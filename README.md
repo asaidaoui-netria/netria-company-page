@@ -139,13 +139,32 @@ The contact form includes:
 
 ## 🚀 Deployment
 
-### Static Hosting Options
+### GitHub Pages (Recommended)
+
+This site is configured for automatic deployment on GitHub Pages:
+
+1. **Enable GitHub Pages:**
+   - Go to your repository → Settings → Pages
+   - Source: "Deploy from a branch"
+   - Branch: `main`
+   - Folder: `/ (root)`
+   - Click "Save"
+
+2. **Automatic Deployment:**
+   - Every push to `main` branch triggers deployment
+   - Site will be available at: `https://yourusername.github.io/repository-name`
+
+3. **Custom Domain (Optional):**
+   - Add your domain in Pages settings
+   - Check "Enforce HTTPS"
+   - Update DNS records as instructed
+
+### Other Hosting Options
 
 1. **Netlify**: Drag and drop the folder to deploy
 2. **Vercel**: Connect your repository for automatic deployments
-3. **GitHub Pages**: Push to a GitHub repository and enable Pages
-4. **AWS S3**: Upload files to an S3 bucket with static website hosting
-5. **Traditional Web Hosting**: Upload files via FTP
+3. **AWS S3**: Upload files to an S3 bucket with static website hosting
+4. **Traditional Web Hosting**: Upload files via FTP
 
 ### Custom Domain
 
