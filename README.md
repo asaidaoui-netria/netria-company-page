@@ -176,13 +176,13 @@ This is a company website, but if you have suggestions for improvements:
 
 ## 📄 License
 
-This project is proprietary to Netria. All rights reserved.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 📞 Support
 
 For questions about this landing page or Netria's services, contact:
 - Email: hello@netria.ma
-- Location: Morocco
+- Location: Kenitra, Morocco
 
 ---
 
