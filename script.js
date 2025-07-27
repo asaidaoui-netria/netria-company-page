@@ -79,7 +79,7 @@ window.addEventListener('scroll', function () {
     }
 });
 
-// Contact form handling
+// Contact form handling with Formspree
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
     contactForm.addEventListener('submit', function (e) {
@@ -103,20 +103,37 @@ if (contactForm) {
             return;
         }
 
-        // Simulate form submission (replace with actual backend integration)
+        // Update button state
         const submitButton = this.querySelector('.submit-button');
         const originalText = submitButton.textContent;
 
         submitButton.textContent = 'Sending...';
         submitButton.disabled = true;
 
-        // Simulate API call
-        setTimeout(() => {
-            showNotification('Thank you! Your message has been sent. We\'ll get back to you soon.', 'success');
-            this.reset();
-            submitButton.textContent = originalText;
-            submitButton.disabled = false;
-        }, 2000);
+        // Submit to Formspree
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    showNotification('Thank you! Your message has been sent. We\'ll get back to you soon.', 'success');
+                    this.reset();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Sorry, there was an error sending your message. Please try again.', 'error');
+            })
+            .finally(() => {
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            });
     });
 }
 
