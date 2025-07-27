@@ -679,6 +679,10 @@ body {
         gap: 2rem;
     }
 
+    .hero-visual {
+        display: none;
+    }
+
     .hero-title {
         font-size: 2.5rem;
     }
