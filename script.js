@@ -25,12 +25,14 @@ function typeWriter(element, text, speed = 150) {
 
 // Mobile Navigation Toggle
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize typewriter effect
-    const typewriterElement = document.getElementById('typewriter');
-    if (typewriterElement) {
-        const originalText = typewriterElement.textContent;
-        typeWriter(typewriterElement, originalText, 200);
-    }
+    // Initialize typewriter effect after i18n is loaded
+    setTimeout(() => {
+        const typewriterElement = document.getElementById('typewriter');
+        if (typewriterElement) {
+            const originalText = typewriterElement.textContent;
+            typeWriter(typewriterElement, originalText, 200);
+        }
+    }, 100);
 
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
@@ -77,6 +79,20 @@ window.addEventListener('scroll', function () {
         navbar.style.background = 'rgba(255, 255, 255, 0.95)';
         navbar.style.boxShadow = 'none';
     }
+});
+
+// Function to reinitialize typewriter effect
+function reinitializeTypewriter() {
+    const typewriterElement = document.getElementById('typewriter');
+    if (typewriterElement) {
+        const currentText = typewriterElement.textContent;
+        typeWriter(typewriterElement, currentText, 200);
+    }
+}
+
+// Listen for language changes
+document.addEventListener('languageChanged', function () {
+    reinitializeTypewriter();
 });
 
 // Contact form handling with Formspree

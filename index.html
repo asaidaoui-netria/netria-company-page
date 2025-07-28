@@ -45,6 +45,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+    <!-- Add Arabic font support -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -56,9 +58,32 @@
                         id="typewriter">Netria</span></a>
             </div>
             <div class="nav-menu">
-                <a href="#about" class="nav-link">About</a>
-                <a href="#services" class="nav-link">Services</a>
-                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#about" class="nav-link" data-i18n="nav.about">About</a>
+                <a href="#services" class="nav-link" data-i18n="nav.services">Services</a>
+                <a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a>
+                <div class="language-selector">
+                    <div class="lang-dropdown">
+                        <button class="lang-dropdown-btn" id="langDropdownBtn">
+                            <span class="lang-flag">🌍</span>
+                            <span class="lang-text">EN</span>
+                            <span class="lang-arrow">▼</span>
+                        </button>
+                        <div class="lang-dropdown-menu" id="langDropdownMenu">
+                            <div class="lang-option" data-lang="en">
+                                <span class="lang-flag">🇺🇸</span>
+                                <span class="lang-text">English</span>
+                            </div>
+                            <div class="lang-option" data-lang="fr">
+                                <span class="lang-flag">🇫🇷</span>
+                                <span class="lang-text">Français</span>
+                            </div>
+                            <div class="lang-option" data-lang="ar">
+                                <span class="lang-flag">🇲🇦</span>
+                                <span class="lang-text">العربية</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="nav-toggle">
                 <span></span>
@@ -73,15 +98,16 @@
         <div class="hero-container">
             <div class="hero-content">
                 <h1 class="hero-title">
-                    Transforming Digital Services in <span class="highlight">Morocco</span>
+                    <span data-i18n="hero.title.prefix">Transforming Digital Services in</span>
+                    <span class="highlight" data-i18n="hero.title.highlight">Morocco</span>
                 </h1>
-                <p class="hero-subtitle">
+                <p class="hero-subtitle" data-i18n="hero.subtitle">
                     We develop solutions that help businesses tackle the most pertinent points of friction in their
                     journey towards financial and social success.
                 </p>
                 <div class="hero-cta">
-                    <a href="#contact" class="cta-button">Let's Build Together</a>
-                    <a href="#services" class="cta-secondary">Our Services</a>
+                    <a href="#contact" class="cta-button" data-i18n="hero.cta.primary">Let's Build Together</a>
+                    <a href="#services" class="cta-secondary" data-i18n="hero.cta.secondary">Our Services</a>
                 </div>
             </div>
             <div class="hero-visual">
@@ -101,35 +127,36 @@
     <section id="about" class="about">
         <div class="container">
             <div class="section-header">
-                <h2>About Netria</h2>
-                <p>Your partner in digital transformation</p>
+                <h2 data-i18n="about.title">About Netria</h2>
+                <p data-i18n="about.subtitle">Your partner in digital transformation</p>
             </div>
             <div class="about-content">
                 <div class="about-text">
-                    <h3>Our Mission</h3>
-                    <p>We're dedicated to improving digital services across Morocco, helping businesses overcome
+                    <h3 data-i18n="about.mission.title">Our Mission</h3>
+                    <p data-i18n="about.mission.text">We're dedicated to improving digital services across Morocco,
+                        helping businesses overcome
                         technological barriers and achieve their full potential in the digital economy.</p>
 
-                    <h3>Why Choose Netria?</h3>
+                    <h3 data-i18n="about.why.title">Why Choose Netria?</h3>
                     <ul class="benefits-list">
-                        <li>Deep understanding of Moroccan business landscape</li>
-                        <li>Custom solutions tailored to your specific needs</li>
-                        <li>Focus on eliminating friction points in your operations</li>
-                        <li>Commitment to your financial and social success</li>
+                        <li data-i18n="about.why.benefit1">Deep understanding of Moroccan business landscape</li>
+                        <li data-i18n="about.why.benefit2">Custom solutions tailored to your specific needs</li>
+                        <li data-i18n="about.why.benefit3">Focus on eliminating friction points in your operations</li>
+                        <li data-i18n="about.why.benefit4">Commitment to your financial and social success</li>
                     </ul>
                 </div>
                 <div class="about-stats">
                     <div class="stat-item">
-                        <div class="stat-number">100%</div>
-                        <div class="stat-label">Moroccan Focus</div>
+                        <div class="stat-number" data-i18n="about.stats.stat1.number">100%</div>
+                        <div class="stat-label" data-i18n="about.stats.stat1.label">Moroccan Focus</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">Custom</div>
-                        <div class="stat-label">Solutions</div>
+                        <div class="stat-number" data-i18n="about.stats.stat2.number">Custom</div>
+                        <div class="stat-label" data-i18n="about.stats.stat2.label">Solutions</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">Results</div>
-                        <div class="stat-label">Driven</div>
+                        <div class="stat-number" data-i18n="about.stats.stat3.number">Results</div>
+                        <div class="stat-label" data-i18n="about.stats.stat3.label">Driven</div>
                     </div>
                 </div>
             </div>
@@ -140,32 +167,36 @@
     <section id="services" class="services">
         <div class="container">
             <div class="section-header">
-                <h2>Our Services</h2>
-                <p>Solutions that drive your success</p>
+                <h2 data-i18n="services.title">Our Services</h2>
+                <p data-i18n="services.subtitle">Solutions that drive your success</p>
             </div>
             <div class="services-grid">
                 <div class="service-card">
                     <div class="service-icon">💻</div>
-                    <h3>Custom Software Development</h3>
-                    <p>Tailored applications designed to solve your specific business challenges and streamline
+                    <h3 data-i18n="services.card1.title">Custom Software Development</h3>
+                    <p data-i18n="services.card1.description">Tailored applications designed to solve your specific
+                        business challenges and streamline
                         operations.</p>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">🔄</div>
-                    <h3>Digital Transformation</h3>
-                    <p>Modernize your business processes with cutting-edge digital solutions that eliminate friction
+                    <h3 data-i18n="services.card2.title">Digital Transformation</h3>
+                    <p data-i18n="services.card2.description">Modernize your business processes with cutting-edge
+                        digital solutions that eliminate friction
                         points.</p>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">📊</div>
-                    <h3>Business Intelligence</h3>
-                    <p>Data-driven insights to help you make informed decisions and optimize your business performance.
+                    <h3 data-i18n="services.card3.title">Business Intelligence</h3>
+                    <p data-i18n="services.card3.description">Data-driven insights to help you make informed decisions
+                        and optimize your business performance.
                     </p>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">🌐</div>
-                    <h3>Web & Mobile Solutions</h3>
-                    <p>Responsive web applications and mobile solutions that connect you with your customers
+                    <h3 data-i18n="services.card4.title">Web & Mobile Solutions</h3>
+                    <p data-i18n="services.card4.description">Responsive web applications and mobile solutions that
+                        connect you with your customers
                         effectively.</p>
                 </div>
             </div>
@@ -176,13 +207,14 @@
     <section id="contact" class="contact">
         <div class="container">
             <div class="section-header">
-                <h2>Ready to Transform Your Business?</h2>
-                <p>Let's discuss how we can help you achieve your goals</p>
+                <h2 data-i18n="contact.title">Ready to Transform Your Business?</h2>
+                <p data-i18n="contact.subtitle">Let's discuss how we can help you achieve your goals</p>
             </div>
             <div class="contact-content">
                 <div class="contact-info">
-                    <h3>Get in Touch</h3>
-                    <p>Ready to tackle those friction points and accelerate your journey to success? We're here to help.
+                    <h3 data-i18n="contact.info.title">Get in Touch</h3>
+                    <p data-i18n="contact.info.description">Ready to tackle those friction points and accelerate your
+                        journey to success? We're here to help.
                     </p>
                     <div class="contact-details">
                         <div class="contact-item">
@@ -191,26 +223,30 @@
                         </div>
                         <div class="contact-item">
                             <span class="contact-icon">📍</span>
-                            <span>Kenitra, Morocco</span>
+                            <span data-i18n="contact.info.location">Kenitra, Morocco</span>
                         </div>
                     </div>
                 </div>
                 <div class="contact-form">
                     <form action="https://formspree.io/f/xldlnenv" method="POST" id="contactForm">
                         <div class="form-group">
-                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                            <input type="text" id="name" name="name" data-i18n-placeholder="contact.form.name"
+                                placeholder="Your Name" required>
                         </div>
                         <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                            <input type="email" id="email" name="email" data-i18n-placeholder="contact.form.email"
+                                placeholder="Your Email" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" id="company" name="company" placeholder="Company Name">
+                            <input type="text" id="company" name="company" data-i18n-placeholder="contact.form.company"
+                                placeholder="Company Name">
                         </div>
                         <div class="form-group">
-                            <textarea id="message" name="message"
+                            <textarea id="message" name="message" data-i18n-placeholder="contact.form.message"
                                 placeholder="Tell us about your project or challenges..." rows="4" required></textarea>
                         </div>
-                        <button type="submit" class="submit-button">Send Message</button>
+                        <button type="submit" class="submit-button" data-i18n="contact.form.submit">Send
+                            Message</button>
                     </form>
                 </div>
             </div>
@@ -223,20 +259,21 @@
             <div class="footer-content">
                 <div class="footer-brand">
                     <a href="#" class="logo-text" onclick="scrollToTop(event)">Netria</a>
-                    <p>Transforming digital services in Morocco</p>
+                    <p data-i18n="footer.tagline">Transforming digital services in Morocco</p>
                 </div>
                 <div class="footer-links">
-                    <a href="#about">About</a>
-                    <a href="#services">Services</a>
-                    <a href="#contact">Contact</a>
+                    <a href="#about" data-i18n="nav.about">About</a>
+                    <a href="#services" data-i18n="nav.services">Services</a>
+                    <a href="#contact" data-i18n="nav.contact">Contact</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Netria. All rights reserved.</p>
+                <p>&copy; 2025 Netria. <span data-i18n="footer.rights">All rights reserved.</span></p>
             </div>
         </div>
     </footer>
 
+    <script src="i18n.js"></script>
     <script src="script.js"></script>
 </body>
 
