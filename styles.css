@@ -244,12 +244,29 @@ body.rtl {
     top: 0;
     left: 0;
     right: 0;
+    bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px);
-    z-index: 2000;
+    z-index: 9999;
     opacity: 0;
     visibility: hidden;
     transition: var(--transition);
+}
+
+/* Body blur when drawer is active */
+body.drawer-active {
+    overflow: hidden;
+}
+
+/* Blur all content except the drawer */
+body.drawer-active .navbar,
+body.drawer-active .hero,
+body.drawer-active .about,
+body.drawer-active .services,
+body.drawer-active .contact,
+body.drawer-active .footer {
+    filter: blur(3px);
+    transition: filter 0.3s ease;
 }
 
 .lang-drawer.active {
