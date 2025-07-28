@@ -104,7 +104,7 @@ class I18n {
                 },
                 hero: {
                     title: {
-                        prefix: 'Transformez vos Services Numériques au',
+                        prefix: 'Transformer les Services Numériques au',
                         highlight: 'Maroc'
                     },
                     subtitle: 'Nous développons des solutions qui aident les entreprises à résoudre les points de friction les plus pertinents dans leur parcours vers le succès financier et social.',
