@@ -62,27 +62,14 @@
                 <a href="#services" class="nav-link" data-i18n="nav.services">Services</a>
                 <a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a>
                 <div class="language-selector">
-                    <div class="lang-dropdown">
-                        <button class="lang-dropdown-btn" id="langDropdownBtn">
-                            <span class="lang-flag">🌍</span>
-                            <span class="lang-text">EN</span>
-                            <span class="lang-arrow">▼</span>
-                        </button>
-                        <div class="lang-dropdown-menu" id="langDropdownMenu">
-                            <div class="lang-option" data-lang="en">
-                                <span class="lang-flag">🇺🇸</span>
-                                <span class="lang-text">English</span>
-                            </div>
-                            <div class="lang-option" data-lang="fr">
-                                <span class="lang-flag">🇫🇷</span>
-                                <span class="lang-text">Français</span>
-                            </div>
-                            <div class="lang-option" data-lang="ar">
-                                <span class="lang-flag">🇲🇦</span>
-                                <span class="lang-text">العربية</span>
-                            </div>
-                        </div>
-                    </div>
+                    <button class="lang-drawer-btn" id="langDrawerBtn">
+                        <svg class="lang-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
+                                fill="currentColor" />
+                        </svg>
+                    </button>
                 </div>
             </div>
             <div class="nav-toggle">
@@ -91,6 +78,56 @@
                 <span></span>
             </div>
         </div>
+    </nav>
+
+    <!-- Language Drawer -->
+    <div class="lang-drawer" id="langDrawer">
+        <div class="lang-drawer-content">
+            <div class="lang-drawer-header">
+                <h3 data-i18n="drawer.title">Select Language</h3>
+                <button class="lang-drawer-close" id="langDrawerClose">×</button>
+            </div>
+            <div class="lang-drawer-options">
+                <div class="lang-drawer-option" data-lang="en">
+                    <div class="lang-option-content">
+                        <span class="lang-flag">🇺🇸</span>
+                        <div class="lang-info">
+                            <span class="lang-name">English</span>
+                            <span class="lang-native">English</span>
+                        </div>
+                    </div>
+                    <div class="lang-check">✓</div>
+                </div>
+                <div class="lang-drawer-option" data-lang="fr">
+                    <div class="lang-option-content">
+                        <span class="lang-flag">🇫🇷</span>
+                        <div class="lang-info">
+                            <span class="lang-name">Français</span>
+                            <span class="lang-native">French</span>
+                        </div>
+                    </div>
+                    <div class="lang-check">✓</div>
+                </div>
+                <div class="lang-drawer-option" data-lang="ar">
+                    <div class="lang-option-content">
+                        <span class="lang-flag">🇲🇦</span>
+                        <div class="lang-info">
+                            <span class="lang-name">العربية</span>
+                            <span class="lang-native">Arabic</span>
+                        </div>
+                    </div>
+                    <div class="lang-check">✓</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="nav-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    </div>
     </nav>
 
     <!-- Hero Section -->
