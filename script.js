@@ -110,12 +110,12 @@ if (contactForm) {
 
         // Basic validation
         if (!name || !email || !message) {
-            showNotification('Please fill in all required fields.', 'error');
+            showNotification('notifications.validation.required', 'error');
             return;
         }
 
         if (!isValidEmail(email)) {
-            showNotification('Please enter a valid email address.', 'error');
+            showNotification('notifications.validation.email', 'error');
             return;
         }
 
@@ -136,7 +136,7 @@ if (contactForm) {
         })
             .then(response => {
                 if (response.ok) {
-                    showNotification('Thank you! Your message has been sent. We\'ll get back to you soon.', 'success');
+                    showNotification('notifications.success', 'success');
                     this.reset();
                 } else {
                     throw new Error('Network response was not ok');
@@ -144,7 +144,7 @@ if (contactForm) {
             })
             .catch(error => {
                 console.error('Error:', error);
-                showNotification('Sorry, there was an error sending your message. Please try again.', 'error');
+                showNotification('notifications.error', 'error');
             })
             .finally(() => {
                 submitButton.textContent = originalText;
@@ -160,58 +160,80 @@ function isValidEmail(email) {
 }
 
 // Notification system
-function showNotification(message, type = 'info') {
+function showNotification(messageKey, type = 'info') {
     // Remove existing notifications
     const existingNotification = document.querySelector('.notification');
     if (existingNotification) {
         existingNotification.remove();
     }
 
+    // Get translated message
+    let message = messageKey;
+    if (window.i18n && messageKey.includes('.')) {
+        message = window.i18n.getNestedTranslation(window.i18n.translations[window.i18n.currentLang], messageKey);
+    }
+
     // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <span class="notification-message">${message}</span>
-            <button class="notification-close">&times;</button>
-        </div>
-    `;
 
     // Add styles
     notification.style.cssText = `
         position: fixed;
-        top: 100px;
-        right: 20px;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    `;
+
+    // Create modal content
+    const modalContent = document.createElement('div');
+    modalContent.style.cssText = `
         background: ${type === 'success' ? '#57a634' : type === 'error' ? '#dc3545' : '#17a2b8'};
         color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        z-index: 10000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         max-width: 400px;
+        text-align: center;
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
     `;
+    modalContent.innerHTML = `<span class="notification-message">${message}</span>`;
+
+    // Add modal content to notification
+    notification.appendChild(modalContent);
 
     // Add to page
     document.body.appendChild(notification);
 
     // Animate in
     setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
+        notification.style.opacity = '1';
+        modalContent.style.transform = 'scale(1)';
     }, 100);
 
-    // Close button functionality
-    const closeButton = notification.querySelector('.notification-close');
-    closeButton.addEventListener('click', () => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => notification.remove(), 300);
+    // Close on background click
+    notification.addEventListener('click', (e) => {
+        if (e.target === notification) {
+            notification.style.opacity = '0';
+            modalContent.style.transform = 'scale(0.8)';
+            setTimeout(() => notification.remove(), 300);
+        }
     });
 
     // Auto remove after 5 seconds
     setTimeout(() => {
         if (notification.parentNode) {
-            notification.style.transform = 'translateX(100%)';
+            notification.style.opacity = '0';
+            modalContent.style.transform = 'scale(0.8)';
             setTimeout(() => notification.remove(), 300);
         }
     }, 5000);

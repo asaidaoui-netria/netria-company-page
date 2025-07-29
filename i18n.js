@@ -91,6 +91,14 @@ class I18n {
                 footer: {
                     tagline: 'Transforming digital services in Morocco',
                     rights: 'All rights reserved.'
+                },
+                notifications: {
+                    success: 'Thank you! Your message has been sent. We\'ll get back to you soon.',
+                    error: 'Sorry, there was an error sending your message. Please try again.',
+                    validation: {
+                        required: 'Please fill in all required fields.',
+                        email: 'Please enter a valid email address.'
+                    }
                 }
             },
             fr: {
@@ -181,6 +189,14 @@ class I18n {
                 footer: {
                     tagline: 'Transformation des services numériques au Maroc',
                     rights: 'Tous droits réservés.'
+                },
+                notifications: {
+                    success: 'Merci ! Votre message a été envoyé. Nous vous répondrons bientôt.',
+                    error: 'Désolé, il y a eu une erreur lors de l\'envoi de votre message. Veuillez réessayer.',
+                    validation: {
+                        required: 'Veuillez remplir tous les champs obligatoires.',
+                        email: 'Veuillez entrer une adresse e-mail valide.'
+                    }
                 }
             },
             ar: {
@@ -271,6 +287,14 @@ class I18n {
                 footer: {
                     tagline: 'تحويل الخدمات الرقمية في المغرب',
                     rights: 'جميع الحقوق محفوظة.'
+                },
+                notifications: {
+                    success: 'شكراً لك! تم إرسال رسالتك. سنرد عليك قريباً.',
+                    error: 'عذراً، حدث خطأ في إرسال رسالتك. يرجى المحاولة مرة أخرى.',
+                    validation: {
+                        required: 'يرجى ملء جميع الحقول المطلوبة.',
+                        email: 'يرجى إدخال عنوان بريد إلكتروني صحيح.'
+                    }
                 }
             }
         };
