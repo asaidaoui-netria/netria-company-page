@@ -140,6 +140,20 @@ body.rtl {
     text-decoration: none;
 }
 
+.nav-logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.logo-image {
+    height: 40px;
+    width: auto;
+    margin-right: 0.5rem;
+    display: none;
+}
+
 .logo-text {
     font-size: 1.8rem;
     font-weight: 700;
@@ -149,7 +163,7 @@ body.rtl {
     cursor: pointer;
 }
 
-.logo-text:hover {
+.nav-logo a:hover .logo-text {
     transform: scale(1.05);
     color: var(--primary-dark);
 }
@@ -874,11 +888,25 @@ body.drawer-active .footer {
     margin-bottom: 2rem;
 }
 
+.footer-brand a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+}
+
+.logo-image-footer {
+    height: 30px;
+    width: auto;
+    margin-right: 0.5rem;
+    display: none;
+}
+
 .footer-brand .logo-text {
     color: var(--primary-color);
     font-size: 1.5rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
 }
 
 .footer-brand p {
@@ -906,6 +934,15 @@ body.drawer-active .footer {
     padding-top: 1rem;
     text-align: center;
     color: var(--text-lighter);
+}
+
+/* Show logo images on larger screens */
+@media (min-width: 769px) {
+
+    .logo-image,
+    .logo-image-footer {
+        display: block;
+    }
 }
 
 /* Responsive Design */

@@ -31,9 +31,11 @@ netria-company-page/
 ├── styles.css          # CSS styles and responsive design
 ├── script.js           # JavaScript functionality
 ├── assets/             # Images and media files
-│   ├── Netria_logo.png           # Original logo (2MB)
+│   ├── netria_logo.png           # Optimized main logo (242KB, reduced from 1MB)
+│   ├── netria-new-logo.png       # Optimized new logo (58KB, reduced from 1.4MB)
 │   ├── netria-logo-navbar.png    # Optimized navbar logo (120×80px, 3KB)
-│   └── netria-logo-footer.png    # Optimized footer logo (90×60px, 2KB)
+│   ├── netria-logo-footer.png    # Optimized footer logo (90×60px, 2KB)
+│   └── netria-logo-hero.png      # Hero section logo (17KB)
 └── README.md           # Project documentation
 ```
 
@@ -102,7 +104,10 @@ The website is fully responsive and optimized for:
 
 - Minimal external dependencies (only Google Fonts)
 - Optimized CSS with efficient selectors
-- **Optimized logo images** (reduced from 2MB to ~5KB total, maintaining 3:2 aspect ratio)
+- **Optimized logo images** (reduced from 2.4MB to ~320KB total, maintaining quality)
+  - Main logo: 1MB → 242KB (77% reduction)
+  - New logo: 1.4MB → 58KB (96% reduction)
+- Integrated logo images for enhanced visual appeal
 - Lazy loading support for images
 - Smooth scrolling and animations
 - Mobile-first responsive design

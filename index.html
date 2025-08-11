@@ -57,8 +57,14 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <a href="#" class="logo-text" onclick="scrollToTop(event)"><span class="typewriter"
-                        id="typewriter">Netria</span></a>
+                <a href="#" onclick="scrollToTop(event)">
+                    <picture>
+                        <source srcset="assets/netria-logo-navbar-transparent.webp" type="image/webp">
+                        <img src="assets/netria-logo-navbar-transparent.png" alt="Netria" class="logo-image" width="120"
+                            height="80">
+                    </picture>
+                    <span class="logo-text typewriter" id="typewriter">Netria</span>
+                </a>
             </div>
             <div class="nav-menu">
                 <a href="#about" class="nav-link" data-i18n="nav.about">About</a>
@@ -292,7 +298,14 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <a href="#" class="logo-text" onclick="scrollToTop(event)">Netria</a>
+                    <a href="#" onclick="scrollToTop(event)">
+                        <picture>
+                            <source srcset="assets/netria-logo-footer-transparent.webp" type="image/webp">
+                            <img src="assets/netria-logo-footer-transparent.png" alt="Netria" class="logo-image-footer"
+                                width="90" height="60">
+                        </picture>
+                        <span class="logo-text">Netria</span>
+                    </a>
                     <p data-i18n="footer.tagline">Transforming digital services in Morocco</p>
                 </div>
                 <div class="footer-links">
