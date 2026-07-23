@@ -45,3 +45,8 @@ test("effects engine avoids retired or banned behavior", () => {
 test("keeps the effects file intentionally small", () => {
   assert.ok(Buffer.byteLength(effects, "utf8") < 6000);
 });
+
+test("guards effect states under reduced motion", () => {
+  assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*\.dissolve-overlay/);
+  assert.match(css, /\[data-reveal\]\[data-dissolve\]/);
+});

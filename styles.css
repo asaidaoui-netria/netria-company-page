@@ -782,6 +782,23 @@ h1 em::after {
     transform: translateY(0);
 }
 
+[data-dissolve] {
+    position: relative;
+}
+
+[data-reveal][data-dissolve] {
+    transform: none;
+    transition: opacity 60ms steps(2, end);
+}
+
+.dissolve-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    image-rendering: pixelated;
+}
+
 .no-js [data-reveal] {
     opacity: 1;
     transform: none;
@@ -1006,5 +1023,9 @@ h1 em::after {
     [data-reveal] {
         opacity: 1;
         transform: none;
+    }
+
+    .dissolve-overlay {
+        display: none !important;
     }
 }
