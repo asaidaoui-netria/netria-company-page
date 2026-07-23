@@ -40,6 +40,14 @@ test("keeps reveal content visible without JavaScript", () => {
   assert.match(css, /\.no-js \[data-reveal\]\s*\{[^}]*transform:\s*none/s);
 });
 
+test("constrains the mobile hero to the viewport", () => {
+  assert.match(css, /\.hero-copy\s*\{[^}]*min-width:\s*0/s);
+  assert.match(
+    css,
+    /@media\s*\(max-width:\s*600px\)[\s\S]*h1\s*\{[^}]*font-size:\s*clamp\(2\.8rem,\s*13vw,\s*4\.6rem\)/
+  );
+});
+
 test("contains no retired light-theme component selectors", () => {
   assert.doesNotMatch(css, /\.contact-form|\.form-group|\.submit-button|\.lang-drawer/);
 });
