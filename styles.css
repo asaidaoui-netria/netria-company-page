@@ -649,6 +649,11 @@ h1 em {
     transform: translateY(0);
 }
 
+.no-js [data-reveal] {
+    opacity: 1;
+    transform: none;
+}
+
 @keyframes grid-drift {
     to {
         background-position: 32px 32px;
