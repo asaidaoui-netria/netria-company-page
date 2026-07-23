@@ -20,6 +20,7 @@ The **Quiet Signal** identity combines:
 - the Netria pixel moth;
 - self-hosted Fusion Pixel bitmap typography with technical monospace labels;
 - CRT scanlines, dithered textures, pixel-cut corners, and hard offset shadows;
+- scroll effects that decode headings and dissolve pixels on every section entry;
 - restrained grids, particles, and squared orbital geometry;
 - conventional scrolling and reduced-motion support.
 
