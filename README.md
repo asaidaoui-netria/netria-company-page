@@ -38,6 +38,7 @@ Visitors contact Netria directly at [hello@netria.dev](mailto:hello@netria.dev).
 ├── CNAME                    # Custom-domain configuration
 ├── index.html               # Semantic page content and metadata
 ├── script.js                # Mobile navigation and progressive reveals
+├── effects.js               # Signal Resolve scroll effects
 └── styles.css               # Quiet Signal visual system
 ```
 
@@ -63,6 +64,7 @@ Check JavaScript syntax and whitespace:
 
 ```bash
 node --check script.js
+node --check effects.js
 git diff --check
 ```
 
