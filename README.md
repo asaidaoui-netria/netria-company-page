@@ -18,8 +18,9 @@ The **Quiet Signal** identity combines:
 - a near-black canvas;
 - signal-green highlights;
 - the Netria pixel moth;
-- restrained grids, particles, and orbital geometry;
-- geometric display typography with technical monospace labels;
+- self-hosted Fusion Pixel bitmap typography with technical monospace labels;
+- CRT scanlines, dithered textures, pixel-cut corners, and hard offset shadows;
+- restrained grids, particles, and squared orbital geometry;
 - conventional scrolling and reduced-motion support.
 
 ## Contact
@@ -30,7 +31,7 @@ Visitors contact Netria directly at [hello@netria.dev](mailto:hello@netria.dev).
 
 ```text
 .
-├── assets/                  # Logos, favicons, and social artwork
+├── assets/                  # Logos, favicons, fonts, and social artwork
 ├── docs/superpowers/        # Approved design and implementation plan
 ├── tests/                   # Dependency-free Node contract tests
 ├── CNAME                    # Custom-domain configuration
