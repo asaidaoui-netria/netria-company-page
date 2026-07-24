@@ -1332,3 +1332,239 @@ git commit -m "docs: document scene pager and glyph wave"
 - **Spec coverage:** shell/pager/touch/keys/anchors (T2), tween/clip/commit-revert/resize (T3), wave incl. palette/charset/font preload (T4), entrances + reset-on-park incl. revert suppression (T5), hash/deep-link/popstate (T2), fallbacks no-js/no-canvas/reduced-motion (T1/T3/T4), fit constraint (T1 initial values + T6 verification), contract tests (all tasks), behavioral verification (T6), README (T6). One deliberate spec deviation documented in T4: font preload at init instead of gating the first transition on `fonts.ready`.
 - **Type consistency:** `enterScene(i, delayMs)` stubbed T2 → implemented T5 with same signature; `parkScene(i)` likewise; `waveBegin/wavePaint(eq)/waveEnd` stubbed T3 → implemented T4; `frontY(x, q, s, H)` defined T3, consumed T4; `easeQ` defined T3, consumed T4; `settleTo(i)` T2 → consumed T3; `__scenes` hook T2 → consumed T6.
 - **Known accepted tradeoffs:** contract tests are static pins (string matches), not runtime assertions — runtime behavior is covered by the T6 Playwright scripts; `enterScene` setTimeout on the deep-link path is not tracked (runs once, idempotent); touch pager has no commit/revert (one swipe = one committed step, matching Kimi).
+
+---
+
+### Task 7: Seven-scene re-decomposition + mobile compaction (fit-verification driven)
+
+Added after Task 6 verification proved the 5-scene merges cannot honestly fit 100svh (user decision: "7 scenes + aggressive mobile compaction"). Spec updated to match.
+
+**Files:**
+- Modify: `index.html` (split capabilities into two scenes; restore principles as its own scene)
+- Modify: `scenes.js` (HASHES/ALIAS only)
+- Modify: `styles.css` (compaction + single-card grid rules; the Task 1 `.situations.scene` merged-scene rules are repointed)
+- Modify: `tests/homepage-scenes.test.mjs` (scene-id list, replace merged-scene test, add systems hash pin, add root-dissolve pin already present from the T6 fix)
+- Modify: `tests/homepage-content.test.mjs` (section-id array gains `systems` and re-adds `principles`)
+- Verify-only: tmp-dir Playwright scripts (updated)
+
+**Interfaces:**
+- Consumes: everything from Tasks 1–6.
+- Produces: 7 scenes with ids `top, capabilities, systems, situations, principles, approach, contact`; `HASHES = ["", "capabilities", "systems", "situations", "principles", "approach", "contact"]`; `ALIAS = { top: 0, capabilities: 1, systems: 2, situations: 3, principles: 4, approach: 5, contact: 6 }`; fit = 21/21 measured combinations.
+
+- [ ] **Step 1: Write the failing tests**
+
+In `tests/homepage-scenes.test.mjs`:
+1a. In the five-scene test, change the expected id list to:
+
+```js
+  assert.deepEqual(ids, ["top", "capabilities", "systems", "situations", "principles", "approach", "contact"]);
+```
+
+(and rename the test to `"main stage contains exactly seven scenes with stable ids"`.)
+
+1b. Replace the test `merged scene pairs situations and principles with renumbered eyebrows` with:
+
+```js
+test("capabilities split into two single-card scenes", () => {
+  const caps = html.slice(html.indexOf('id="capabilities"'), html.indexOf('id="systems"'));
+  const systems = html.slice(html.indexOf('id="systems"'), html.indexOf('id="situations"'));
+  assert.equal((caps.match(/capability-card/g) || []).length, 1);
+  assert.equal((systems.match(/capability-card/g) || []).length, 1);
+  assert.match(caps, /<span>02<\/span> Two ways we help/);
+});
+
+test("situations and principles are separate scenes", () => {
+  const situ = html.slice(html.indexOf('id="situations"'), html.indexOf('id="principles"'));
+  const prin = html.slice(html.indexOf('id="principles"'), html.indexOf('id="approach"'));
+  assert.match(situ, /<span>03<\/span> Useful when/);
+  assert.match(situ, /situation-grid/);
+  assert.match(prin, /<span>04<\/span> Working principles/);
+  assert.match(prin, /principle-grid/);
+  assert.match(html.slice(html.indexOf('id="approach"')), /<span>05<\/span> How engagements work/);
+});
+```
+
+1c. In the `hash deep-linking, history, and nav are wired` test, add:
+
+```js
+  assert.match(scenes, /systems/);
+```
+
+1d. In `tests/homepage-content.test.mjs`, change the section-id array to include the new and restored ids:
+
+```js
+["capabilities", "systems", "situations", "approach", "principles", "contact"]
+```
+
+Run: `node --test tests/homepage-scenes.test.mjs tests/homepage-content.test.mjs`
+Expected: FAIL (ids list mismatch; `systems` missing; principles selector missing).
+
+- [ ] **Step 2: Restructure index.html**
+
+2a. Split the capabilities scene: keep `<section class="section capabilities scene" id="capabilities">` with the `.section-heading` and the FIRST `.capability-card` (card A, "Build a product") only, then close the section. Immediately after, add a second section containing card B byte-identical:
+
+```html
+        <section class="section capabilities systems scene" id="systems">
+            <div class="capability-grid">
+                <article class="capability-card" data-dissolve>
+                    ... (card B "Improve a system" inner markup byte-identical) ...
+                </article>
+            </div>
+        </section>
+```
+
+2b. Un-merge principles: inside the situations section, remove the second `.section-heading.compact` (Working principles) and the `.principle-grid` block; keep situations as `<section class="section situations scene" id="situations">` with its own heading + `.situation-grid`. Immediately after it, add:
+
+```html
+        <section class="section principles scene" id="principles">
+            <div class="section-heading compact">
+                <p class="eyebrow"><span>04</span> Working principles</p>
+                <h2 data-decode>Dependable software starts with dependable decisions.</h2>
+            </div>
+
+            <div class="principle-grid">
+                ... (4 articles byte-identical) ...
+            </div>
+        </section>
+```
+
+- [ ] **Step 3: Update scenes.js aliases**
+
+Replace the HASHES and ALIAS lines with:
+
+```js
+const HASHES = ["", "capabilities", "systems", "situations", "principles", "approach", "contact"];
+const ALIAS = { top: 0, capabilities: 1, systems: 2, situations: 3, principles: 4, approach: 5, contact: 6 };
+```
+
+- [ ] **Step 4: styles.css — single-card grids + repoint + compaction**
+
+4a. Replace the Task-1 rule `html.js .situations.scene { ... }` selector list so both mini-grid scenes keep flex centering:
+
+```css
+html.js .situations.scene,
+html.js .principles.scene,
+html.js .systems.scene {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+}
+```
+
+(Remove the now-obsolete `html.js .situations .section-heading, html.js .situations .section-heading.compact { margin-bottom: 0; }` rule.)
+
+4b. Single-card capability grids (all viewports):
+
+```css
+html.js .capabilities .capability-grid {
+    grid-template-columns: minmax(0, 640px);
+    justify-content: center;
+}
+```
+
+4c. Contact-scene desktop compaction (fits 1440×900):
+
+```css
+html.js .contact.scene {
+    padding-top: 80px;
+    padding-bottom: 24px;
+    gap: 0;
+}
+```
+
+4d. Mobile compaction at ≤600px (append a new media block; values are starting points — see Step 6 authority):
+
+```css
+@media (max-width: 600px) {
+    html.js .hero-signal,
+    html.js .hero-status {
+        display: none;
+    }
+
+    html.js .hero.scene {
+        padding-top: 64px;
+        padding-bottom: 40px;
+        gap: 20px;
+    }
+
+    html.js .section.scene {
+        padding-top: 60px;
+        padding-bottom: 12px;
+    }
+
+    html.js .section-heading h2 {
+        font-size: clamp(2.2rem, 9vw, 3rem);
+    }
+
+    html.js .section-heading > p:last-child {
+        font-size: 1.3rem;
+    }
+
+    html.js .capability-card {
+        padding: 14px;
+    }
+
+    html.js .capability-card p {
+        font-size: 1.3rem;
+    }
+
+    html.js .capability-card li {
+        font-size: 1.2rem;
+    }
+
+    html.js .approach-list {
+        gap: 14px;
+    }
+
+    html.js .approach-list h3 {
+        font-size: 1.4rem;
+    }
+
+    html.js .approach-list p {
+        font-size: 1.2rem;
+    }
+
+    html.js .footer {
+        padding-top: 16px;
+        gap: 12px;
+    }
+
+    html.js .footer .brand img {
+        width: 40px;
+        height: 40px;
+    }
+}
+```
+
+- [ ] **Step 5: Run the full suite**
+
+Run: `node --test tests/*.test.mjs && node --check scenes.js`
+Expected: all PASS (44 tests: 43 + 1 renamed/replaced + content array).
+
+- [ ] **Step 6: Fit verification loop (21/21 required)**
+
+Serve the repo root on :8123. Update `/var/folders/jl/7y_x237n2435vhkgql4mggdm0000gn/T/opencode/verify-scenes.mjs` to iterate scene indices 0–6 (7 scenes) for the same three viewports (1440×900, 390×844, 320×568), same assert (`scrollHeight <= clientHeight + 2`), screenshots `sc-{w}-{i}.png`. Run it.
+
+**Authority:** if a combination fails, adjust ONLY values/selectors inside the CSS rules added in Step 4 (never the pinned h1 clamp `clamp(2.8rem, 13vw, 4.6rem)`, never copy, never `--color-*` tokens, never the desktop-pinned tokens) and re-run. Legitimate additional moves if arithmetic demands them: 2-column `.capability-card ul` at ≤600px, smaller `.eyebrow` at ≤600px, `.approach-list > li > span` inline compaction, `.scroll-cue` bottom offset, `.contact-link` margin compaction, card `gap` reduction. Do not hide any content element other than `.hero-signal` / `.hero-status` (already mandated).
+
+Expected: 21/21 PASS. If any scene still cannot fit after honest compaction, STOP and report DONE_WITH_CONCERNS with per-element measurements.
+
+- [ ] **Step 7: Behavioral re-verification**
+
+Update `/var/folders/jl/7y_x237n2435vhkgql4mggdm0000gn/T/opencode/verify-pager.mjs`:
+- scene count 7: `End` key → active 6; deep-link `/#approach` → active 5; contact scene checks → index 6.
+- Check 2 assert amendment (controller-approved): instead of the literal `1440px`, read the entering scene's `clientWidth` at runtime and assert the backward clip base equals `0px 900px, {clientWidth}px 900px` (scenes are width-capped columns; the wave canvas still covers edge-to-edge — confirmed visually in Task 6).
+Run it. Expected: 9/9 PASS, including the contact scene now visibly rendering (root-dissolve fix from Task 6). Read the new mid-wave screenshots as before.
+
+- [ ] **Step 8: Final gate + commit**
+
+Run: `node --test tests/*.test.mjs && node --check scenes.js && wc -c scenes.js`
+Expected: all PASS; scenes.js < 18,500 bytes.
+
+```bash
+git add index.html scenes.js styles.css tests/homepage-scenes.test.mjs tests/homepage-content.test.mjs
+git commit -m "feat: split dense scenes for honest viewport fit"
+```
+
+Kill the dev server afterward.

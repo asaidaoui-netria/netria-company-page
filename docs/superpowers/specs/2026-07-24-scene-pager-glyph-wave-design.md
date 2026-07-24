@@ -19,7 +19,7 @@ Goal: full parity with these two components, keeping the site's zero-dependency 
 
 | Question | Decision |
 |---|---|
-| Scene decomposition | **5 scenes**: hero / capabilities / situations+principles (merged) / approach / contact+footer (footer folds into contact scene) |
+| Scene decomposition | **7 scenes** (amended after fit verification): hero / capabilities-a / capabilities-b / situations / principles / approach / contact+footer — dense content cannot fit 100svh when merged; mobile uses aggressive compaction incl. hiding the moth and hero-status below 600px |
 | URL behavior | **Hash sync + deep-linking**: `pushState` on transition complete, recognized hash loads directly into its scene, `popstate` drives the pager |
 | Reduced motion | **Instant cuts**: pager still navigates; no wave, no decode, no dissolve |
 | Entrance effects | **Keep decode + dissolve**, rewired from IntersectionObserver to scene-entry, replaying on every entry |
@@ -39,15 +39,17 @@ Goal: full parity with these two components, keeping the site's zero-dependency 
 
 ### Scenes
 
-Existing content re-parented into 5 scenes:
+Existing content re-parented into 7 scenes (amended after fit verification — the merged/3-card scenes could not honestly fit 100svh):
 
-1. **hero** (`#top`) — moth art + heading + tagline + new scroll cue ("Scroll" + blinking pixel arrow; static `↓` under reduced motion). Eyebrow `01`.
-2. **capabilities** (`#capabilities`) — 3 cards, unchanged. Eyebrow `02`.
-3. **situations-principles** (`#situations`, alias `#principles`) — "Useful when" grid (eyebrow `03`) + "Working principles" grid (eyebrow renumbered `05→04`). On mobile both mini-grids go 2-column with compact spacing.
-4. **approach** (`#approach`) — 4-step list, unchanged. Eyebrow renumbered `04→05`.
-5. **contact** (`#contact`) — contact block (eyebrow `06`, unchanged) + footer content folded in; the standalone `<footer>` element is removed.
+1. **hero** (`#top`) — moth art + heading + tagline + scroll cue ("Scroll" + blinking pixel arrow; static `↓` under reduced motion). Eyebrow `01`. Below 600px the moth (`.hero-signal`) and `.hero-status` are hidden (decorative) and hero padding compacts.
+2. **capabilities-a** (`#capabilities`) — section heading (eyebrow `02` + h2) + card A ("Build a product"), single-card centered grid.
+3. **capabilities-b** (`#systems`) — card B ("Improve a system") alone, single-card centered grid; no eyebrow (the card's own `B / Systems` index + h3 carry the context; no copy added).
+4. **situations** (`#situations`) — "Useful when" grid. Eyebrow `03`.
+5. **principles** (`#principles`) — "Working principles" grid. Eyebrow `04` (renumbered from `05`).
+6. **approach** (`#approach`) — 4-step list. Eyebrow `05` (renumbered from `04`).
+7. **contact** (`#contact`) — contact block (eyebrow `06`) + footer content folded in; the standalone `<footer>` element is removed.
 
-Eyebrow renumbering: principles `05→04`, approach `04→05`; all others unchanged.
+Eyebrow renumbering: principles `05→04`, approach `04→05`; all others unchanged. Mobile (≤600px) compaction: h2 drops to `clamp(2.2rem, 9vw, 3rem)` (the pinned h1 clamp is untouched), cards/lists/grids compact, mini-grids go 2-column.
 
 ### Scene manager (`scenes.js`)
 
@@ -70,7 +72,7 @@ New module absorbing `effects.js` (which is deleted). Owns: scene array, active 
 
 ### Fit constraint (hard acceptance criterion)
 
-Every scene must fit within 100svh at 320×568 and at 1440×900 without internal scrolling. Mobile compaction is part of the work: smaller hero moth canvas, 2-col mini-grids on the merged scene, tighter section padding/gaps, clamp-based type already in place. Verified by screenshots in the plan's verification step.
+Every scene must fit within 100svh at 320×568, 390×844, and 1440×900 without internal scrolling. This criterion drove the 7-scene decomposition: verification proved the denser merges cannot fit (hero copy alone exceeds 568px at 320px width with pinned typography; the two-card capabilities scene exceeds even 844px). Mobile compaction (moth/status hidden ≤600px, compact h2/cards/lists/padding) is part of the work. Verified by automated measurement plus screenshots in the plan's verification step.
 
 ## Transition engine
 
@@ -112,13 +114,15 @@ Full-viewport `<canvas>` above the stage (`z-index` below header), `image-render
 
 ## URL / hash
 
-| Scene | Hash | Alias |
-|---|---|---|
-| hero | (bare path) | `#top` resolves here |
-| capabilities | `#capabilities` | |
-| situations-principles | `#situations` | `#principles` resolves here |
-| approach | `#approach` | |
-| contact | `#contact` | |
+| Scene | Hash |
+|---|---|
+| hero | (bare path; `#top` resolves here) |
+| capabilities-a | `#capabilities` |
+| capabilities-b | `#systems` |
+| situations | `#situations` |
+| principles | `#principles` |
+| approach | `#approach` |
+| contact | `#contact` |
 
 - Transition complete → `pushState` (not `replaceState`, so back/forward walks scene history).
 - Load with recognized hash/alias → open directly on that scene, no wave, entrances run once.
@@ -141,8 +145,8 @@ Full-viewport `<canvas>` above the stage (`z-index` below header), `image-render
 
 **Contract tests** — `tests/homepage-effects.test.mjs` is replaced by `tests/homepage-scenes.test.mjs` pinning:
 - Shell: `overflow:hidden` rules exist and are gated behind `html.js`; stage has `100svh`; scenes absolutely stacked.
-- Structure: exactly 5 scenes with correct ids; footer content present exactly once (inside contact scene); eyebrow sequence `01,02,03,04,05,06` in order; scroll cue present in hero.
-- Engine: `scenes.js` exists, ≤ **18,000 bytes** (twice-adjusted from the ~9KB estimate; the plan's assembled code measures ~17.4KB at project style), contains pinned constants (12, 72, 130, sine frequencies 0.013/0.041, phases 0.9/1.7, charset incl. `@#$%&*`, `#63ff72`, 800ms, wheel threshold 6, 180ms idle reset, 0.5 commit), no banned patterns (`fetch(`, `FormData`, `analytics`, `i18n`, `contactForm`, `langDrawer`).
+- Structure: exactly 7 scenes with correct ids; footer content present exactly once (inside contact scene); eyebrow sequence `01,02,03,04,05,06` in order; scroll cue present in hero; single-card capability grids centered.
+- Engine: `scenes.js` exists, ≤ **18,500 bytes** (adjusted after the root-dissolve fix and the 7-scene alias table), contains pinned constants (12, 72, 130, sine frequencies 0.013/0.041, phases 0.9/1.7, charset incl. `@#$%&*`, `#63ff72`, 800ms, wheel threshold 6, 180ms idle reset, 0.5 commit), no banned patterns (`fetch(`, `FormData`, `analytics`, `i18n`, `contactForm`, `langDrawer`).
 - `effects.js` absent from HTML; `scenes.js` loaded with `defer`.
 - Guards: reduced-motion and no-canvas fallbacks present; `document.fonts.ready` gate present.
 - Existing pixel-identity/content contract tests (~20) untouched; `script.js` cap stays but its pinned content changes (scroll-spy gone, `goTo` hook present).
