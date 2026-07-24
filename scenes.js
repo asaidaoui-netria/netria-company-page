@@ -280,6 +280,7 @@ function goTo(i, direction) {
 let wheelAcc = 0;
 let revAcc = 0;
 let wheelIdle = 0;
+let gestureLock = false;
 
 function onWheel(e) {
     e.preventDefault();
@@ -290,6 +291,7 @@ function onWheel(e) {
     wheelIdle = setTimeout(() => {
         wheelAcc = 0;
         revAcc = 0;
+        gestureLock = false;
     }, WHEEL_IDLE_MS);
     if (busy) {
         const d = e.deltaY > 0 ? "forward" : e.deltaY < 0 ? "backward" : null;
@@ -302,10 +304,17 @@ function onWheel(e) {
         }
         return;
     }
+    /* One continuous wheel stream = one scene step. A hard flick's momentum
+       keeps firing after the transition lock releases; ignore the stream
+       until it goes quiet for WHEEL_IDLE_MS. */
+    if (gestureLock) {
+        return;
+    }
     wheelAcc += e.deltaY;
     if (Math.abs(wheelAcc) >= WHEEL_THRESHOLD) {
         const d = wheelAcc > 0 ? "forward" : "backward";
         wheelAcc = 0;
+        gestureLock = true;
         goTo(active + (d === "forward" ? 1 : -1), d);
     }
 }
