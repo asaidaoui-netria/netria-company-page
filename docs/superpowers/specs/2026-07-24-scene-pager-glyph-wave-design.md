@@ -142,7 +142,7 @@ Full-viewport `<canvas>` above the stage (`z-index` below header), `image-render
 **Contract tests** — `tests/homepage-effects.test.mjs` is replaced by `tests/homepage-scenes.test.mjs` pinning:
 - Shell: `overflow:hidden` rules exist and are gated behind `html.js`; stage has `100svh`; scenes absolutely stacked.
 - Structure: exactly 5 scenes with correct ids; footer content present exactly once (inside contact scene); eyebrow sequence `01,02,03,04,05,06` in order; scroll cue present in hero.
-- Engine: `scenes.js` exists, ≤ **14,000 bytes** (adjusted from the ~9KB estimate after sizing pager+wave+entrances), contains pinned constants (12, 72, 130, sine frequencies 0.013/0.041, phases 0.9/1.7, charset incl. `@#$%&*`, `#63ff72`, 800ms, wheel threshold 6, 180ms idle reset, 0.5 commit), no banned patterns (`fetch(`, `FormData`, `analytics`, `i18n`, `contactForm`, `langDrawer`).
+- Engine: `scenes.js` exists, ≤ **18,000 bytes** (twice-adjusted from the ~9KB estimate; the plan's assembled code measures ~17.4KB at project style), contains pinned constants (12, 72, 130, sine frequencies 0.013/0.041, phases 0.9/1.7, charset incl. `@#$%&*`, `#63ff72`, 800ms, wheel threshold 6, 180ms idle reset, 0.5 commit), no banned patterns (`fetch(`, `FormData`, `analytics`, `i18n`, `contactForm`, `langDrawer`).
 - `effects.js` absent from HTML; `scenes.js` loaded with `defer`.
 - Guards: reduced-motion and no-canvas fallbacks present; `document.fonts.ready` gate present.
 - Existing pixel-identity/content contract tests (~20) untouched; `script.js` cap stays but its pinned content changes (scroll-spy gone, `goTo` hook present).
