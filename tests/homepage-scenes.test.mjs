@@ -114,3 +114,25 @@ test("mid-transition resize snaps to the target scene", () => {
 test("popstate navigation does not re-push history", () => {
   assert.match(scenes, /fromPop/);
 });
+
+test("wave uses a 12px grid with head and tail falloff", () => {
+  assert.match(scenes, /WCELL\s*=\s*12/);
+  assert.match(scenes, /HEAD\s*=\s*72/);
+  assert.match(scenes, /TAIL\s*=\s*130/);
+  assert.match(scenes, /1\.7\)/);
+});
+
+test("wave palette is grayscale with rare green sparks", () => {
+  assert.ok(scenes.includes("#63ff72"));
+  assert.match(scenes, /1\s*\/\s*12/);
+  assert.ok(scenes.includes("@#$%&*"));
+  assert.match(scenes, /#ffffff/);
+});
+
+test("wave canvas lifecycle is gated and cleaned up", () => {
+  assert.match(scenes, /"fx-wave"/);
+  assert.match(scenes, /fillRect/);
+  assert.match(scenes, /fillText/);
+  assert.match(scenes, /document\.fonts/);
+  assert.match(scenes, /clearRect/);
+});

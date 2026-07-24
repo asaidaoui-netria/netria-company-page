@@ -73,10 +73,132 @@ function settleTo(i) {
     syncNav(i);
 }
 
-/* Wave hooks — wired in Task 4. */
-function waveBegin() {}
-function wavePaint(eq) {}
-function waveEnd() {}
+/* Directional glyph wave (port of the careers.kimi.com transition). */
+const WAVE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*";
+const WAVE_BLOCKS = "█▓▒░";
+const WAVE_COLORS = ["#ffffff", "#969696", "#505050"];
+const WAVE_GREEN = "#63ff72";
+const WCELL = 12;
+const HEAD = 72;
+const TAIL = 130;
+
+let wave = null;
+let waveOn = false;
+
+function newWaveCell() {
+    const char =
+        Math.random() < 0.125
+            ? WAVE_BLOCKS.charAt((Math.random() * WAVE_BLOCKS.length) | 0)
+            : WAVE_CHARS.charAt((Math.random() * WAVE_CHARS.length) | 0);
+    const color =
+        Math.random() < 1 / 12 ? WAVE_GREEN : WAVE_COLORS[(Math.random() * WAVE_COLORS.length) | 0];
+    return { char, color, threshold: Math.random(), edgeOffset: 2 * Math.random() - 1 };
+}
+
+function waveEnsure() {
+    if (wave || REDUCED) {
+        return wave;
+    }
+    const canvas = document.createElement("canvas");
+    canvas.id = "fx-wave";
+    canvas.setAttribute("aria-hidden", "true");
+    const ctx = canvas.getContext && canvas.getContext("2d");
+    if (!ctx) {
+        return null;
+    }
+    document.body.appendChild(canvas);
+    wave = { canvas, ctx, cells: new Map(), frame: 0 };
+    return wave;
+}
+
+function waveBegin() {
+    const w = waveEnsure();
+    if (!w) {
+        return;
+    }
+    const dpr = window.devicePixelRatio || 1;
+    w.canvas.width = Math.round(window.innerWidth * dpr);
+    w.canvas.height = Math.round(window.innerHeight * dpr);
+    w.frame = 0;
+    w.cells = new Map();
+    const cols = Math.ceil(window.innerWidth / WCELL);
+    const rows = Math.ceil(window.innerHeight / WCELL);
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            w.cells.set(c + "," + r, newWaveCell());
+        }
+    }
+    w.canvas.classList.add("is-on");
+    waveOn = true;
+}
+
+function waveEnd() {
+    if (wave) {
+        wave.canvas.classList.remove("is-on");
+        wave.ctx.clearRect(0, 0, wave.canvas.width, wave.canvas.height);
+    }
+    waveOn = false;
+}
+
+function wavePaint(eq) {
+    if (!waveOn || !wave) {
+        return;
+    }
+    const { ctx, canvas, cells } = wave;
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.width / dpr;
+    const H = canvas.height / dpr;
+    const f = ++wave.frame;
+    const E = clamp01(Math.min(eq / 0.3, (1 - eq) / 0.3));
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (E <= 0) {
+        return;
+    }
+    ctx.font = `${WCELL * dpr}px 'Fusion Pixel 12px Mono', monospace`;
+    ctx.textBaseline = "top";
+    const cols = Math.ceil(W / WCELL);
+    const rows = Math.ceil(H / WCELL);
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            const cell = cells.get(c + "," + r);
+            if (!cell) {
+                continue;
+            }
+            const px = (c + 0.5) * WCELL;
+            const py = (r + 0.5) * WCELL;
+            const d = py - frontY(px, eq, target, H);
+            let a;
+            if (Math.abs(d) <= HEAD) {
+                a = E;
+            } else {
+                const wY = easeQ(eq) * H;
+                const edgeDist = d < 0 ? wY : H - wY;
+                const k = TAIL + Math.max(0, TAIL - edgeDist);
+                const A =
+                    Math.abs(d) -
+                    (0.55 * cell.edgeOffset + 0.22 * Math.sin(0.07 * f + 7.3 * cell.edgeOffset)) * TAIL;
+                if (A > k) {
+                    continue;
+                }
+                a = 0.94 * Math.pow(1 - clamp01(A / k), 1.7) * E;
+            }
+            const N =
+                0.5 + 0.5 * Math.sin(0.18 * f + 10.7 * cell.threshold + (0.31 * c + 0.17 * r));
+            if (N > a) {
+                continue;
+            }
+            if (N > 0.85 && (f + c + r) % 7 === 0) {
+                const nc = newWaveCell();
+                cell.char = nc.char;
+                cell.color = nc.color;
+            }
+            ctx.fillStyle = "#000";
+            ctx.fillRect(c * WCELL * dpr, r * WCELL * dpr, WCELL * dpr, WCELL * dpr);
+            ctx.fillStyle = cell.color;
+            ctx.fillText(cell.char, c * WCELL * dpr, r * WCELL * dpr);
+        }
+    }
+}
 
 const easeQ = (q) => smooth(clamp01(q));
 
@@ -274,6 +396,9 @@ if (JS && scenes.length > 1) {
     document.addEventListener("click", onDocClick);
     window.addEventListener("popstate", onPopState);
     window.addEventListener("resize", onResize);
+    if (document.fonts && document.fonts.load) {
+        document.fonts.load("12px 'Fusion Pixel 12px Mono'");
+    }
     settleTo(hashIndex());
     enterScene(active, 0);
 }
