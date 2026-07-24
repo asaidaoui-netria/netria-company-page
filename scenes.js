@@ -3,8 +3,8 @@ const JS = document.documentElement.classList.contains("js");
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const scenes = [...document.querySelectorAll(".scene")];
-const HASHES = ["", "capabilities", "systems", "situations", "principles", "approach", "contact"];
-const ALIAS = { top: 0, capabilities: 1, systems: 2, situations: 3, principles: 4, approach: 5, contact: 6 };
+const HASHES = ["", "capabilities", "situations", "principles", "approach", "contact"];
+const ALIAS = { top: 0, capabilities: 1, systems: 1, situations: 2, principles: 3, approach: 4, contact: 5 };
 
 const TRANS_MS = 800;
 const COMMIT = 0.5;

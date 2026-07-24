@@ -456,8 +456,8 @@ h1 em {
 
 .capability-card {
     position: relative;
-    min-height: 470px;
-    padding: clamp(1.5rem, 4vw, 3rem);
+    min-height: 300px;
+    padding: clamp(1rem, 2vw, 1.5rem);
     overflow: hidden;
     border: 1px solid var(--color-border);
     background:
@@ -487,7 +487,7 @@ h1 em {
 }
 
 .card-index {
-    margin-bottom: clamp(4rem, 9vw, 7rem);
+    margin-bottom: 1rem;
     color: var(--color-signal);
     font-family: var(--font-pixel);
     font-size: 0.7rem;
@@ -1011,18 +1011,13 @@ html.js .section.scene {
     padding-bottom: 16px;
 }
 
+html.js .capabilities.scene,
 html.js .situations.scene,
-html.js .principles.scene,
-html.js .systems.scene {
+html.js .principles.scene {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 12px;
-}
-
-html.js .capabilities .capability-grid {
-    grid-template-columns: minmax(0, 640px);
-    justify-content: center;
 }
 
 html.js .contact.scene {
@@ -1096,6 +1091,10 @@ html.js .contact.scene .footer {
         font-size: 0.62rem;
     }
 
+    html.js .capabilities.scene {
+        gap: 8px;
+    }
+
     html.js .capability-card {
         padding: 8px;
     }
@@ -1106,11 +1105,13 @@ html.js .contact.scene .footer {
 
     html.js .capability-card h3 {
         margin-bottom: 6px;
+        font-size: 1.25rem;
+        line-height: 1.2;
     }
 
     html.js .capability-card p {
-        font-size: 0.9rem;
-        line-height: 1.4;
+        font-size: 0.85rem;
+        line-height: 1.35;
     }
 
     html.js .capability-card ul {
@@ -1120,8 +1121,8 @@ html.js .contact.scene .footer {
     }
 
     html.js .capability-card li {
-        padding: 0.2rem 0;
-        font-size: 0.9rem;
+        padding: 0.18rem 0;
+        font-size: 0.8rem;
     }
 
     html.js .approach-list li {
@@ -1160,5 +1161,15 @@ html.js .contact.scene .footer {
     html.js .footer .brand img {
         width: 40px;
         height: 40px;
+    }
+}
+
+@media (max-width: 400px) {
+    html.js .capabilities .section-heading h2 {
+        font-size: 1.3rem;
+    }
+
+    html.js .capability-card p {
+        display: none;
     }
 }

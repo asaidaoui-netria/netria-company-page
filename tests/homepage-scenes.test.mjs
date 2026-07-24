@@ -7,11 +7,11 @@ const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const css = readFileSync(new URL("../styles.css", import.meta.url), "utf8");
 const scenes = readFileSync(new URL("../scenes.js", import.meta.url), "utf8");
 
-test("main stage contains exactly seven scenes with stable ids", () => {
+test("main stage contains exactly six scenes with stable ids", () => {
   const ids = [
     ...html.matchAll(/<section class="[^"]*\bscene\b[^"]*" id="([^"]+)"/g),
   ].map((m) => m[1]);
-  assert.deepEqual(ids, ["top", "capabilities", "systems", "situations", "principles", "approach", "contact"]);
+  assert.deepEqual(ids, ["top", "capabilities", "situations", "principles", "approach", "contact"]);
 });
 
 test("footer content lives inside the contact scene exactly once", () => {
@@ -21,12 +21,12 @@ test("footer content lives inside the contact scene exactly once", () => {
   assert.match(contact, /© 2026 Netria\. All rights reserved\./);
 });
 
-test("capabilities split into two single-card scenes", () => {
-  const caps = html.slice(html.indexOf('id="capabilities"'), html.indexOf('id="systems"'));
-  const systems = html.slice(html.indexOf('id="systems"'), html.indexOf('id="situations"'));
-  assert.equal((caps.match(/capability-card/g) || []).length, 1);
-  assert.equal((systems.match(/capability-card/g) || []).length, 1);
+test("capabilities scene holds both capability cards", () => {
+  const caps = html.slice(html.indexOf('id="capabilities"'), html.indexOf('id="situations"'));
+  assert.equal((caps.match(/capability-card/g) || []).length, 2);
   assert.match(caps, /<span>02<\/span> Two ways we help/);
+  assert.match(caps, /A \/ Product/);
+  assert.match(caps, /B \/ Systems/);
 });
 
 test("situations and principles are separate scenes", () => {
