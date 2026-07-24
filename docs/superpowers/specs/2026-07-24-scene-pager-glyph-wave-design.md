@@ -49,7 +49,7 @@ Existing content re-parented into 7 scenes (amended after fit verification — t
 6. **approach** (`#approach`) — 4-step list. Eyebrow `05` (renumbered from `04`).
 7. **contact** (`#contact`) — contact block (eyebrow `06`) + footer content folded in; the standalone `<footer>` element is removed.
 
-Eyebrow renumbering: principles `05→04`, approach `04→05`; all others unchanged. Mobile (≤600px) compaction: h2 drops to `clamp(2.2rem, 9vw, 3rem)` (the pinned h1 clamp is untouched), cards/lists/grids compact, mini-grids go 2-column.
+Eyebrow renumbering: principles `05→04`, approach `04→05`; all others unchanged. Mobile (≤600px) compaction: h2 drops to `clamp(1.5rem, 8vw, 3rem)` (the pinned h1 clamp is untouched), cards/lists/grids compact, mini-grids go 2-column.
 
 ### Scene manager (`scenes.js`)
 
@@ -87,7 +87,7 @@ Every scene must fit within 100svh at 320×568, 390×844, and 1440×900 without 
 
 Full-viewport `<canvas>` above the stage (`z-index` below header), `image-rendering:pixelated`, painted only during transitions (rAF loop starts at transition start, stops at end).
 
-**Grid:** 12px cells × devicePixelRatio. Cell state persists in a `Map<"x,y", cell>` rebuilt when dimensions change:
+**Grid:** 12px cells × devicePixelRatio. Cell state persists in a `Map<"x,y", cell>` rebuilt at each transition start (each `waveBegin` re-sizes the canvas to the current viewport and re-rolls every cell, so dimension changes are picked up implicitly):
 - `char`: random from `A–Za–z0–9@#$%&*`; ~1/8 of cells instead roll from the block set `█▓▒░`.
 - `color`: random from `[#ffffff, #969696, #505050]`; then ~1/12 of cells re-roll to `#63ff72`.
 - `threshold ∈ [0,1)`, `edgeOffset ∈ [−1,1)`.
@@ -99,7 +99,7 @@ Full-viewport `<canvas>` above the stage (`z-index` below header), `image-render
   - Head zone `|d| ≤ 72`: alpha `a = E`.
   - Tail zone: `A = |d| − (0.55·edgeOffset + 0.22·sin(0.07f + 7.3·edgeOffset))×130`; tail length `k = 130 + max(0, 130 − edgeDist)` where `edgeDist` is the front's distance to the screen edge on the cell's side (so the falloff stretches to a full gradient when the front is near an edge, exactly as the reference); skip if `A > k`; else `a = 0.94 × (1 − clamp(A/k))^{1.7} × E`.
 - Twinkle: `N = 0.5 + 0.5·sin(0.18f + 10.7·threshold + (0.31col + 0.17row))`; draw only if `N ≤ a`. If `N > 0.85` and `(f + col + row) mod 7 = 0`, re-roll char + color.
-- Draw: black `fillRect` over the cell, then `fillText(char)` in cell color. Font `12px × dpr 'Fusion Pixel 12px Mono'` — the subset already covers U+0020–00FF (includes `@#$%&*`) and U+2580–259F (`█▓▒░`); first transition waits on `document.fonts.ready`.
+- Draw: black `fillRect` over the cell, then `fillText(char)` in cell color. Font `12px × dpr 'Fusion Pixel'` — the subset already covers U+0020–00FF (includes `@#$%&*`) and U+2580–259F (`█▓▒░`); the font is preloaded at init via `document.fonts.load`.
 
 **Reduced motion:** canvas never starts; pager cuts instantly.
 **No canvas 2d / font failure:** wave skipped; transition becomes clip-path wipe only.
@@ -148,7 +148,7 @@ Full-viewport `<canvas>` above the stage (`z-index` below header), `image-render
 - Structure: exactly 7 scenes with correct ids; footer content present exactly once (inside contact scene); eyebrow sequence `01,02,03,04,05,06` in order; scroll cue present in hero; single-card capability grids centered.
 - Engine: `scenes.js` exists, ≤ **18,500 bytes** (adjusted after the root-dissolve fix and the 7-scene alias table), contains pinned constants (12, 72, 130, sine frequencies 0.013/0.041, phases 0.9/1.7, charset incl. `@#$%&*`, `#63ff72`, 800ms, wheel threshold 6, 180ms idle reset, 0.5 commit), no banned patterns (`fetch(`, `FormData`, `analytics`, `i18n`, `contactForm`, `langDrawer`).
 - `effects.js` absent from HTML; `scenes.js` loaded with `defer`.
-- Guards: reduced-motion and no-canvas fallbacks present; `document.fonts.ready` gate present.
+- Guards: reduced-motion and no-canvas fallbacks present; `document.fonts` preload present.
 - Existing pixel-identity/content contract tests (~20) untouched; `script.js` cap stays but its pinned content changes (scroll-spy gone, `goTo` hook present).
 
 **Behavioral verification** (Playwright, mirroring the previous fx-verify):
@@ -156,10 +156,10 @@ Full-viewport `<canvas>` above the stage (`z-index` below header), `image-render
 - Wheel up: front sweeps bottom→top.
 - Wheel during lock: no scene skip; opposite wheel mid-flight: commit if `p≥0.5` else revert.
 - Keyboard arrows navigate; nav link click `goTo`s.
-- Deep-link `#approach` opens scene 4 directly; `popstate` triggers transition.
+- Deep-link `#approach` opens scene 5 directly; `popstate` triggers transition.
 - Entrances replay on re-entry; suppressed on revert.
 - Reduced-motion emulation: instant cuts, no canvas.
-- Screenshots: all 5 scenes at 1440×900, 390×844, 320×568 (fit check — no internal scrollbars); mid-wave frames both directions.
+- Screenshots: all 7 scenes at 1440×900, 390×844, 320×568 (fit check — no internal scrollbars); mid-wave frames both directions.
 
 ## Out of scope
 
@@ -169,11 +169,11 @@ Full-viewport `<canvas>` above the stage (`z-index` below header), `image-render
 
 ## Acceptance criteria
 
-1. No scrollbar; all five scenes navigate via wheel/touch/keys/nav/hash.
+1. No scrollbar; all seven scenes navigate via wheel/touch/keys/nav/hash.
 2. Every transition shows the directional glyph wave with scene-index-phased silhouette, mirrored by scroll direction, riding the clip-path wipe edge.
 3. Decode + dissolve replay on every scene entry (except reverts).
 4. Hash deep-linking and back/forward work.
 5. Reduced motion: fully navigable with instant cuts.
 6. No JS: page is the normal scrolling document.
-7. All scenes fit 100svh at 320×568 and 1440×900.
+7. All scenes fit 100svh at 320×568, 390×844, and 1440×900.
 8. All contract tests pass; behavioral verification passes.

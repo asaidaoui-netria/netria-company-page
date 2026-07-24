@@ -72,7 +72,7 @@ test("dissolve blocks hide only when motion is allowed", () => {
 });
 
 test("scenes.js stays lean and clean", () => {
-  assert.ok(Buffer.byteLength(scenes, "utf8") < 18000);
+  assert.ok(Buffer.byteLength(scenes, "utf8") < 18500);
   assert.doesNotMatch(scenes, /fetch\(|FormData|analytics|i18n|contactForm|langDrawer/);
 });
 
@@ -169,4 +169,10 @@ test("effects.js is retired", () => {
 
 test("dissolve queries include the scene root", () => {
   assert.match(scenes, /scene\.matches\("\[data-dissolve\]"\)/);
+});
+
+test("wave uses the registered pixel font family", () => {
+  const m = css.match(/@font-face\s*\{[^}]*font-family:\s*"([^"]+)"/);
+  assert.ok(m);
+  assert.ok(scenes.includes(`'${m[1]}'`));
 });

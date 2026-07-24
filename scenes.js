@@ -3,7 +3,6 @@ const JS = document.documentElement.classList.contains("js");
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const scenes = [...document.querySelectorAll(".scene")];
-const stage = document.getElementById("main");
 const HASHES = ["", "capabilities", "systems", "situations", "principles", "approach", "contact"];
 const ALIAS = { top: 0, capabilities: 1, systems: 2, situations: 3, principles: 4, approach: 5, contact: 6 };
 
@@ -349,7 +348,7 @@ function wavePaint(eq) {
     if (E <= 0) {
         return;
     }
-    ctx.font = `${WCELL * dpr}px 'Fusion Pixel 12px Mono', monospace`;
+    ctx.font = `${WCELL * dpr}px 'Fusion Pixel', monospace`;
     ctx.textBaseline = "top";
     const cols = Math.ceil(W / WCELL);
     const rows = Math.ceil(H / WCELL);
@@ -448,6 +447,7 @@ function completeTransition() {
         syncHash(active);
     }
     fromPop = false;
+    revAcc = 0;
     busy = false;
 }
 
@@ -495,6 +495,7 @@ function goTo(i, direction) {
 
 /* Wheel pager (Kimi semantics: accumulate, threshold, lock, reverse, idle reset). */
 let wheelAcc = 0;
+let revAcc = 0;
 let wheelIdle = 0;
 
 function onWheel(e) {
@@ -505,11 +506,16 @@ function onWheel(e) {
     clearTimeout(wheelIdle);
     wheelIdle = setTimeout(() => {
         wheelAcc = 0;
+        revAcc = 0;
     }, WHEEL_IDLE_MS);
     if (busy) {
         const d = e.deltaY > 0 ? "forward" : e.deltaY < 0 ? "backward" : null;
         if (d && d !== dir) {
-            requestReverse();
+            revAcc += e.deltaY;
+            if (Math.abs(revAcc) >= WHEEL_THRESHOLD) {
+                revAcc = 0;
+                requestReverse();
+            }
         }
         return;
     }
@@ -585,15 +591,15 @@ function onPopState() {
 
 if (JS && scenes.length > 1) {
     prepEntrances();
-    stage.addEventListener("wheel", onWheel, { passive: false });
-    stage.addEventListener("touchstart", onTouchStart, { passive: true });
-    stage.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
     window.addEventListener("keydown", onKeydown);
     document.addEventListener("click", onDocClick);
     window.addEventListener("popstate", onPopState);
     window.addEventListener("resize", onResize);
     if (document.fonts && document.fonts.load) {
-        document.fonts.load("12px 'Fusion Pixel 12px Mono'");
+        document.fonts.load("12px 'Fusion Pixel'").catch(() => {});
     }
     settleTo(hashIndex());
     enterScene(active, 0);

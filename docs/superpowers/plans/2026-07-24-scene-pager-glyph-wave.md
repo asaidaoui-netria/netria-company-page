@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - Zero dependencies: no libraries, no build step, no `fetch(`, `FormData`, `analytics`, `i18n`, `contactForm`, `langDrawer` anywhere in JS.
-- `scenes.js` < 18,000 bytes; `script.js` < 5,000 bytes.
+- `scenes.js` < 18,500 bytes; `script.js` < 5,000 bytes.
 - No `IntersectionObserver` anywhere after Task 2 (neither file may contain the string).
 - Progressive enhancement: without the `html.js` class, the page MUST remain a normal scrolling document; all shell CSS is gated behind `html.js`.
 - Do not change: authored copy (except the eyebrow numbers specified), meta tags, the Fusion Pixel subset font, pixel-identity CSS pins (`--color-bg:#050706`, `--color-signal:#63ff72`, `--font-display`, `--font-mono`, mobile h1 `clamp(2.8rem, 13vw, 4.6rem)`), `assets/`.
