@@ -705,7 +705,7 @@ h1 em {
     }
     50%,
     100% {
-        opacity: 0;
+        opacity: 0.25;
     }
 }
 
@@ -1171,5 +1171,59 @@ html.js .contact.scene .footer {
 
     html.js .capability-card p {
         display: none;
+    }
+
+    /* Make room for the scroll cue on the smallest phones */
+    html.js .section.scene {
+        gap: 6px;
+    }
+
+    html.js .capability-card {
+        padding: 6px;
+    }
+
+    html.js .capability-card li {
+        padding: 0.12rem 0;
+        font-size: 0.75rem;
+    }
+
+    html.js .situation-grid,
+    html.js .principle-grid {
+        gap: 6px;
+    }
+
+    html.js .situation-grid p,
+    html.js .principle-grid p,
+    html.js .approach-list p {
+        font-size: 0.85rem;
+        line-height: 1.35;
+    }
+
+    html.js .approach-list li {
+        padding: 2px 0;
+    }
+
+    .scroll-cue {
+        bottom: 8px;
+    }
+
+    .scroll-cue-chevrons {
+        gap: 3px;
+    }
+
+    .scroll-cue-chevrons i {
+        width: 10px;
+        height: 6px;
+    }
+
+    .scroll-cue-chevrons i::before {
+        width: 2px;
+        height: 2px;
+        box-shadow:
+            4px 0 0 var(--color-signal),
+            2px 2px 0 var(--color-signal),
+            6px 2px 0 var(--color-signal),
+            0 4px 0 var(--color-signal),
+            8px 4px 0 var(--color-signal);
     }
 }
