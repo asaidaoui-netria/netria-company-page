@@ -421,7 +421,7 @@ h1 em::after {
         transparent 16%
     );
     transform: translateY(-100%);
-    animation: signal-sweep 5.5s steps(28, end) infinite;
+    animation: signal-sweep 5.5s linear infinite;
 }
 
 .signal-core {
@@ -446,18 +446,32 @@ h1 em::after {
     position: absolute;
     width: 8px;
     height: 8px;
+}
+
+.signal-pixel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
     background: var(--color-signal);
     animation: pixel-pulse 3s steps(2, end) infinite;
 }
 
+/* Fade timings share the 5.5s sweep clock: each pixel re-ignites during
+   the quiet first half of the loop, then slowly vanishes as the sweep's
+   glow front reaches its vertical position (one 18%, two 70%, three 87%). */
 .signal-pixel-one {
     top: 18%;
     left: 20%;
+    animation: pixel-life-one 5.5s linear infinite;
 }
 
 .signal-pixel-two {
     right: 13%;
     bottom: 28%;
+    animation: pixel-life-two 5.5s linear infinite;
+}
+
+.signal-pixel-two::before {
     animation-delay: 0.8s;
 }
 
@@ -466,6 +480,10 @@ h1 em::after {
     left: 32%;
     width: 6px;
     height: 6px;
+    animation: pixel-life-three 5.5s linear infinite;
+}
+
+.signal-pixel-three::before {
     animation-delay: 1.4s;
 }
 
@@ -790,6 +808,30 @@ h1 em::after {
     to {
         transform: translateY(100%);
     }
+}
+
+@keyframes pixel-life-one {
+    0% { opacity: 0; }
+    5% { opacity: 1; }
+    51% { opacity: 1; }
+    59% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@keyframes pixel-life-two {
+    0% { opacity: 0; }
+    5% { opacity: 1; }
+    77% { opacity: 1; }
+    85% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@keyframes pixel-life-three {
+    0% { opacity: 0; }
+    5% { opacity: 1; }
+    85% { opacity: 1; }
+    93% { opacity: 0; }
+    100% { opacity: 0; }
 }
 
 @keyframes pixel-pulse {
