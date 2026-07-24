@@ -824,6 +824,11 @@ html.js .scene {
     overscroll-behavior: contain;
 }
 
+/* Opaque backdrop so the entering scene's clip truly wipes the outgoing one */
+html.js .scene:not(.contact) {
+    background: var(--color-bg);
+}
+
 html.js .scene--active {
     visibility: visible;
     z-index: 1;
