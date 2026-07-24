@@ -155,3 +155,7 @@ test("entrances fire on scene entry and reset on park", () => {
 test("effects.js is retired", () => {
   assert.throws(() => readFileSync(new URL("../effects.js", import.meta.url), "utf8"));
 });
+
+test("dissolve queries include the scene root", () => {
+  assert.match(scenes, /scene\.matches\("\[data-dissolve\]"\)/);
+});

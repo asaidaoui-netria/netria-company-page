@@ -183,7 +183,11 @@ function enterScene(i, delayMs) {
                 runDecode(state);
             }
         });
-        scene.querySelectorAll("[data-dissolve]").forEach((el) => {
+        const els = [...scene.querySelectorAll("[data-dissolve]")];
+        if (scene.matches("[data-dissolve]")) {
+            els.push(scene);
+        }
+        els.forEach((el) => {
             el.classList.add("is-visible");
             runDissolve(el);
         });
@@ -211,7 +215,11 @@ function parkScene(i) {
         });
     });
     scene.querySelectorAll(".dissolve-overlay").forEach((c) => c.remove());
-    scene.querySelectorAll("[data-dissolve]").forEach((el) => {
+    const els = [...scene.querySelectorAll("[data-dissolve]")];
+    if (scene.matches("[data-dissolve]")) {
+        els.push(scene);
+    }
+    els.forEach((el) => {
         el._fxBusy = false;
         el.classList.remove("is-visible");
     });
