@@ -37,6 +37,7 @@ test("situations and principles are separate scenes", () => {
   assert.match(prin, /<span>04<\/span> Working principles/);
   assert.match(prin, /principle-grid/);
   assert.match(html.slice(html.indexOf('id="approach"')), /<span>05<\/span> How engagements work/);
+  assert.match(html.slice(html.indexOf('id="contact"')), /<span>06<\/span> Open a channel/);
 });
 
 test("hero is the default active scene and carries a scroll cue", () => {
