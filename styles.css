@@ -982,12 +982,12 @@ html.js #fx-wave.is-on {
     animation: pixel-blink 1.4s steps(1) infinite;
 }
 
-.scroll-cue-chevrons i:nth-child(2) {
-    animation-delay: 0.2s;
+.scroll-cue-chevrons i:nth-child(1) {
+    animation-delay: 0.4s;
 }
 
-.scroll-cue-chevrons i:nth-child(3) {
-    animation-delay: 0.4s;
+.scroll-cue-chevrons i:nth-child(2) {
+    animation-delay: 0.2s;
 }
 
 .scroll-cue-chevrons i::before {
