@@ -13,6 +13,7 @@ const ENTRANCE_DELAY_MS = 250;
 const WHEEL_THRESHOLD = 6;
 const WHEEL_IDLE_MS = 180;
 const TOUCH_MIN = 40;
+const CLIP_STEPS = 24;
 
 let active = 0;
 let busy = false;
@@ -20,6 +21,7 @@ let target = 0;
 let dir = "forward";
 let p = 0;
 let goal = 1;
+let fromPop = false;
 
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const smooth = (t) => t * t * (3 - 2 * t);
@@ -45,6 +47,10 @@ function syncNav(i) {
 }
 
 function syncHash(i) {
+    if (fromPop) {
+        fromPop = false;
+        return;
+    }
     history.pushState(null, "", HASHES[i] ? `#${HASHES[i]}` : location.pathname);
 }
 
@@ -67,13 +73,100 @@ function settleTo(i) {
     syncNav(i);
 }
 
+/* Wave hooks — wired in Task 4. */
+function waveBegin() {}
+function wavePaint(eq) {}
+function waveEnd() {}
+
+const easeQ = (q) => smooth(clamp01(q));
+
+/* Wave front y at column x: eased progress plus two scene-phased sines. */
+function frontY(x, q, s, H) {
+    return easeQ(q) * H + 38 * (0.6 * Math.sin(0.013 * x + 0.9 * s) + 0.4 * Math.sin(0.041 * x + 1.7 * s));
+}
+
+/* Clip the incoming scene along the wave front. Forward: reveal top-down. */
+function applyClip(el, q, s) {
+    const W = el.clientWidth;
+    const H = el.clientHeight;
+    const pts = [];
+    for (let k = CLIP_STEPS; k >= 0; k--) {
+        const x = (W * k) / CLIP_STEPS;
+        pts.push(`${x.toFixed(1)}px ${frontY(x, q, s, H).toFixed(1)}px`);
+    }
+    const base = dir === "forward" ? `0px 0px, ${W}px 0px` : `0px ${H}px, ${W}px ${H}px`;
+    el.style.clipPath = `polygon(${base}, ${pts.join(", ")})`;
+}
+
+let rafId = 0;
+let lastT = 0;
+let entranceTimer = 0;
+
+function stepFrame(now) {
+    const dt = Math.min(64, now - lastT);
+    lastT = now;
+    p = clamp01(p + ((goal === 1 ? dt : -dt) / TRANS_MS));
+    const eq = dir === "forward" ? p : 1 - p;
+    applyClip(scenes[target], eq, target);
+    wavePaint(eq);
+    if ((goal === 1 && p >= 1) || (goal === 0 && p <= 0)) {
+        completeTransition();
+        return;
+    }
+    rafId = requestAnimationFrame(stepFrame);
+}
+
+function requestReverse() {
+    if (busy) {
+        goal = p >= COMMIT ? 1 : 0;
+    }
+}
+
+function completeTransition() {
+    cancelAnimationFrame(rafId);
+    clearTimeout(entranceTimer);
+    waveEnd();
+    settleTo(goal === 1 ? target : active);
+    if (goal === 1) {
+        syncHash(active);
+    }
+    fromPop = false;
+    busy = false;
+}
+
 function startTransition(next, direction) {
     if (busy || next === active || next < 0 || next >= scenes.length) {
         return;
     }
-    settleTo(next); // Task 3 replaces this cut with the animated transition.
-    syncHash(next);
-    enterScene(next, 0);
+    if (REDUCED) {
+        settleTo(next);
+        syncHash(next);
+        return;
+    }
+    busy = true;
+    target = next;
+    dir = direction;
+    p = 0;
+    goal = 1;
+    const incoming = scenes[target];
+    incoming.classList.add("scene--entering");
+    incoming.removeAttribute("aria-hidden");
+    incoming.removeAttribute("inert");
+    entranceTimer = setTimeout(() => enterScene(target, 0), ENTRANCE_DELAY_MS);
+    waveBegin();
+    lastT = performance.now();
+    rafId = requestAnimationFrame(stepFrame);
+}
+
+function onResize() {
+    if (busy) {
+        cancelAnimationFrame(rafId);
+        clearTimeout(entranceTimer);
+        waveEnd();
+        settleTo(target);
+        syncHash(active);
+        busy = false;
+    }
 }
 
 function goTo(i, direction) {
@@ -99,7 +192,7 @@ function onWheel(e) {
     if (busy) {
         const d = e.deltaY > 0 ? "forward" : e.deltaY < 0 ? "backward" : null;
         if (d && d !== dir) {
-            goal = p >= COMMIT ? 1 : 0; // reversal: commit past halfway, else revert
+            requestReverse();
         }
         return;
     }
@@ -166,9 +259,11 @@ function onDocClick(e) {
 
 function onPopState() {
     const i = hashIndex();
-    if (i !== active) {
-        goTo(i, i > active ? "forward" : "backward");
+    if (busy || i === active || i < 0 || i >= scenes.length) {
+        return;
     }
+    fromPop = true;
+    goTo(i, i > active ? "forward" : "backward");
 }
 
 if (JS && scenes.length > 1) {
@@ -178,6 +273,7 @@ if (JS && scenes.length > 1) {
     window.addEventListener("keydown", onKeydown);
     document.addEventListener("click", onDocClick);
     window.addEventListener("popstate", onPopState);
+    window.addEventListener("resize", onResize);
     settleTo(hashIndex());
     enterScene(active, 0);
 }

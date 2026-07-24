@@ -89,3 +89,28 @@ test("exposes the scene test hook", () => {
 test("no intersection observers remain", () => {
   assert.doesNotMatch(scenes, /IntersectionObserver/);
 });
+
+test("transition tweens progress with clip-path wipe", () => {
+  assert.match(scenes, /TRANS_MS\s*=\s*800/);
+  assert.match(scenes, /COMMIT\s*=\s*0\.5/);
+  assert.match(scenes, /CLIP_STEPS\s*=\s*24/);
+  assert.match(scenes, /requestAnimationFrame/);
+  assert.match(scenes, /clipPath\s*=\s*`polygon\(/);
+  assert.match(scenes, /cancelAnimationFrame/);
+});
+
+test("wave front is perturbed by scene-phased sines", () => {
+  assert.match(scenes, /function frontY\(/);
+  assert.match(scenes, /0\.013/);
+  assert.match(scenes, /0\.041/);
+  assert.match(scenes, /0\.9\s*\*\s*s/);
+  assert.match(scenes, /1\.7\s*\*\s*s/);
+});
+
+test("mid-transition resize snaps to the target scene", () => {
+  assert.match(scenes, /addEventListener\("resize", onResize\)/);
+});
+
+test("popstate navigation does not re-push history", () => {
+  assert.match(scenes, /fromPop/);
+});
