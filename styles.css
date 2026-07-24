@@ -1090,15 +1090,15 @@ html.js #fx-wave.is-on {
 
 /* Scene fit */
 html.js .section.scene {
-    padding-top: 84px;
-    padding-bottom: 32px;
+    padding-top: 80px;
+    padding-bottom: 16px;
 }
 
 html.js .situations.scene {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 22px;
+    gap: 12px;
 }
 
 html.js .situations .section-heading,
@@ -1110,7 +1110,7 @@ html.js .contact.scene {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 28px;
+    gap: 0;
 }
 
 html.js .contact.scene .footer {

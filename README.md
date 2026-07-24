@@ -20,9 +20,9 @@ The **Quiet Signal** identity combines:
 - the Netria pixel moth;
 - self-hosted Fusion Pixel bitmap typography with technical monospace labels;
 - CRT scanlines, dithered textures, pixel-cut corners, and hard offset shadows;
-- scroll effects that decode headings and dissolve pixels on every section entry;
+- a no-scrollbar scene pager with a directional glyph-wave transition (careers.kimi.com parity), plus heading-decode and pixel-dissolve entrances on every scene entry;
 - restrained grids, particles, and squared orbital geometry;
-- conventional scrolling and reduced-motion support.
+- hash deep-linking, wheel/touch/keyboard navigation, and reduced-motion instant cuts (no-JS keeps the normal scrolling document).
 
 ## Contact
 
@@ -38,7 +38,7 @@ Visitors contact Netria directly at [hello@netria.dev](mailto:hello@netria.dev).
 ├── CNAME                    # Custom-domain configuration
 ├── index.html               # Semantic page content and metadata
 ├── script.js                # Mobile navigation and progressive reveals
-├── effects.js               # Signal Resolve scroll effects
+├── scenes.js                # Scene pager, glyph wave, entrances
 └── styles.css               # Quiet Signal visual system
 ```
 
@@ -64,7 +64,7 @@ Check JavaScript syntax and whitespace:
 
 ```bash
 node --check script.js
-node --check effects.js
+node --check scenes.js
 git diff --check
 ```
 
