@@ -23,7 +23,7 @@ test("uses internationally neutral English metadata", () => {
 });
 
 test("contains the approved dual-track content structure", () => {
-  for (const id of ["capabilities", "situations", "approach", "principles", "contact"]) {
+  for (const id of ["capabilities", "situations", "approach", "contact"]) {
     assert.match(html, new RegExp(`<section[^>]+id="${id}"`));
   }
 

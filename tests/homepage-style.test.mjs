@@ -35,9 +35,9 @@ test("disables decorative motion when reduced motion is requested", () => {
   assert.match(css, /scroll-behavior:\s*auto/);
 });
 
-test("keeps reveal content visible without JavaScript", () => {
-  assert.match(css, /\.no-js \[data-reveal\]\s*\{[^}]*opacity:\s*1/s);
-  assert.match(css, /\.no-js \[data-reveal\]\s*\{[^}]*transform:\s*none/s);
+test("keeps scenes in normal document flow without JavaScript", () => {
+  assert.doesNotMatch(css, /\[data-reveal\]/);
+  assert.match(css, /html\.js \.scene\s*\{/);
 });
 
 test("constrains the mobile hero to the viewport", () => {

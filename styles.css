@@ -771,24 +771,8 @@ h1 em::after {
     margin: 0;
 }
 
-[data-reveal] {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 650ms ease, transform 650ms ease;
-}
-
-[data-reveal].is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
 [data-dissolve] {
     position: relative;
-}
-
-[data-reveal][data-dissolve] {
-    transform: none;
-    transition: opacity 60ms steps(2, end);
 }
 
 .dissolve-overlay {
@@ -797,11 +781,6 @@ h1 em::after {
     z-index: 3;
     pointer-events: none;
     image-rendering: pixelated;
-}
-
-.no-js [data-reveal] {
-    opacity: 1;
-    transform: none;
 }
 
 @keyframes grid-drift {
@@ -1020,12 +999,133 @@ h1 em::after {
         transition-duration: 0.01ms !important;
     }
 
-    [data-reveal] {
-        opacity: 1;
-        transform: none;
-    }
-
     .dissolve-overlay {
         display: none !important;
+    }
+}
+
+/* Scene shell (gated behind html.js: no-js keeps the normal scrolling document) */
+html.js,
+html.js body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
+}
+
+html.js main {
+    position: relative;
+    height: 100svh;
+    overflow: hidden;
+}
+
+html.js .scene {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+html.js .scene--active {
+    visibility: visible;
+    z-index: 1;
+}
+
+html.js .scene--entering {
+    visibility: visible;
+    z-index: 2;
+}
+
+html.js .site-header {
+    z-index: 70;
+}
+
+#fx-wave {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100svh;
+    display: none;
+    pointer-events: none;
+    image-rendering: pixelated;
+    z-index: 60;
+}
+
+html.js #fx-wave.is-on {
+    display: block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html.js [data-dissolve] {
+        opacity: 0;
+        transition: opacity 60ms steps(2, end);
+    }
+
+    html.js [data-dissolve].is-visible {
+        opacity: 1;
+    }
+}
+
+.scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(149, 160, 151, 0.85);
+}
+
+.scroll-cue-arrow {
+    color: var(--color-signal);
+    animation: pixel-blink 1.1s steps(1) infinite;
+}
+
+/* Scene fit */
+html.js .section.scene {
+    padding-top: 84px;
+    padding-bottom: 32px;
+}
+
+html.js .situations.scene {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 22px;
+}
+
+html.js .situations .section-heading,
+html.js .situations .section-heading.compact {
+    margin-bottom: 0;
+}
+
+html.js .contact.scene {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 28px;
+}
+
+html.js .contact.scene .footer {
+    margin-top: 16px;
+}
+
+@media (max-width: 600px) {
+    html.js .situation-grid,
+    html.js .principle-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    html.js .situation-grid article,
+    html.js .principle-grid article {
+        padding: 12px;
     }
 }

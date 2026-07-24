@@ -42,7 +42,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
-    <script src="effects.js" defer></script>
+    <script src="scenes.js" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -76,8 +76,8 @@
     </header>
 
     <main id="main">
-        <section class="hero" id="top">
-            <div class="hero-copy" data-reveal>
+        <section class="hero scene scene--active" id="top">
+            <div class="hero-copy">
                 <p class="eyebrow"><span>01</span> Custom software · Workflow automation</p>
                 <h1 data-decode>Software for ideas and operations <em>in motion.</em></h1>
                 <p class="hero-summary">
@@ -95,7 +95,7 @@
                 </div>
             </div>
 
-            <div class="hero-signal" aria-hidden="true" data-reveal data-dissolve>
+            <div class="hero-signal" aria-hidden="true" data-dissolve>
                 <div class="signal-grid"></div>
                 <div class="signal-orbit signal-orbit-large"></div>
                 <div class="signal-orbit signal-orbit-small"></div>
@@ -114,10 +114,12 @@
                 <span>Signal active</span>
                 <span>Custom systems · Built to evolve</span>
             </div>
+
+            <p class="scroll-cue" aria-hidden="true"><span>Scroll</span><span class="scroll-cue-arrow">↓</span></p>
         </section>
 
-        <section class="section capabilities" id="capabilities">
-            <div class="section-heading" data-reveal>
+        <section class="section capabilities scene" id="capabilities">
+            <div class="section-heading">
                 <p class="eyebrow"><span>02</span> Two ways we help</p>
                 <h2 data-decode>Build something new.<br>Improve what already moves.</h2>
                 <p>
@@ -126,7 +128,7 @@
             </div>
 
             <div class="capability-grid">
-                <article class="capability-card" data-reveal data-dissolve>
+                <article class="capability-card" data-dissolve>
                     <div class="card-index">A / Product</div>
                     <h3>Build a product</h3>
                     <p>
@@ -141,7 +143,7 @@
                     </ul>
                 </article>
 
-                <article class="capability-card" data-reveal data-dissolve>
+                <article class="capability-card" data-dissolve>
                     <div class="card-index">B / Systems</div>
                     <h3>Improve a system</h3>
                     <p>
@@ -158,65 +160,89 @@
             </div>
         </section>
 
-        <section class="section situations" id="situations">
-            <div class="section-heading compact" data-reveal>
+        <section class="section situations scene" id="situations">
+            <div class="section-heading compact">
                 <p class="eyebrow"><span>03</span> Useful when</p>
                 <h2 data-decode>The next step needs more than another off-the-shelf tool.</h2>
             </div>
 
             <div class="situation-grid">
-                <article data-reveal>
+                <article>
                     <span>01</span>
                     <h3>Launching a digital product</h3>
                     <p>Shape the right first version and build toward real use.</p>
                 </article>
-                <article data-reveal>
+                <article>
                     <span>02</span>
                     <h3>Replacing manual work</h3>
                     <p>Turn repetitive steps and spreadsheets into a coherent workflow.</p>
                 </article>
-                <article data-reveal>
+                <article>
                     <span>03</span>
                     <h3>Connecting fragmented tools</h3>
                     <p>Make information and actions move cleanly between systems.</p>
                 </article>
-                <article data-reveal>
+                <article>
                     <span>04</span>
                     <h3>Extending a product team</h3>
                     <p>Add focused engineering capacity around a defined outcome.</p>
                 </article>
             </div>
+
+            <div class="section-heading compact">
+                <p class="eyebrow"><span>04</span> Working principles</p>
+                <h2 data-decode>Dependable software starts with dependable decisions.</h2>
+            </div>
+
+            <div class="principle-grid">
+                <article>
+                    <h3>Clarity before complexity</h3>
+                    <p>Understand the real problem before choosing the machinery.</p>
+                </article>
+                <article>
+                    <h3>Pragmatic engineering</h3>
+                    <p>Use technology because it serves the outcome, not the other way around.</p>
+                </article>
+                <article>
+                    <h3>Close collaboration</h3>
+                    <p>Keep decisions visible and the work connected to the people it affects.</p>
+                </article>
+                <article>
+                    <h3>Designed to evolve</h3>
+                    <p>Build a strong first version without closing off what comes next.</p>
+                </article>
+            </div>
         </section>
 
-        <section class="section approach" id="approach">
-            <div class="section-heading" data-reveal>
-                <p class="eyebrow"><span>04</span> How engagements work</p>
+        <section class="section approach scene" id="approach">
+            <div class="section-heading">
+                <p class="eyebrow"><span>05</span> How engagements work</p>
                 <h2 data-decode>Clarity first. Then forward motion.</h2>
             </div>
 
             <ol class="approach-list">
-                <li data-reveal>
+                <li>
                     <span>01</span>
                     <div>
                         <h3>Frame the problem</h3>
                         <p>Clarify the outcome, users, constraints, and highest-risk assumptions.</p>
                     </div>
                 </li>
-                <li data-reveal>
+                <li>
                     <span>02</span>
                     <div>
                         <h3>Prototype the path</h3>
                         <p>Test the experience and technical direction before the full build.</p>
                     </div>
                 </li>
-                <li data-reveal>
+                <li>
                     <span>03</span>
                     <div>
                         <h3>Build and validate</h3>
                         <p>Deliver in understandable increments and validate against the workflow.</p>
                     </div>
                 </li>
-                <li data-reveal>
+                <li>
                     <span>04</span>
                     <div>
                         <h3>Release and evolve</h3>
@@ -226,46 +252,17 @@
             </ol>
         </section>
 
-        <section class="section principles" id="principles">
-            <div class="section-heading compact" data-reveal>
-                <p class="eyebrow"><span>05</span> Working principles</p>
-                <h2 data-decode>Dependable software starts with dependable decisions.</h2>
-            </div>
-
-            <div class="principle-grid">
-                <article data-reveal>
-                    <h3>Clarity before complexity</h3>
-                    <p>Understand the real problem before choosing the machinery.</p>
-                </article>
-                <article data-reveal>
-                    <h3>Pragmatic engineering</h3>
-                    <p>Use technology because it serves the outcome, not the other way around.</p>
-                </article>
-                <article data-reveal>
-                    <h3>Close collaboration</h3>
-                    <p>Keep decisions visible and the work connected to the people it affects.</p>
-                </article>
-                <article data-reveal>
-                    <h3>Designed to evolve</h3>
-                    <p>Build a strong first version without closing off what comes next.</p>
-                </article>
-            </div>
-        </section>
-
-        <section class="contact" id="contact" data-dissolve>
-            <div data-reveal>
+        <section class="contact scene" id="contact" data-dissolve>
+            <div>
                 <p class="eyebrow"><span>06</span> Open a channel</p>
                 <h2 data-decode>Have an idea or operation that needs forward motion?</h2>
                 <p>Start with an email. Tell us what you are trying to change.</p>
             </div>
             <a class="contact-link"
-                href="mailto:hello@netria.dev?subject=Project%20conversation" data-reveal>
+                href="mailto:hello@netria.dev?subject=Project%20conversation">
                 <span>hello@netria.dev</span>
                 <span aria-hidden="true">↗</span>
             </a>
-        </section>
-    </main>
-
     <footer class="footer">
         <a class="brand" href="#top" aria-label="Netria home">
             <picture>
@@ -282,5 +279,7 @@
         </div>
         <p>© 2026 Netria. All rights reserved.</p>
     </footer>
+        </section>
+    </main>
 </body>
 </html>
