@@ -527,7 +527,6 @@ h1 em {
     color: var(--color-signal);
 }
 
-.situation-grid,
 .principle-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -535,7 +534,6 @@ h1 em {
     border-left: 1px solid var(--color-border);
 }
 
-.situation-grid article,
 .principle-grid article {
     min-height: 230px;
     padding: 1.5rem;
@@ -545,70 +543,20 @@ h1 em {
     transition: background var(--transition);
 }
 
-.situation-grid article:hover,
 .principle-grid article:hover {
     background: rgba(99, 255, 114, 0.06);
 }
 
-.situation-grid span {
-    display: block;
-    margin-bottom: 4rem;
-    color: var(--color-signal);
-    font-family: var(--font-pixel);
-    font-size: 0.7rem;
-}
-
-.situation-grid h3,
 .principle-grid h3 {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.35;
 }
 
-.situation-grid p,
 .principle-grid p {
     margin-bottom: 0;
     color: var(--color-muted);
     font-size: 0.9rem;
-}
-
-.approach-list {
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid var(--color-border);
-    list-style: none;
-}
-
-.approach-list li {
-    display: grid;
-    grid-template-columns: minmax(70px, 0.25fr) minmax(0, 1fr);
-    gap: 1rem;
-    padding: 2rem 0;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.approach-list > li > span {
-    color: var(--color-signal);
-    font-family: var(--font-pixel);
-    font-size: 0.75rem;
-}
-
-.approach-list div {
-    display: grid;
-    grid-template-columns: minmax(220px, 0.7fr) minmax(240px, 1fr);
-    gap: 2rem;
-}
-
-.approach-list h3 {
-    margin-bottom: 0;
-    font-size: clamp(1.2rem, 2vw, 1.7rem);
-    font-weight: 400;
-}
-
-.approach-list p {
-    max-width: 52ch;
-    margin-bottom: 0;
-    color: var(--color-muted);
 }
 
 .contact {
@@ -660,20 +608,6 @@ h1 em {
     color: var(--color-dim);
     font-family: var(--font-pixel);
     font-size: 0.68rem;
-}
-
-.footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-}
-
-.footer-links a {
-    text-decoration: none;
-}
-
-.footer-links a:hover {
-    color: var(--color-signal);
 }
 
 .footer p {
@@ -798,8 +732,7 @@ h1 em {
     }
 
     .section-heading,
-    .capability-grid,
-    .approach-list div {
+    .capability-grid {
         grid-template-columns: 1fr;
     }
 
@@ -807,7 +740,6 @@ h1 em {
         grid-column: auto;
     }
 
-    .situation-grid,
     .principle-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -817,8 +749,7 @@ h1 em {
         text-align: center;
     }
 
-    .footer .brand,
-    .footer-links {
+    .footer .brand {
         justify-self: center;
     }
 }
@@ -853,13 +784,8 @@ h1 em {
         columns: 1;
     }
 
-    .situation-grid,
     .principle-grid {
         grid-template-columns: 1fr;
-    }
-
-    .approach-list li {
-        grid-template-columns: 42px 1fr;
     }
 
     .contact {
@@ -870,10 +796,6 @@ h1 em {
         align-items: flex-start;
         font-size: 1rem;
         overflow-wrap: anywhere;
-    }
-
-    .footer-links {
-        flex-wrap: wrap;
     }
 }
 
@@ -1012,7 +934,6 @@ html.js .section.scene {
 }
 
 html.js .capabilities.scene,
-html.js .situations.scene,
 html.js .principles.scene {
     display: flex;
     flex-direction: column;
@@ -1034,24 +955,16 @@ html.js .contact.scene .footer {
 }
 
 @media (max-width: 600px) {
-    html.js .situation-grid,
     html.js .principle-grid {
         grid-template-columns: 1fr 1fr;
         gap: 6px;
     }
 
-    html.js .situation-grid article,
     html.js .principle-grid article {
         min-height: 0;
         padding: 4px;
     }
 
-    html.js .situation-grid span {
-        margin-bottom: 0.2rem;
-        font-size: 0.62rem;
-    }
-
-    html.js .situation-grid h3,
     html.js .principle-grid h3 {
         margin-bottom: 4px;
     }
@@ -1125,25 +1038,6 @@ html.js .contact.scene .footer {
         font-size: 0.8rem;
     }
 
-    html.js .approach-list li {
-        padding: 4px 0;
-        gap: 8px;
-    }
-
-    html.js .approach-list div {
-        gap: 6px;
-    }
-
-    html.js .approach-list h3 {
-        font-size: 1.05rem;
-        line-height: 1.3;
-    }
-
-    html.js .approach-list p {
-        font-size: 0.95rem;
-        line-height: 1.35;
-    }
-
     html.js .contact.scene {
         padding-top: 68px;
         padding-bottom: 16px;
@@ -1187,20 +1081,13 @@ html.js .contact.scene .footer {
         font-size: 0.75rem;
     }
 
-    html.js .situation-grid,
     html.js .principle-grid {
         gap: 6px;
     }
 
-    html.js .situation-grid p,
-    html.js .principle-grid p,
-    html.js .approach-list p {
+    html.js .principle-grid p {
         font-size: 0.85rem;
         line-height: 1.35;
-    }
-
-    html.js .approach-list li {
-        padding: 2px 0;
     }
 
     .scroll-cue {

@@ -3,8 +3,8 @@ const JS = document.documentElement.classList.contains("js");
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const scenes = [...document.querySelectorAll(".scene")];
-const HASHES = ["", "capabilities", "situations", "principles", "approach", "contact"];
-const ALIAS = { top: 0, capabilities: 1, systems: 1, situations: 2, principles: 3, approach: 4, contact: 5 };
+const HASHES = ["", "capabilities", "principles", "contact"];
+const ALIAS = { top: 0, capabilities: 1, systems: 1, situations: 1, principles: 2, approach: 3, contact: 3 };
 
 const TRANS_MS = 800;
 const COMMIT = 0.5;
@@ -229,17 +229,6 @@ function hashIndex() {
     return h ? ALIAS[h] ?? 0 : 0;
 }
 
-function syncNav(i) {
-    document.querySelectorAll(".nav-menu a[href^='#'], .footer-links a[href^='#']").forEach((a) => {
-        const idx = ALIAS[a.getAttribute("href").slice(1)];
-        if (idx === i) {
-            a.setAttribute("aria-current", "true");
-        } else {
-            a.removeAttribute("aria-current");
-        }
-    });
-}
-
 function syncHash(i) {
     if (fromPop) {
         fromPop = false;
@@ -264,7 +253,6 @@ function settleTo(i) {
         }
     });
     active = i;
-    syncNav(i);
 }
 
 /* Directional glyph wave (port of the careers.kimi.com transition). */

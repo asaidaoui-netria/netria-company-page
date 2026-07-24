@@ -7,11 +7,11 @@ const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const css = readFileSync(new URL("../styles.css", import.meta.url), "utf8");
 const scenes = readFileSync(new URL("../scenes.js", import.meta.url), "utf8");
 
-test("main stage contains exactly six scenes with stable ids", () => {
+test("main stage contains exactly four scenes with stable ids", () => {
   const ids = [
     ...html.matchAll(/<section class="[^"]*\bscene\b[^"]*" id="([^"]+)"/g),
   ].map((m) => m[1]);
-  assert.deepEqual(ids, ["top", "capabilities", "situations", "principles", "approach", "contact"]);
+  assert.deepEqual(ids, ["top", "capabilities", "principles", "contact"]);
 });
 
 test("footer content lives inside the contact scene exactly once", () => {
@@ -22,22 +22,18 @@ test("footer content lives inside the contact scene exactly once", () => {
 });
 
 test("capabilities scene holds both capability cards", () => {
-  const caps = html.slice(html.indexOf('id="capabilities"'), html.indexOf('id="situations"'));
+  const caps = html.slice(html.indexOf('id="capabilities"'), html.indexOf('id="principles"'));
   assert.equal((caps.match(/capability-card/g) || []).length, 2);
   assert.match(caps, /<span>02<\/span> Two ways we help/);
   assert.match(caps, /A \/ Product/);
   assert.match(caps, /B \/ Systems/);
 });
 
-test("situations and principles are separate scenes", () => {
-  const situ = html.slice(html.indexOf('id="situations"'), html.indexOf('id="principles"'));
-  const prin = html.slice(html.indexOf('id="principles"'), html.indexOf('id="approach"'));
-  assert.match(situ, /<span>03<\/span> Useful when/);
-  assert.match(situ, /situation-grid/);
-  assert.match(prin, /<span>04<\/span> Working principles/);
+test("principles scene carries the grid, contact closes the page", () => {
+  const prin = html.slice(html.indexOf('id="principles"'), html.indexOf('id="contact"'));
+  assert.match(prin, /<span>03<\/span> Working principles/);
   assert.match(prin, /principle-grid/);
-  assert.match(html.slice(html.indexOf('id="approach"')), /<span>05<\/span> How engagements work/);
-  assert.match(html.slice(html.indexOf('id="contact"')), /<span>06<\/span> Open a channel/);
+  assert.match(html.slice(html.indexOf('id="contact"')), /<span>04<\/span> Open a channel/);
 });
 
 test("hero is the default active scene and carries a scroll cue", () => {
@@ -84,10 +80,9 @@ test("pager implements kimi wheel semantics", () => {
   assert.match(scenes, /TOUCH_MIN\s*=\s*40/);
 });
 
-test("hash deep-linking, history, and nav are wired", () => {
+test("hash deep-linking and history are wired", () => {
   assert.match(scenes, /pushState/);
   assert.match(scenes, /popstate/);
-  assert.match(scenes, /aria-current/);
   assert.match(scenes, /principles/);
   assert.match(scenes, /systems/);
 });

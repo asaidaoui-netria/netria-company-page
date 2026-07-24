@@ -23,17 +23,13 @@ test("uses internationally neutral English metadata", () => {
 });
 
 test("contains the approved dual-track content structure", () => {
-  for (const id of ["capabilities", "situations", "approach", "principles", "contact"]) {
+  for (const id of ["capabilities", "principles", "contact"]) {
     assert.match(html, new RegExp(`<section[^>]+id="${id}"`));
   }
 
   assert.match(authoredText, /Software for ideas and operations in motion\./);
   assert.match(html, /Build a product/);
   assert.match(html, /Improve a system/);
-  assert.match(html, /Frame the problem/);
-  assert.match(html, /Prototype the path/);
-  assert.match(html, /Build and validate/);
-  assert.match(html, /Release and evolve/);
 });
 
 test("uses direct email contact with no contact form", () => {
