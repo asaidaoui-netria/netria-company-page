@@ -316,13 +316,6 @@ h1 em {
     text-shadow: 0.07em 0.07em 0 var(--color-signal-dark);
 }
 
-.hero-summary {
-    max-width: 56ch;
-    margin-bottom: 2rem;
-    color: var(--color-muted);
-    font-size: clamp(1rem, 1.6vw, 1.2rem);
-}
-
 .hero-actions {
     display: flex;
     flex-wrap: wrap;
