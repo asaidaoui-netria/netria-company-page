@@ -1094,22 +1094,26 @@ html.js .section.scene {
     padding-bottom: 16px;
 }
 
-html.js .situations.scene {
+html.js .situations.scene,
+html.js .principles.scene,
+html.js .systems.scene {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 12px;
 }
 
-html.js .situations .section-heading,
-html.js .situations .section-heading.compact {
-    margin-bottom: 0;
+html.js .capabilities .capability-grid {
+    grid-template-columns: minmax(0, 640px);
+    justify-content: center;
 }
 
 html.js .contact.scene {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-top: 80px;
+    padding-bottom: 24px;
     gap: 0;
 }
 
@@ -1121,11 +1125,124 @@ html.js .contact.scene .footer {
     html.js .situation-grid,
     html.js .principle-grid {
         grid-template-columns: 1fr 1fr;
-        gap: 12px;
+        gap: 6px;
     }
 
     html.js .situation-grid article,
     html.js .principle-grid article {
-        padding: 12px;
+        min-height: 0;
+        padding: 4px;
+    }
+
+    html.js .situation-grid span {
+        margin-bottom: 0.2rem;
+        font-size: 0.62rem;
+    }
+
+    html.js .situation-grid h3,
+    html.js .principle-grid h3 {
+        margin-bottom: 4px;
+    }
+}
+
+@media (max-width: 600px) {
+    html.js .hero-signal,
+    html.js .hero-status {
+        display: none;
+    }
+
+    html.js .hero.scene {
+        padding-top: 68px;
+        padding-bottom: 16px;
+        gap: 12px;
+    }
+
+    html.js .section.scene {
+        padding-top: 68px;
+        padding-bottom: 4px;
+    }
+
+    html.js .section-heading {
+        gap: 6px;
+        margin-bottom: 8px;
+    }
+
+    html.js .section-heading h2 {
+        font-size: clamp(1.5rem, 8vw, 3rem);
+    }
+
+    html.js .section-heading > p:last-child {
+        font-size: 0.95rem;
+    }
+
+    html.js .eyebrow {
+        margin-bottom: 0.4rem;
+        font-size: 0.62rem;
+    }
+
+    html.js .capability-card {
+        padding: 8px;
+    }
+
+    html.js .card-index {
+        margin-bottom: 6px;
+    }
+
+    html.js .capability-card h3 {
+        margin-bottom: 6px;
+    }
+
+    html.js .capability-card p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    html.js .capability-card ul {
+        columns: 2;
+        margin-top: 6px;
+        padding-top: 6px;
+    }
+
+    html.js .capability-card li {
+        padding: 0.2rem 0;
+        font-size: 0.9rem;
+    }
+
+    html.js .approach-list li {
+        padding: 4px 0;
+        gap: 8px;
+    }
+
+    html.js .approach-list div {
+        gap: 6px;
+    }
+
+    html.js .approach-list h3 {
+        font-size: 1.05rem;
+        line-height: 1.3;
+    }
+
+    html.js .approach-list p {
+        font-size: 0.95rem;
+        line-height: 1.35;
+    }
+
+    html.js .contact.scene {
+        padding-top: 68px;
+        padding-bottom: 16px;
+    }
+
+    html.js .contact-link {
+        margin-top: 1rem;
+    }
+
+    html.js .footer {
+        padding: 8px 0;
+        gap: 12px;
+    }
+
+    html.js .footer .brand img {
+        width: 40px;
+        height: 40px;
     }
 }

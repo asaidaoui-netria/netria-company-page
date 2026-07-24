@@ -4,8 +4,8 @@ const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const scenes = [...document.querySelectorAll(".scene")];
 const stage = document.getElementById("main");
-const HASHES = ["", "capabilities", "situations", "approach", "contact"];
-const ALIAS = { top: 0, capabilities: 1, situations: 2, principles: 2, approach: 3, contact: 4 };
+const HASHES = ["", "capabilities", "systems", "situations", "principles", "approach", "contact"];
+const ALIAS = { top: 0, capabilities: 1, systems: 2, situations: 3, principles: 4, approach: 5, contact: 6 };
 
 const TRANS_MS = 800;
 const COMMIT = 0.5;
