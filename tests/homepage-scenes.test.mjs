@@ -143,13 +143,25 @@ test("wave canvas lifecycle is gated and cleaned up", () => {
   assert.match(scenes, /clearRect/);
 });
 
-test("decode and dissolve engine is ported with original tuning", () => {
-  assert.ok(scenes.includes("█▓▒░<>/\\\\+=*#01"));
-  assert.match(scenes, /DECODE_MS\s*=\s*700/);
+test("noise-resolve engine covers entry and exit with no decode glitch", () => {
+  assert.doesNotMatch(scenes, /DECODE_MS|initDecode|runDecode|decodeStates|data-decode/);
   assert.match(scenes, /DISSOLVE_MS\s*=\s*500/);
-  assert.match(scenes, /createTreeWalker/);
-  assert.match(scenes, /aria-label/);
+  assert.match(scenes, /EXIT_MS\s*=\s*600/);
+  assert.match(scenes, /function runDissolve\(el\)/);
+  assert.match(scenes, /function runDisintegrate\(el\)/);
+  assert.match(scenes, /function exitScene\(i\)/);
+  assert.match(scenes, /exitScene\(active\)/);
   assert.match(scenes, /dissolve-overlay/);
+});
+
+test("every content element across scenes resolves from noise", () => {
+  const slice = (from, to) => html.slice(html.indexOf(`id="${from}"`), to ? html.indexOf(`id="${to}"`) : undefined);
+  const count = (s) => (s.match(/data-dissolve/g) || []).length;
+  assert.equal(count(slice("top", "capabilities")), 5, "hero: eyebrow, h1, summary, actions, signal");
+  assert.equal(count(slice("capabilities", "principles")), 4, "capabilities: eyebrow, h2, two cards");
+  assert.equal(count(slice("principles", "contact")), 6, "principles: eyebrow, h2, four articles");
+  assert.ok(count(slice("contact")) >= 1, "contact scene root dissolves");
+  assert.doesNotMatch(html, /data-decode/);
 });
 
 test("entrances fire on scene entry and reset on park", () => {

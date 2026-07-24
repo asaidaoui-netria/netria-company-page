@@ -626,6 +626,10 @@ h1 em {
     image-rendering: pixelated;
 }
 
+[data-dissolve] {
+    position: relative;
+}
+
 @keyframes grid-drift {
     to {
         background-position: 32px 32px;

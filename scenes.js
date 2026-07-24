@@ -25,10 +25,10 @@ let fromPop = false;
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const smooth = (t) => t * t * (3 - 2 * t);
 
-/* Entrances: heading decode + pixel dissolve (ported from effects.js, fired per scene entry). */
-const GLYPHS = "█▓▒░<>/\\+=*#01";
-const DECODE_MS = 700;
+/* Scene fx: elements resolve out of static noise on entry and disintegrate
+   back into noise on exit (fired per scene transition). */
 const DISSOLVE_MS = 500;
+const EXIT_MS = 600;
 const TICK_MS = 50;
 const CELL = 8;
 const DCOLORS = [
@@ -38,94 +38,20 @@ const DCOLORS = [
     "rgba(149,160,151,0.5)",
 ];
 
-const decodeStates = new Map();
-
-function textNodes(el) {
-    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
-    const nodes = [];
-    let node;
-    while ((node = walker.nextNode())) {
-        nodes.push(node);
-    }
-    return nodes;
-}
-
-function initDecode(el) {
-    const nodes = textNodes(el);
-    const originals = nodes.map((node) => node.nodeValue);
-    if (!originals.join("").trim()) {
-        return null;
-    }
-    el.setAttribute("aria-label", originals.join(" ").replace(/\s+/g, " ").trim());
-    return { nodes, originals, raf: 0 };
-}
-
-function runDecode(state) {
-    const originals = state.originals;
-    const total = originals.join("").length;
-    const offsets = [];
-    let acc = 0;
-    originals.forEach((text) => {
-        offsets.push(acc);
-        acc += text.length;
-    });
-    const resolveAt = [];
-    for (let i = 0; i < total; i++) {
-        const base = total > 1 ? i / (total - 1) : 0;
-        resolveAt.push(base * DECODE_MS * 0.6 + Math.random() * DECODE_MS * 0.4);
-    }
-    if (state.raf) {
-        cancelAnimationFrame(state.raf);
-    }
-    const start = performance.now();
-
-    function frame(now) {
-        const t = now - start;
-        let settled = true;
-        for (let n = 0; n < state.nodes.length; n++) {
-            let out = "";
-            for (let c = 0; c < originals[n].length; c++) {
-                const ch = originals[n].charAt(c);
-                if (/\s/.test(ch) || t >= resolveAt[offsets[n] + c]) {
-                    out += ch;
-                } else {
-                    settled = false;
-                    out += GLYPHS.charAt((Math.random() * GLYPHS.length) | 0);
-                }
-            }
-            state.nodes[n].nodeValue = out;
-        }
-        if (!settled && t < DECODE_MS + 120) {
-            state.raf = requestAnimationFrame(frame);
-        } else {
-            for (let r = 0; r < state.nodes.length; r++) {
-                state.nodes[r].nodeValue = originals[r];
-            }
-            state.raf = 0;
-        }
-    }
-    state.raf = requestAnimationFrame(frame);
-}
-
-function runDissolve(el) {
-    if (el._fxBusy) {
-        return;
-    }
+function noiseCanvas(el) {
     const rect = el.getBoundingClientRect();
     const canvas = document.createElement("canvas");
     const ctx = rect.width > 1 && rect.height > 1 && canvas.getContext("2d");
     if (!ctx) {
-        return;
+        return null;
     }
     const dpr = window.devicePixelRatio || 1;
-    const size = CELL * dpr;
-    const cols = Math.ceil(rect.width / CELL);
-    const rows = Math.ceil(rect.height / CELL);
     canvas.width = Math.round(rect.width * dpr);
     canvas.height = Math.round(rect.height * dpr);
     canvas.className = "dissolve-overlay";
     canvas.setAttribute("aria-hidden", "true");
-
+    const cols = Math.ceil(rect.width / CELL);
+    const rows = Math.ceil(rect.height / CELL);
     const cells = [];
     for (let i = 0; i < cols * rows; i++) {
         cells.push(i);
@@ -136,11 +62,24 @@ function runDissolve(el) {
         cells[j] = cells[k];
         cells[k] = swap;
     }
-    ctx.fillStyle = "#050706";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    const noise = Math.round(cells.length * 0.55);
-    for (let q = 0; q < noise; q++) {
-        ctx.fillStyle = DCOLORS[(Math.random() * DCOLORS.length) | 0];
+    return { canvas, ctx, cells, cols, size: CELL * dpr };
+}
+
+function cellColor() {
+    return Math.random() < 0.45 ? "#050706" : DCOLORS[(Math.random() * DCOLORS.length) | 0];
+}
+
+function runDissolve(el) {
+    if (el._fxBusy) {
+        return;
+    }
+    const fx = noiseCanvas(el);
+    if (!fx) {
+        return;
+    }
+    const { canvas, ctx, cells, cols, size } = fx;
+    for (let q = 0; q < cells.length; q++) {
+        ctx.fillStyle = cellColor();
         ctx.fillRect((cells[q] % cols) * size, ((cells[q] / cols) | 0) * size, size, size);
     }
     el.appendChild(canvas);
@@ -161,13 +100,38 @@ function runDissolve(el) {
     }, TICK_MS);
 }
 
-function prepEntrances() {
-    document.querySelectorAll("[data-decode]").forEach((el) => {
-        const state = initDecode(el);
-        if (state) {
-            decodeStates.set(el, state);
+function runDisintegrate(el) {
+    if (el._fxBusy) {
+        return;
+    }
+    const fx = noiseCanvas(el);
+    if (!fx) {
+        return;
+    }
+    const { canvas, ctx, cells, cols, size } = fx;
+    el.appendChild(canvas);
+    el._fxBusy = true;
+
+    const perTick = Math.max(1, Math.round(cells.length / (EXIT_MS / TICK_MS)));
+    let cursor = 0;
+    const timer = setInterval(() => {
+        const end = Math.min(cells.length, cursor + perTick);
+        for (; cursor < end; cursor++) {
+            ctx.fillStyle = cellColor();
+            ctx.fillRect((cells[cursor] % cols) * size, ((cells[cursor] / cols) | 0) * size, size, size);
         }
-    });
+        if (cursor >= cells.length) {
+            clearInterval(timer);
+        }
+    }, TICK_MS);
+}
+
+function fxTargets(scene) {
+    const els = [...scene.querySelectorAll("[data-dissolve]")];
+    if (scene.matches("[data-dissolve]")) {
+        els.push(scene);
+    }
+    return els;
 }
 
 function enterScene(i, delayMs) {
@@ -176,17 +140,7 @@ function enterScene(i, delayMs) {
     }
     const scene = scenes[i];
     const run = () => {
-        scene.querySelectorAll("[data-decode]").forEach((el) => {
-            const state = decodeStates.get(el);
-            if (state) {
-                runDecode(state);
-            }
-        });
-        const els = [...scene.querySelectorAll("[data-dissolve]")];
-        if (scene.matches("[data-dissolve]")) {
-            els.push(scene);
-        }
-        els.forEach((el) => {
+        fxTargets(scene).forEach((el) => {
             el.classList.add("is-visible");
             runDissolve(el);
         });
@@ -198,27 +152,19 @@ function enterScene(i, delayMs) {
     }
 }
 
+function exitScene(i) {
+    if (REDUCED) {
+        return;
+    }
+    fxTargets(scenes[i]).forEach((el) => {
+        runDisintegrate(el);
+    });
+}
+
 function parkScene(i) {
     const scene = scenes[i];
-    scene.querySelectorAll("[data-decode]").forEach((el) => {
-        const state = decodeStates.get(el);
-        if (!state) {
-            return;
-        }
-        if (state.raf) {
-            cancelAnimationFrame(state.raf);
-            state.raf = 0;
-        }
-        state.nodes.forEach((node, k) => {
-            node.nodeValue = state.originals[k];
-        });
-    });
     scene.querySelectorAll(".dissolve-overlay").forEach((c) => c.remove());
-    const els = [...scene.querySelectorAll("[data-dissolve]")];
-    if (scene.matches("[data-dissolve]")) {
-        els.push(scene);
-    }
-    els.forEach((el) => {
+    fxTargets(scene).forEach((el) => {
         el._fxBusy = false;
         el.classList.remove("is-visible");
     });
@@ -453,6 +399,7 @@ function startTransition(next, direction) {
     dir = direction;
     p = 0;
     goal = 1;
+    exitScene(active);
     const incoming = scenes[target];
     incoming.classList.add("scene--entering");
     incoming.removeAttribute("aria-hidden");
@@ -578,7 +525,6 @@ function onPopState() {
 }
 
 if (JS && scenes.length > 1) {
-    prepEntrances();
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchend", onTouchEnd, { passive: true });
