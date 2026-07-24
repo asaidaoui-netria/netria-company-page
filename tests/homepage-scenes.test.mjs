@@ -136,3 +136,22 @@ test("wave canvas lifecycle is gated and cleaned up", () => {
   assert.match(scenes, /document\.fonts/);
   assert.match(scenes, /clearRect/);
 });
+
+test("decode and dissolve engine is ported with original tuning", () => {
+  assert.ok(scenes.includes("█▓▒░<>/\\\\+=*#01"));
+  assert.match(scenes, /DECODE_MS\s*=\s*700/);
+  assert.match(scenes, /DISSOLVE_MS\s*=\s*500/);
+  assert.match(scenes, /createTreeWalker/);
+  assert.match(scenes, /aria-label/);
+  assert.match(scenes, /dissolve-overlay/);
+});
+
+test("entrances fire on scene entry and reset on park", () => {
+  assert.match(scenes, /function enterScene\(i, delayMs\)/);
+  assert.match(scenes, /function parkScene\(i\)/);
+  assert.match(scenes, /ENTRANCE_DELAY_MS\s*=\s*250/);
+});
+
+test("effects.js is retired", () => {
+  assert.throws(() => readFileSync(new URL("../effects.js", import.meta.url), "utf8"));
+});
