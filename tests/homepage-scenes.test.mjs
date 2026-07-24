@@ -59,12 +59,9 @@ test("shell locks native scroll only when js is on", () => {
   assert.match(css, /html\.js #fx-wave\.is-on\s*\{[^}]*display:\s*block/s);
 });
 
-test("dissolve blocks hide only when motion is allowed", () => {
-  assert.match(
-    css,
-    /@media\s*\(prefers-reduced-motion:\s*no-preference\)\s*\{[^@]*html\.js \[data-dissolve\]\s*\{[^}]*opacity:\s*0/s
-  );
-  assert.doesNotMatch(css, /\[data-reveal\]/);
+test("no element-level reveal effects remain", () => {
+  assert.doesNotMatch(css, /\[data-reveal\]|\[data-dissolve\]|dissolve-overlay/);
+  assert.doesNotMatch(html, /data-reveal|data-dissolve/);
 });
 
 test("scenes.js stays lean and clean", () => {
@@ -143,39 +140,17 @@ test("wave canvas lifecycle is gated and cleaned up", () => {
   assert.match(scenes, /clearRect/);
 });
 
-test("noise-resolve engine covers entry and exit with no decode glitch", () => {
+test("scene fx are the glyph wave and clip wipe only", () => {
   assert.doesNotMatch(scenes, /DECODE_MS|initDecode|runDecode|decodeStates|data-decode/);
-  assert.match(scenes, /DISSOLVE_MS\s*=\s*500/);
-  assert.match(scenes, /EXIT_MS\s*=\s*600/);
-  assert.match(scenes, /function runDissolve\(el\)/);
-  assert.match(scenes, /function runDisintegrate\(el\)/);
-  assert.match(scenes, /function exitScene\(i\)/);
-  assert.match(scenes, /exitScene\(active\)/);
-  assert.match(scenes, /dissolve-overlay/);
-});
-
-test("every content element across scenes resolves from noise", () => {
-  const slice = (from, to) => html.slice(html.indexOf(`id="${from}"`), to ? html.indexOf(`id="${to}"`) : undefined);
-  const count = (s) => (s.match(/data-dissolve/g) || []).length;
-  assert.equal(count(slice("top", "capabilities")), 5, "hero: eyebrow, h1, summary, actions, signal");
-  assert.equal(count(slice("capabilities", "principles")), 4, "capabilities: eyebrow, h2, two cards");
-  assert.equal(count(slice("principles", "contact")), 6, "principles: eyebrow, h2, four articles");
-  assert.ok(count(slice("contact")) >= 1, "contact scene root dissolves");
-  assert.doesNotMatch(html, /data-decode/);
-});
-
-test("entrances fire on scene entry and reset on park", () => {
-  assert.match(scenes, /function enterScene\(i, delayMs\)/);
-  assert.match(scenes, /function parkScene\(i\)/);
-  assert.match(scenes, /ENTRANCE_DELAY_MS\s*=\s*250/);
+  assert.doesNotMatch(scenes, /DISSOLVE_MS|EXIT_MS|runDissolve|runDisintegrate|enterScene|exitScene|parkScene|dissolve-overlay|ENTRANCE_DELAY_MS/);
+  assert.doesNotMatch(html, /data-dissolve|data-decode/);
+  assert.doesNotMatch(css, /dissolve-overlay|\[data-dissolve\]/);
+  assert.match(scenes, /function applyClip\(el, q, s\)/);
+  assert.match(scenes, /function wavePaint\(eq\)/);
 });
 
 test("effects.js is retired", () => {
   assert.throws(() => readFileSync(new URL("../effects.js", import.meta.url), "utf8"));
-});
-
-test("dissolve queries include the scene root", () => {
-  assert.match(scenes, /scene\.matches\("\[data-dissolve\]"\)/);
 });
 
 test("wave uses the registered pixel font family", () => {

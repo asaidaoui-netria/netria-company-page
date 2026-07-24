@@ -614,22 +614,6 @@ h1 em {
     margin: 0;
 }
 
-[data-dissolve] {
-    position: relative;
-}
-
-.dissolve-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-    pointer-events: none;
-    image-rendering: pixelated;
-}
-
-[data-dissolve] {
-    position: relative;
-}
-
 @keyframes grid-drift {
     to {
         background-position: 32px 32px;
@@ -815,10 +799,6 @@ h1 em {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
-
-    .dissolve-overlay {
-        display: none !important;
-    }
 }
 
 /* Scene shell (gated behind html.js: no-js keeps the normal scrolling document) */
@@ -871,17 +851,6 @@ html.js .site-header {
 
 html.js #fx-wave.is-on {
     display: block;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    html.js [data-dissolve] {
-        opacity: 0;
-        transition: opacity 60ms steps(2, end);
-    }
-
-    html.js [data-dissolve].is-visible {
-        opacity: 1;
-    }
 }
 
 .scroll-cue {

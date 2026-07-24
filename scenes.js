@@ -8,7 +8,6 @@ const ALIAS = { top: 0, capabilities: 1, systems: 1, situations: 1, principles: 
 
 const TRANS_MS = 800;
 const COMMIT = 0.5;
-const ENTRANCE_DELAY_MS = 250;
 const WHEEL_THRESHOLD = 6;
 const WHEEL_IDLE_MS = 180;
 const TOUCH_MIN = 40;
@@ -24,151 +23,6 @@ let fromPop = false;
 
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const smooth = (t) => t * t * (3 - 2 * t);
-
-/* Scene fx: elements resolve out of static noise on entry and disintegrate
-   back into noise on exit (fired per scene transition). */
-const DISSOLVE_MS = 500;
-const EXIT_MS = 600;
-const TICK_MS = 50;
-const CELL = 8;
-const DCOLORS = [
-    "rgba(99,255,114,0.9)",
-    "rgba(99,255,114,0.45)",
-    "rgba(25,60,30,0.9)",
-    "rgba(149,160,151,0.5)",
-];
-
-function noiseCanvas(el) {
-    const rect = el.getBoundingClientRect();
-    const canvas = document.createElement("canvas");
-    const ctx = rect.width > 1 && rect.height > 1 && canvas.getContext("2d");
-    if (!ctx) {
-        return null;
-    }
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = Math.round(rect.width * dpr);
-    canvas.height = Math.round(rect.height * dpr);
-    canvas.className = "dissolve-overlay";
-    canvas.setAttribute("aria-hidden", "true");
-    const cols = Math.ceil(rect.width / CELL);
-    const rows = Math.ceil(rect.height / CELL);
-    const cells = [];
-    for (let i = 0; i < cols * rows; i++) {
-        cells.push(i);
-    }
-    for (let j = cells.length - 1; j > 0; j--) {
-        const k = (Math.random() * (j + 1)) | 0;
-        const swap = cells[j];
-        cells[j] = cells[k];
-        cells[k] = swap;
-    }
-    return { canvas, ctx, cells, cols, size: CELL * dpr };
-}
-
-function cellColor() {
-    return Math.random() < 0.45 ? "#050706" : DCOLORS[(Math.random() * DCOLORS.length) | 0];
-}
-
-function runDissolve(el) {
-    if (el._fxBusy) {
-        return;
-    }
-    const fx = noiseCanvas(el);
-    if (!fx) {
-        return;
-    }
-    const { canvas, ctx, cells, cols, size } = fx;
-    for (let q = 0; q < cells.length; q++) {
-        ctx.fillStyle = cellColor();
-        ctx.fillRect((cells[q] % cols) * size, ((cells[q] / cols) | 0) * size, size, size);
-    }
-    el.appendChild(canvas);
-    el._fxBusy = true;
-
-    const perTick = Math.max(1, Math.round(cells.length / (DISSOLVE_MS / TICK_MS)));
-    let cursor = 0;
-    const timer = setInterval(() => {
-        const end = Math.min(cells.length, cursor + perTick);
-        for (; cursor < end; cursor++) {
-            ctx.clearRect((cells[cursor] % cols) * size, ((cells[cursor] / cols) | 0) * size, size, size);
-        }
-        if (cursor >= cells.length) {
-            clearInterval(timer);
-            canvas.remove();
-            el._fxBusy = false;
-        }
-    }, TICK_MS);
-}
-
-function runDisintegrate(el) {
-    if (el._fxBusy) {
-        return;
-    }
-    const fx = noiseCanvas(el);
-    if (!fx) {
-        return;
-    }
-    const { canvas, ctx, cells, cols, size } = fx;
-    el.appendChild(canvas);
-    el._fxBusy = true;
-
-    const perTick = Math.max(1, Math.round(cells.length / (EXIT_MS / TICK_MS)));
-    let cursor = 0;
-    const timer = setInterval(() => {
-        const end = Math.min(cells.length, cursor + perTick);
-        for (; cursor < end; cursor++) {
-            ctx.fillStyle = cellColor();
-            ctx.fillRect((cells[cursor] % cols) * size, ((cells[cursor] / cols) | 0) * size, size, size);
-        }
-        if (cursor >= cells.length) {
-            clearInterval(timer);
-        }
-    }, TICK_MS);
-}
-
-function fxTargets(scene) {
-    const els = [...scene.querySelectorAll("[data-dissolve]")];
-    if (scene.matches("[data-dissolve]")) {
-        els.push(scene);
-    }
-    return els;
-}
-
-function enterScene(i, delayMs) {
-    if (REDUCED) {
-        return;
-    }
-    const scene = scenes[i];
-    const run = () => {
-        fxTargets(scene).forEach((el) => {
-            el.classList.add("is-visible");
-            runDissolve(el);
-        });
-    };
-    if (delayMs) {
-        setTimeout(run, delayMs);
-    } else {
-        run();
-    }
-}
-
-function exitScene(i) {
-    if (REDUCED) {
-        return;
-    }
-    fxTargets(scenes[i]).forEach((el) => {
-        runDisintegrate(el);
-    });
-}
-
-function parkScene(i) {
-    const scene = scenes[i];
-    scene.querySelectorAll(".dissolve-overlay").forEach((c) => c.remove());
-    fxTargets(scene).forEach((el) => {
-        el._fxBusy = false;
-        el.classList.remove("is-visible");
-    });
-}
 
 function hashIndex() {
     const h = location.hash.replace("#", "");
@@ -195,7 +49,6 @@ function settleTo(i) {
         } else {
             s.setAttribute("aria-hidden", "true");
             s.setAttribute("inert", "");
-            parkScene(k);
         }
     });
     active = i;
@@ -350,7 +203,6 @@ function applyClip(el, q, s) {
 
 let rafId = 0;
 let lastT = 0;
-let entranceTimer = 0;
 
 function stepFrame(now) {
     const dt = Math.min(64, now - lastT);
@@ -374,7 +226,6 @@ function requestReverse() {
 
 function completeTransition() {
     cancelAnimationFrame(rafId);
-    clearTimeout(entranceTimer);
     waveEnd();
     settleTo(goal === 1 ? target : active);
     if (goal === 1) {
@@ -399,12 +250,10 @@ function startTransition(next, direction) {
     dir = direction;
     p = 0;
     goal = 1;
-    exitScene(active);
     const incoming = scenes[target];
     incoming.classList.add("scene--entering");
     incoming.removeAttribute("aria-hidden");
     incoming.removeAttribute("inert");
-    entranceTimer = setTimeout(() => enterScene(target, 0), ENTRANCE_DELAY_MS);
     waveBegin();
     lastT = performance.now();
     rafId = requestAnimationFrame(stepFrame);
@@ -413,8 +262,7 @@ function startTransition(next, direction) {
 function onResize() {
     if (busy) {
         cancelAnimationFrame(rafId);
-        clearTimeout(entranceTimer);
-        waveEnd();
+            waveEnd();
         settleTo(target);
         syncHash(active);
         busy = false;
@@ -536,7 +384,6 @@ if (JS && scenes.length > 1) {
         document.fonts.load("12px 'Fusion Pixel'").catch(() => {});
     }
     settleTo(hashIndex());
-    enterScene(active, 0);
 }
 
 window.__scenes = { active: () => active, goTo };
