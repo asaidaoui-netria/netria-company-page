@@ -12,8 +12,7 @@ test("contains only progressive navigation and reveal behavior", () => {
   assert.match(script, /aria-expanded/);
   assert.match(script, /aria-label/);
   assert.match(script, /Escape/);
-  assert.match(script, /IntersectionObserver/);
-  assert.match(script, /prefers-reduced-motion/);
+  assert.doesNotMatch(script, /IntersectionObserver/);
   assert.match(script, /classList\.replace\("no-js", "js"\)/);
 });
 

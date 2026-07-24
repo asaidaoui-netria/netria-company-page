@@ -65,3 +65,27 @@ test("scenes.js stays lean and clean", () => {
   assert.ok(Buffer.byteLength(scenes, "utf8") < 18000);
   assert.doesNotMatch(scenes, /fetch\(|FormData|analytics|i18n|contactForm|langDrawer/);
 });
+
+test("pager implements kimi wheel semantics", () => {
+  assert.match(scenes, /passive:\s*false/);
+  assert.match(scenes, /preventDefault\(\)/);
+  assert.match(scenes, /WHEEL_THRESHOLD\s*=\s*6/);
+  assert.match(scenes, /WHEEL_IDLE_MS\s*=\s*180/);
+  assert.match(scenes, /TOUCH_MIN\s*=\s*40/);
+});
+
+test("hash deep-linking, history, and nav are wired", () => {
+  assert.match(scenes, /pushState/);
+  assert.match(scenes, /popstate/);
+  assert.match(scenes, /aria-current/);
+  assert.match(scenes, /principles/);
+});
+
+test("exposes the scene test hook", () => {
+  assert.match(scenes, /window\.__scenes/);
+  assert.match(scenes, /goTo/);
+});
+
+test("no intersection observers remain", () => {
+  assert.doesNotMatch(scenes, /IntersectionObserver/);
+});
