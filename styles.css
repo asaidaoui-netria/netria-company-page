@@ -453,12 +453,11 @@ h1 em::after {
     position: absolute;
     inset: 0;
     background: var(--color-signal);
-    animation: pixel-pulse 3s steps(2, end) infinite;
 }
 
-/* Fade timings share the 5.5s sweep clock: each pixel re-ignites during
-   the quiet first half of the loop, then slowly vanishes as the sweep's
-   glow front reaches its vertical position (one 18%, two 70%, three 87%). */
+/* Blink windows share the 5.5s sweep clock: each pixel stays dark, then
+   flashes three times while the sweep's glow band passes its vertical
+   position (one 18%, two 70%, three 87%), then goes dark again. */
 .signal-pixel-one {
     top: 18%;
     left: 20%;
@@ -471,20 +470,12 @@ h1 em::after {
     animation: pixel-life-two 5.5s linear infinite;
 }
 
-.signal-pixel-two::before {
-    animation-delay: 0.8s;
-}
-
 .signal-pixel-three {
     bottom: 12%;
     left: 32%;
     width: 6px;
     height: 6px;
     animation: pixel-life-three 5.5s linear infinite;
-}
-
-.signal-pixel-three::before {
-    animation-delay: 1.4s;
 }
 
 .hero-status {
@@ -812,32 +803,38 @@ h1 em::after {
 
 @keyframes pixel-life-one {
     0% { opacity: 0; }
-    5% { opacity: 1; }
-    51% { opacity: 1; }
-    59% { opacity: 0; }
+    49% { opacity: 0; }
+    50% { opacity: 1; animation-timing-function: steps(1, end); }
+    53% { opacity: 0.15; animation-timing-function: steps(1, end); }
+    56% { opacity: 1; animation-timing-function: steps(1, end); }
+    59% { opacity: 0.15; animation-timing-function: steps(1, end); }
+    62% { opacity: 1; }
+    64% { opacity: 0; }
     100% { opacity: 0; }
 }
 
 @keyframes pixel-life-two {
     0% { opacity: 0; }
-    5% { opacity: 1; }
-    77% { opacity: 1; }
-    85% { opacity: 0; }
+    75% { opacity: 0; }
+    76% { opacity: 1; animation-timing-function: steps(1, end); }
+    79% { opacity: 0.15; animation-timing-function: steps(1, end); }
+    82% { opacity: 1; animation-timing-function: steps(1, end); }
+    85% { opacity: 0.15; animation-timing-function: steps(1, end); }
+    88% { opacity: 1; }
+    90% { opacity: 0; }
     100% { opacity: 0; }
 }
 
 @keyframes pixel-life-three {
     0% { opacity: 0; }
-    5% { opacity: 1; }
-    85% { opacity: 1; }
-    93% { opacity: 0; }
+    84% { opacity: 0; }
+    85% { opacity: 1; animation-timing-function: steps(1, end); }
+    88% { opacity: 0.15; animation-timing-function: steps(1, end); }
+    91% { opacity: 1; animation-timing-function: steps(1, end); }
+    94% { opacity: 0.15; animation-timing-function: steps(1, end); }
+    97% { opacity: 1; }
+    99% { opacity: 0; }
     100% { opacity: 0; }
-}
-
-@keyframes pixel-pulse {
-    50% {
-        opacity: 0.25;
-    }
 }
 
 @keyframes pixel-blink {
