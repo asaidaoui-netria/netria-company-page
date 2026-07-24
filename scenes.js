@@ -188,10 +188,12 @@ function frontY(x, q, s, H) {
     return easeQ(q) * H + 38 * (0.6 * Math.sin(0.013 * x + 0.9 * s) + 0.4 * Math.sin(0.041 * x + 1.7 * s));
 }
 
-/* Clip the incoming scene along the wave front. Forward: reveal top-down. */
+/* Clip the incoming scene along the wave front. Forward: reveal top-down.
+   offsetWidth/Height: clip-path resolves against the border box, so the
+   contact scene's right and bottom borders are not left out of the polygon. */
 function applyClip(el, q, s) {
-    const W = el.clientWidth;
-    const H = el.clientHeight;
+    const W = el.offsetWidth;
+    const H = el.offsetHeight;
     const pts = [];
     for (let k = CLIP_STEPS; k >= 0; k--) {
         const x = (W * k) / CLIP_STEPS;
