@@ -414,25 +414,21 @@ h1 em {
 /* Behind the scene's content, above its backdrop (active scenes are stacking contexts) */
 .scene > .scene-fx {
     z-index: -1;
+    transition: opacity 300ms;
 }
 
-/* Scene layers stop at the content column: fade their sides out */
-.capabilities > .scene-fx,
-.principles > .scene-fx {
-    mask-composite: intersect;
+/* Full-bleed layers outlast a wipe into a column-wide scene at the sides: fade them as it starts */
+main:has(.scene--entering) .scene--active > .scene-fx {
+    opacity: 0;
 }
 
 .capabilities > .scene-fx {
     opacity: 0.6;
-    mask-image:
-        linear-gradient(to bottom, transparent 30%, black 75%),
-        linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+    mask-image: linear-gradient(to bottom, transparent 30%, black 75%);
 }
 
 .principles > .scene-fx {
-    mask-image:
-        radial-gradient(circle 15rem at var(--mx, 70%) var(--my, 40%), black, rgb(0 0 0 / 0.28)),
-        linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image: radial-gradient(circle 15rem at var(--mx, 70%) var(--my, 40%), black, rgb(0 0 0 / 0.28));
 }
 
 .principles:has(> .scene-fx) .principle-grid article {
@@ -966,12 +962,15 @@ html.js .section.scene {
     padding-bottom: 16px;
 }
 
+/* Full-bleed boxes so their fx layers reach the viewport edges; padding keeps the content column */
 html.js .capabilities.scene,
 html.js .principles.scene {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 12px;
+    width: auto;
+    padding-inline: max(1rem, calc(50% - var(--content-width) / 2));
 }
 
 html.js .contact.scene {
@@ -1017,6 +1016,7 @@ html.js .contact.scene .footer {
     html.js .section.scene {
         padding-top: 68px;
         padding-bottom: 4px;
+        padding-inline: 0.625rem;
     }
 
     html.js .section-heading {
