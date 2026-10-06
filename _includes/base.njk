@@ -82,7 +82,8 @@
             </button>
 
             <div class="nav-menu" id="navMenu">
-                <a href="/articles/"{% if page.url.startsWith('/articles/') %} aria-current="page"{% endif %}>Articles</a>
+                {# Articles link: re-enable once the first article is published.
+                <a href="/articles/"{% if page.url.startsWith('/articles/') %} aria-current="page"{% endif %}>Articles</a> #}
                 <a class="nav-email" href="mailto:{{ site.email }}?subject=Project%20conversation">
                     Email Netria
                 </a>

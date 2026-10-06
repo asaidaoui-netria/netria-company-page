@@ -63,7 +63,6 @@ test("article pages scroll normally and carry search and share metadata", () => 
 test("only the homepage pager locks native scroll", () => {
   assert.match(read("scenes.js"), /classList\.add\("paged"\)/);
   assert.doesNotMatch(read("styles.css"), /html\.js\b/);
-  assert.match(read("index.html"), /<a href="\/articles\/">Articles<\/a>/);
 });
 
 test("deploys run the tests before building", () => {
