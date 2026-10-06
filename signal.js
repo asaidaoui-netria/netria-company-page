@@ -1,10 +1,25 @@
-// Scene fx: one WebGPU layer per scene (shaders.com), each tuned to a piece of green-phosphor
-// screen culture. Progressive: the static page stays unless WebGPU, a fine pointer and motion
-// all line up, and any layer that fails just removes its canvas.
+// Scene fx: one WebGPU layer per homepage scene (shaders.com), each tuned to a piece of
+// green-phosphor screen culture, plus the article divider trace. Progressive: the static page
+// stays unless WebGPU, a fine pointer and motion all line up, and any layer that fails just
+// removes its canvas. Pages with no layer host never download the bundle.
 // Pinned by an import-map integrity hash in index.html: bump both together.
 const SHADERS_URL = "https://cdn.jsdelivr.net/npm/shaders@4.0.0/dist/js/bundle.js";
 const GREEN = "#63ff72";
-const MOTH = new URL("assets/netria-logo-navbar-transparent.png", location.href).href;
+const MOTH = new URL("/assets/netria-logo-navbar-transparent.png", location.href).href;
+
+const scope = (amplitude, speed) => [
+    {
+        type: "Glow",
+        props: { intensity: 3, threshold: 0.1, size: 10 },
+        children: [
+            {
+                type: "Waveform",
+                id: "scope",
+                props: { style: "line", colorA: GREEN, colorB: GREEN, amplitude, frequency: 1.4, height: 0.8, lineWidth: 0.02, speed, align: "mirrored" },
+            },
+        ],
+    },
+];
 
 const LAYERS = [
     {
@@ -92,19 +107,7 @@ const LAYERS = [
         // 04 · Contact: an oscilloscope trace that locks on when you reach for the email link.
         host: ".contact-scope",
         live: "signal-live",
-        components: [
-            {
-                type: "Glow",
-                props: { intensity: 3, threshold: 0.1, size: 10 },
-                children: [
-                    {
-                        type: "Waveform",
-                        id: "scope",
-                        props: { style: "line", colorA: GREEN, colorB: GREEN, amplitude: 0.35, frequency: 1.4, height: 0.8, lineWidth: 0.02, speed: 0.8, align: "mirrored" },
-                    },
-                ],
-            },
-        ],
+        components: scope(0.35, 0.8),
         wire(shader, host) {
             const link = host.closest("a");
             const hot = (on) => () => shader.update("scope", { amplitude: on ? 1.6 : 0.35, frequency: on ? 2.6 : 1.4 });
@@ -113,14 +116,19 @@ const LAYERS = [
             }
         },
     },
+    {
+        // Articles: the same trace, calmer, as the divider between the intro and the body.
+        host: ".article-scope",
+        live: "signal-live",
+        components: scope(0.25, 0.4),
+    },
 ];
+
+const present = (layer) => document.querySelector(layer.host)?.offsetWidth > 0;
 
 async function mountLayer({ host: selector, live, components, wire }, createShader, gpu) {
     const host = document.querySelector(selector);
-    const scene = host?.closest(".scene");
-    if (!host || !scene || host.offsetWidth === 0) {
-        return;
-    }
+    const scene = host.closest(".scene");
     const canvas = document.createElement("canvas");
     canvas.className = "scene-fx";
     canvas.style.width = canvas.style.height = "100%";
@@ -144,16 +152,23 @@ async function mountLayer({ host: selector, live, components, wire }, createShad
     }
     wire?.(shader, host, canvas);
 
-    // Only draw while the owning scene is on screen.
-    const sync = () => (scene.matches(".scene--active, .scene--entering") ? shader.resume() : shader.pause());
-    new MutationObserver(sync).observe(scene, { attributes: true, attributeFilter: ["class"] });
-    sync();
+    // Stacked scenes all look visible to the renderer: only draw while the owning one is on
+    // screen. Outside the pager the renderer already pauses layers scrolled out of view.
+    if (scene) {
+        const sync = () => (scene.matches(".scene--active, .scene--entering") ? shader.resume() : shader.pause());
+        new MutationObserver(sync).observe(scene, { attributes: true, attributeFilter: ["class"] });
+        sync();
+    }
 }
 
 async function mount() {
+    const layers = LAYERS.filter(present);
+    if (!layers.length) {
+        return;
+    }
     const { createShader, createSharedDevice } = await import(SHADERS_URL);
     const gpu = (await createSharedDevice()) || undefined;
-    await Promise.all(LAYERS.map((layer) => mountLayer(layer, createShader, gpu).catch(() => {})));
+    await Promise.all(layers.map((layer) => mountLayer(layer, createShader, gpu).catch(() => {})));
 }
 
 if (
@@ -161,5 +176,7 @@ if (
     window.matchMedia("(pointer: fine)").matches &&
     !window.matchMedia("(prefers-reduced-motion: reduce)").matches
 ) {
-    mount().catch(() => {});
+    // After load: the bundle never competes with the page's own text, fonts and images.
+    const start = () => mount().catch(() => {});
+    document.readyState === "complete" ? start() : window.addEventListener("load", start, { once: true });
 }

@@ -1,0 +1,29 @@
+---
+layout: base.njk
+isArticle: true
+---
+<article class="article">
+    <header class="article-header">
+        <p class="article-meta">
+            <a href="/articles/">Articles</a>
+            <time datetime="{{ page.date | isoDate }}">{{ page.date | readableDate }}</time>
+            <span>{{ content | readingTime }} min read</span>
+        </p>
+        <h1>{{ title }}</h1>
+        <p class="article-lede">{{ description }}</p>
+    </header>
+
+    <div class="article-body">
+        <span class="article-scope" aria-hidden="true"></span>
+        {{ content | safe }}
+    </div>
+
+    <aside class="article-cta" aria-label="Contact Netria">
+        <h2>Working on something like this?</h2>
+        <p>Tell us what you are building or what slows your team down.</p>
+        <a class="contact-link" href="mailto:{{ site.email }}?subject={{ ('Re: ' + title) | urlencode }}">
+            <span>{{ site.email }}</span>
+            <span aria-hidden="true">↗</span>
+        </a>
+    </aside>
+</article>

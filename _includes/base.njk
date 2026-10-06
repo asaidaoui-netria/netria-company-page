@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} — {{ site.name }}</title>
+    <meta name="description" content="{{ description }}">
+    <meta name="author" content="{{ site.name }}">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#050706">
+
+    <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+    <link rel="alternate" type="application/atom+xml" title="{{ site.name }} articles" href="/articles/feed.xml">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+
+    <meta property="og:type" content="{{ 'article' if isArticle else 'website' }}">
+    <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:description" content="{{ description }}">
+    <meta property="og:image" content="{{ site.url }}/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="{{ site.name }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ title }}">
+    <meta name="twitter:description" content="{{ description }}">
+    <meta name="twitter:image" content="{{ site.url }}/assets/og-image.png">
+    {% if isArticle %}
+    <meta property="article:published_time" content="{{ page.date | isoDate }}">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": {{ title | dump | safe }},
+            "description": {{ description | dump | safe }},
+            "datePublished": "{{ page.date | isoDate }}",
+            "url": "{{ site.url }}{{ page.url }}",
+            "image": "{{ site.url }}/assets/og-image.png",
+            "author": { "@type": "Organization", "name": "{{ site.name }}", "url": "{{ site.url }}/" },
+            "publisher": { "@type": "Organization", "name": "{{ site.name }}", "url": "{{ site.url }}/" }
+        }
+    </script>
+    {% endif %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Silkscreen:wght@400;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/script.js" defer></script>
+    <script type="importmap">
+        {
+            "integrity": {
+                "https://cdn.jsdelivr.net/npm/shaders@4.0.0/dist/js/bundle.js": "sha384-VDjIeOVAcnhq9MDIGMkbO6OLD5w+pfUpRpIJ8Pfv/f2uuM2o0vmPvMrkvEOnuy0b"
+            }
+        }
+    </script>
+    <script src="/signal.js" type="module"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+        <nav class="navbar" aria-label="Primary navigation">
+            <a class="brand" href="/" aria-label="Netria home">
+                <picture>
+                    <source srcset="/assets/netria-logo-navbar-transparent.webp" type="image/webp">
+                    <img src="/assets/netria-logo-navbar-transparent.png" alt="" width="80" height="80">
+                </picture>
+                <span>Netria</span>
+            </a>
+
+            <button class="nav-toggle" id="navToggle" type="button"
+                aria-controls="navMenu" aria-expanded="false" aria-label="Open navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="/articles/"{% if page.url.startsWith('/articles/') %} aria-current="page"{% endif %}>Articles</a>
+                <a class="nav-email" href="mailto:{{ site.email }}?subject=Project%20conversation">
+                    Email Netria
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main">
+        {{ content | safe }}
+    </main>
+
+    <footer class="footer">
+        <a class="brand" href="/" aria-label="Netria home">
+            <picture>
+                <source srcset="/assets/netria-logo-footer-transparent.webp" type="image/webp">
+                <img src="/assets/netria-logo-footer-transparent.png" alt="" width="60" height="60">
+            </picture>
+            <span>Netria</span>
+        </a>
+        <p>© 2026 Netria. All rights reserved.</p>
+    </footer>
+</body>
+</html>

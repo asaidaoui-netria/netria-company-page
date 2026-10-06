@@ -1,0 +1,29 @@
+---
+layout: base.njk
+permalink: /articles/
+title: Articles
+description: Notes from Netria on building custom software and automating the work around it.
+---
+<section class="articles">
+    <h1>{{ title }}</h1>
+    <p class="article-lede">{{ description }}</p>
+
+    {% if collections.articles.length %}
+    <ol class="article-list">
+        {% for post in collections.articles %}
+        <li>
+            <a href="{{ post.url }}">
+                <time datetime="{{ post.date | isoDate }}">{{ post.date | readableDate }}</time>
+                <h2>{{ post.data.title }}</h2>
+                <p>{{ post.data.description }}</p>
+            </a>
+        </li>
+        {% endfor %}
+    </ol>
+    {% else %}
+    <p class="article-empty">
+        The first article is on its way. Until then, write to
+        <a href="mailto:{{ site.email }}?subject=Project%20conversation">{{ site.email }}</a>.
+    </p>
+    {% endif %}
+</section>

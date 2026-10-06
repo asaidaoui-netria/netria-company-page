@@ -63,6 +63,7 @@ html {
 body {
     margin: 0;
     min-width: 320px;
+    min-height: 100svh;
     overflow-x: hidden;
     color: var(--color-text);
     background: var(--color-bg);
@@ -852,22 +853,22 @@ main:has(.scene--entering) .scene--active > .scene-fx {
     }
 }
 
-/* Scene shell (gated behind html.js: no-js keeps the normal scrolling document) */
-html.js,
-html.js body {
+/* Scene shell (gated behind html.paged, set by scenes.js: no-js and article pages keep normal scrolling) */
+html.paged,
+html.paged body {
     height: 100%;
     overflow: hidden;
     overscroll-behavior: none;
     touch-action: none;
 }
 
-html.js main {
+html.paged main {
     position: relative;
     height: 100svh;
     overflow: hidden;
 }
 
-html.js .scene {
+html.paged .scene {
     position: absolute;
     inset: 0;
     visibility: hidden;
@@ -876,21 +877,21 @@ html.js .scene {
 }
 
 /* Opaque backdrop so the entering scene's clip truly wipes the outgoing one */
-html.js .scene:not(.contact) {
+html.paged .scene:not(.contact) {
     background: var(--color-bg);
 }
 
-html.js .scene--active {
+html.paged .scene--active {
     visibility: visible;
     z-index: 1;
 }
 
-html.js .scene--entering {
+html.paged .scene--entering {
     visibility: visible;
     z-index: 2;
 }
 
-html.js .site-header {
+html.paged .site-header {
     z-index: 70;
 }
 
@@ -905,7 +906,7 @@ html.js .site-header {
     z-index: 60;
 }
 
-html.js #fx-wave.is-on {
+html.paged #fx-wave.is-on {
     display: block;
 }
 
@@ -957,14 +958,14 @@ html.js #fx-wave.is-on {
 }
 
 /* Scene fit */
-html.js .section.scene {
+html.paged .section.scene {
     padding-top: 80px;
     padding-bottom: 16px;
 }
 
 /* Full-bleed boxes so their fx layers reach the viewport edges; padding keeps the content column */
-html.js .capabilities.scene,
-html.js .principles.scene {
+html.paged .capabilities.scene,
+html.paged .principles.scene {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -973,7 +974,7 @@ html.js .principles.scene {
     padding-inline: max(1rem, calc(50% - var(--content-width) / 2));
 }
 
-html.js .contact.scene {
+html.paged .contact.scene {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -982,143 +983,143 @@ html.js .contact.scene {
     gap: 0;
 }
 
-html.js .contact.scene .footer {
+html.paged .contact.scene .footer {
     margin-top: 16px;
 }
 
 @media (max-width: 600px) {
-    html.js .principle-grid {
+    html.paged .principle-grid {
         grid-template-columns: 1fr 1fr;
         gap: 6px;
     }
 
-    html.js .principle-grid article {
+    html.paged .principle-grid article {
         min-height: 0;
         padding: 4px;
     }
 
-    html.js .principle-grid h3 {
+    html.paged .principle-grid h3 {
         margin-bottom: 4px;
     }
 }
 
 @media (max-width: 600px) {
-    html.js .hero-signal {
+    html.paged .hero-signal {
         display: none;
     }
 
-    html.js .hero.scene {
+    html.paged .hero.scene {
         padding-top: 68px;
         padding-bottom: 16px;
         gap: 12px;
     }
 
-    html.js .section.scene {
+    html.paged .section.scene {
         padding-top: 68px;
         padding-bottom: 4px;
         padding-inline: 0.625rem;
     }
 
-    html.js .section-heading {
+    html.paged .section-heading {
         gap: 6px;
         margin-bottom: 8px;
     }
 
-    html.js .section-heading h2 {
+    html.paged .section-heading h2 {
         font-size: clamp(1.5rem, 8vw, 3rem);
     }
 
-    html.js .section-heading > p:last-child {
+    html.paged .section-heading > p:last-child {
         font-size: 0.95rem;
     }
 
-    html.js .eyebrow {
+    html.paged .eyebrow {
         margin-bottom: 0.4rem;
         font-size: 0.62rem;
     }
 
-    html.js .capabilities.scene {
+    html.paged .capabilities.scene {
         gap: 8px;
     }
 
-    html.js .capability-card {
+    html.paged .capability-card {
         padding: 8px;
     }
 
-    html.js .card-index {
+    html.paged .card-index {
         margin-bottom: 6px;
     }
 
-    html.js .capability-card h3 {
+    html.paged .capability-card h3 {
         margin-bottom: 6px;
         font-size: 1.25rem;
         line-height: 1.2;
     }
 
-    html.js .capability-card p {
+    html.paged .capability-card p {
         font-size: 0.85rem;
         line-height: 1.35;
     }
 
-    html.js .capability-card ul {
+    html.paged .capability-card ul {
         columns: 2;
         margin-top: 6px;
         padding-top: 6px;
     }
 
-    html.js .capability-card li {
+    html.paged .capability-card li {
         padding: 0.18rem 0;
         font-size: 0.8rem;
     }
 
-    html.js .contact.scene {
+    html.paged .contact.scene {
         padding-top: 68px;
         padding-bottom: 16px;
     }
 
-    html.js .contact-link {
+    html.paged .contact-link {
         margin-top: 1rem;
     }
 
-    html.js .footer {
+    html.paged .footer {
         padding: 8px 0;
         gap: 12px;
     }
 
-    html.js .footer .brand img {
+    html.paged .footer .brand img {
         width: 40px;
         height: 40px;
     }
 }
 
 @media (max-width: 400px) {
-    html.js .capabilities .section-heading h2 {
+    html.paged .capabilities .section-heading h2 {
         font-size: 1.3rem;
     }
 
-    html.js .capability-card p {
+    html.paged .capability-card p {
         display: none;
     }
 
     /* Make room for the scroll cue on the smallest phones */
-    html.js .section.scene {
+    html.paged .section.scene {
         gap: 6px;
     }
 
-    html.js .capability-card {
+    html.paged .capability-card {
         padding: 6px;
     }
 
-    html.js .capability-card li {
+    html.paged .capability-card li {
         padding: 0.12rem 0;
         font-size: 0.75rem;
     }
 
-    html.js .principle-grid {
+    html.paged .principle-grid {
         gap: 6px;
     }
 
-    html.js .principle-grid p {
+    html.paged .principle-grid p {
         font-size: 0.85rem;
         line-height: 1.35;
     }
@@ -1146,4 +1147,227 @@ html.js .contact.scene .footer {
             0 4px 0 var(--color-signal),
             8px 4px 0 var(--color-signal);
     }
+}
+
+/* Articles: ordinary scrolling pages built by Eleventy (no scene pager) */
+.articles,
+.article {
+    width: min(calc(100% - 2rem), 46rem);
+    margin: 0 auto;
+    padding: calc(var(--header-height) + clamp(3rem, 8vw, 6rem)) 0 clamp(3rem, 8vw, 5rem);
+}
+
+.articles h1,
+.article h1 {
+    max-width: none;
+    margin-bottom: 1rem;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 1.1;
+}
+
+.article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-dim);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+}
+
+.article-meta a {
+    color: var(--color-signal);
+    text-decoration: none;
+}
+
+.article-lede {
+    margin-bottom: 0;
+    color: var(--color-muted);
+    font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+    line-height: 1.5;
+}
+
+.article-body {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    padding-top: clamp(2rem, 5vw, 3rem);
+    border-top: 1px solid var(--color-border);
+    font-size: 1.125rem;
+    line-height: 1.75;
+}
+
+.article-body > * {
+    margin: 0 0 1.4em;
+}
+
+/* signal.js draws a live trace over the divider; the plain border stays as the fallback */
+.article-body {
+    position: relative;
+}
+
+.article-scope {
+    position: absolute;
+    top: -2.5rem;
+    left: 0;
+    right: 0;
+    height: 5rem;
+    pointer-events: none;
+}
+
+.article-body:has(> .signal-live) {
+    border-top-color: transparent;
+}
+
+.article-body h2 {
+    margin: 2.4em 0 0.8em;
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    line-height: 1.2;
+}
+
+.article-body h3 {
+    margin: 2em 0 0.6em;
+    font-size: 1.2rem;
+    line-height: 1.3;
+}
+
+.article-body a,
+.article-empty a {
+    color: var(--color-signal);
+    text-underline-offset: 0.2em;
+}
+
+.article-body ul {
+    padding-left: 1.5rem;
+    list-style: none;
+}
+
+.article-body ol {
+    padding-left: 2rem;
+}
+
+.article-body ul > li::before {
+    content: "+";
+    display: inline-block;
+    width: 1.5rem;
+    margin-left: -1.5rem;
+    color: var(--color-signal);
+}
+
+.article-body ol ::marker {
+    color: var(--color-signal);
+    font-family: var(--font-mono);
+}
+
+.article-body li + li {
+    margin-top: 0.4em;
+}
+
+.article-body blockquote {
+    padding: 0.2em 0 0.2em 1.25rem;
+    border-left: 3px solid var(--color-signal);
+    font-size: 1.2rem;
+}
+
+.article-body blockquote > :last-child {
+    margin-bottom: 0;
+}
+
+.article-body code {
+    padding: 0.1em 0.35em;
+    background: var(--color-surface-raised);
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+}
+
+.article-body pre {
+    overflow-x: auto;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    line-height: 1.6;
+}
+
+.article-body pre code {
+    padding: 0;
+    background: none;
+}
+
+/* Photos and diagrams, unlike the pixel-art logos */
+.article-body img {
+    height: auto;
+    image-rendering: auto;
+}
+
+.article-cta {
+    margin-top: clamp(3rem, 8vw, 5rem);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border: 2px solid var(--color-border-strong);
+    background:
+        var(--dither) 0 0 / 6px 6px,
+        var(--color-surface);
+    clip-path: var(--pixel-corner);
+}
+
+.article-cta h2 {
+    margin-bottom: 0.5rem;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    line-height: 1.15;
+}
+
+.article-cta p {
+    color: var(--color-muted);
+}
+
+.article-cta .contact-link {
+    margin-top: 1.5rem;
+}
+
+.article-list {
+    margin: clamp(2.5rem, 6vw, 4rem) 0 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border);
+    list-style: none;
+}
+
+.article-list a {
+    display: block;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+    color: inherit;
+    text-decoration: none;
+}
+
+.article-list time {
+    color: var(--color-dim);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+}
+
+.article-list h2 {
+    margin: 0.5rem 0;
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    line-height: 1.2;
+    transition: color var(--transition);
+}
+
+.article-list p {
+    margin: 0;
+    color: var(--color-muted);
+}
+
+.article-list a:hover h2,
+.article-list a:focus-visible h2 {
+    color: var(--color-signal);
+}
+
+.article-empty {
+    margin-top: 2.5rem;
+    color: var(--color-muted);
+}
+
+.nav-menu a[aria-current="page"] {
+    color: var(--color-text);
+}
+
+main + .footer {
+    border-top: 1px solid var(--color-border);
 }

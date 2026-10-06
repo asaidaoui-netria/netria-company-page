@@ -37,7 +37,7 @@ test("disables decorative motion when reduced motion is requested", () => {
 
 test("keeps scenes in normal document flow without JavaScript", () => {
   assert.doesNotMatch(css, /\[data-reveal\]/);
-  assert.match(css, /html\.js \.scene\s*\{/);
+  assert.match(css, /html\.paged \.scene\s*\{/);
 });
 
 test("constrains the mobile hero to the viewport", () => {

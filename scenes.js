@@ -384,6 +384,8 @@ function onPopState() {
 }
 
 if (JS && scenes.length > 1) {
+    // Locks native scroll (styles.css "Scene shell"); pages without scenes.js scroll normally.
+    document.documentElement.classList.add("paged");
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchend", onTouchEnd, { passive: true });

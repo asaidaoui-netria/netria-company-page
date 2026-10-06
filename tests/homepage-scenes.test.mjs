@@ -49,14 +49,14 @@ test("loads scenes.js progressively and retires effects.js and data-reveal", () 
 });
 
 test("shell locks native scroll only when js is on", () => {
-  assert.match(css, /html\.js,\s*\r?\n?html\.js body\s*\{[^}]*overflow:\s*hidden/s);
-  assert.match(css, /html\.js,\s*\r?\n?html\.js body\s*\{[^}]*touch-action:\s*none/s);
-  assert.match(css, /html\.js main\s*\{[^}]*100svh/s);
-  assert.match(css, /html\.js \.scene\s*\{[^}]*position:\s*absolute/s);
-  assert.match(css, /html\.js \.scene--active\s*\{[^}]*visibility:\s*visible/s);
-  assert.match(css, /html\.js \.scene--entering\s*\{[^}]*z-index:\s*2/s);
+  assert.match(css, /html\.paged,\s*\r?\n?html\.paged body\s*\{[^}]*overflow:\s*hidden/s);
+  assert.match(css, /html\.paged,\s*\r?\n?html\.paged body\s*\{[^}]*touch-action:\s*none/s);
+  assert.match(css, /html\.paged main\s*\{[^}]*100svh/s);
+  assert.match(css, /html\.paged \.scene\s*\{[^}]*position:\s*absolute/s);
+  assert.match(css, /html\.paged \.scene--active\s*\{[^}]*visibility:\s*visible/s);
+  assert.match(css, /html\.paged \.scene--entering\s*\{[^}]*z-index:\s*2/s);
   assert.match(css, /#fx-wave\s*\{[^}]*position:\s*fixed/s);
-  assert.match(css, /html\.js #fx-wave\.is-on\s*\{[^}]*display:\s*block/s);
+  assert.match(css, /html\.paged #fx-wave\.is-on\s*\{[^}]*display:\s*block/s);
 });
 
 test("no element-level reveal effects remain", () => {

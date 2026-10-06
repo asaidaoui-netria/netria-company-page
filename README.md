@@ -1,6 +1,6 @@
 # Netria Company Page
 
-Custom software and workflow automation, presented through a lightweight static homepage for Netria.
+Custom software and workflow automation, presented through a lightweight static homepage for Netria, plus articles built with [Eleventy](https://www.11ty.dev/).
 
 ## Positioning
 
@@ -27,17 +27,33 @@ The **Quiet Signal** identity combines:
 
 ## Contact
 
-Visitors contact Netria directly at [hello@netria.dev](mailto:hello@netria.dev).
+Visitors contact Netria directly at [hello@netria.dev](mailto:hello@netria.dev). Every article ends with the same enquiry box, whose email subject names the article, so enquiries show which post brought them in.
+
+## Writing Articles
+
+Articles are Markdown files in `articles/`, published at `/articles/<slug>/`:
+
+1. Copy `articles/2026-10-06-article-template.md` to `articles/YYYY-MM-DD-short-slug.md`. The date is the publish date; the rest of the name becomes the address.
+2. Set `title` and `description` (the description is the summary shown in the listing, search results and link previews).
+3. Write, preview with `npm start`, then remove `draft: true` and push to `main`.
+
+Posts marked `draft: true` show in `npm start` but are never published. The listing, feed (`/articles/feed.xml`), sitemap and search and share metadata update automatically.
 
 ## Project Structure
 
 ```text
 .
+├── .github/workflows/       # Build and deploy to GitHub Pages
+├── _includes/               # Article page templates
+├── articles/                # Markdown articles, listing and feed
 ├── assets/                  # Logos, favicons, fonts, and social artwork
-├── docs/superpowers/        # Approved design and implementation plan
-├── tests/                   # Dependency-free Node contract tests
+├── docs/superpowers/        # Approved design and implementation plan (not published)
+├── tests/                   # Node contract tests (not published)
 ├── CNAME                    # Custom-domain configuration
+├── eleventy.config.js       # What gets built and published
 ├── index.html               # Semantic page content and metadata
+├── robots.txt               # Points crawlers at the sitemap
+├── sitemap.njk              # Generates sitemap.xml
 ├── script.js                # Mobile navigation and progressive reveals
 ├── scenes.js                # Scene pager, glyph wave, entrances
 ├── signal.js                # Live WebGPU scene layers (progressive)
@@ -49,14 +65,15 @@ Visitors contact Netria directly at [hello@netria.dev](mailto:hello@netria.dev).
 From the project root:
 
 ```bash
-python3 -m http.server 8000
+npm install
+npm start
 ```
 
-Open `http://localhost:8000`.
+Open `http://localhost:8080`. Pages reload as you edit, and drafts are visible. `npm run build` writes the published site to `_site/`.
 
 ## Validation
 
-Run all contract tests:
+Run all contract tests (`npm test` runs the same command; the articles tests run a real build):
 
 ```bash
 node --test tests/*.test.mjs
@@ -71,8 +88,8 @@ node --check signal.js
 git diff --check
 ```
 
-The page should also be checked at 320px, 768px, 1024px, and 1440px widths, with keyboard navigation and reduced motion enabled.
+The pages should also be checked at 320px, 768px, 1024px, and 1440px widths, with keyboard navigation and reduced motion enabled.
 
 ## Deployment
 
-The repository is deployed as a static site. `CNAME` preserves the custom `netria.dev` domain.
+Every push to `main` runs `.github/workflows/deploy.yml`: it installs dependencies, runs the tests, builds with Eleventy, and publishes `_site/` to GitHub Pages. Only the homepage files listed in `eleventy.config.js` and the rendered articles are published; a failing test stops the deploy. The repository's Pages source must be set to **GitHub Actions**, and the custom domain `www.netria.dev` is configured in the Pages settings.

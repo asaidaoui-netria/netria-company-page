@@ -1,6 +1,5 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -20,12 +19,9 @@ test("has a maintainable Quiet Signal social source", () => {
 });
 
 test("ships a 1200 by 630 PNG", () => {
-  const output = execFileSync(
-    "sips",
-    ["-g", "pixelWidth", "-g", "pixelHeight", pngPath],
-    { encoding: "utf8" }
-  );
-
-  assert.match(output, /pixelWidth:\s+1200/);
-  assert.match(output, /pixelHeight:\s+630/);
+  // Width and height sit in the IHDR chunk right after the 8-byte signature.
+  const png = readFileSync(pngPath);
+  assert.equal(png.toString("ascii", 12, 16), "IHDR");
+  assert.equal(png.readUInt32BE(16), 1200);
+  assert.equal(png.readUInt32BE(20), 630);
 });
