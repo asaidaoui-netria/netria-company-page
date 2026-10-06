@@ -22,6 +22,7 @@ The **Quiet Signal** identity combines:
 - CRT scanlines, dithered textures, pixel-cut corners, and hard offset shadows;
 - a no-scrollbar scene pager with a directional glyph-wave transition (careers.kimi.com parity), plus heading-decode and pixel-dissolve entrances on every scene entry;
 - restrained grids, particles, and squared orbital geometry;
+- live WebGPU scene layers via [shaders](https://github.com/shader-effects-inc/shaders), one green-phosphor reference per scene: Matrix glyph rain behind an LED-matrix moth the cursor scatters (hero), a Tron grid floor the cursor ripples (capabilities), Severance-style refinement numbers under a cursor lens (principles), and an oscilloscope trace that spikes when you reach for the email link (contact). They load lazily and only with WebGPU, a fine pointer and motion allowed; otherwise the static page stays;
 - hash deep-linking, wheel/touch/keyboard navigation, and reduced-motion instant cuts (no-JS keeps the normal scrolling document).
 
 ## Contact
@@ -39,6 +40,7 @@ Visitors contact Netria directly at [hello@netria.dev](mailto:hello@netria.dev).
 ├── index.html               # Semantic page content and metadata
 ├── script.js                # Mobile navigation and progressive reveals
 ├── scenes.js                # Scene pager, glyph wave, entrances
+├── signal.js                # Live WebGPU scene layers (progressive)
 └── styles.css               # Quiet Signal visual system
 ```
 
@@ -65,6 +67,7 @@ Check JavaScript syntax and whitespace:
 ```bash
 node --check script.js
 node --check scenes.js
+node --check signal.js
 git diff --check
 ```
 

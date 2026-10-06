@@ -394,6 +394,68 @@ h1 em {
     display: block;
 }
 
+/* signal.js: live WebGPU layers. Each canvas fills its host; static art stays as the fallback */
+.scene-fx {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.hero-signal .scene-fx {
+    z-index: 1;
+    mask-image: radial-gradient(circle, black 30%, transparent 70%);
+}
+
+.signal-live .signal-core,
+.signal-live .signal-grid {
+    visibility: hidden;
+}
+
+/* Behind the scene's content, above its backdrop (active scenes are stacking contexts) */
+.scene > .scene-fx {
+    z-index: -1;
+}
+
+/* Scene layers stop at the content column: fade their sides out */
+.capabilities > .scene-fx,
+.principles > .scene-fx {
+    mask-composite: intersect;
+}
+
+.capabilities > .scene-fx {
+    opacity: 0.6;
+    mask-image:
+        linear-gradient(to bottom, transparent 30%, black 75%),
+        linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+.principles > .scene-fx {
+    mask-image:
+        radial-gradient(circle 15rem at var(--mx, 70%) var(--my, 40%), black, rgb(0 0 0 / 0.28)),
+        linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.principles:has(> .scene-fx) .principle-grid article {
+    background: rgba(5, 7, 6, 0.85);
+}
+
+.contact-link {
+    position: relative;
+}
+
+.contact-scope {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(100% - 2.5rem);
+    height: 5rem;
+    pointer-events: none;
+}
+
+.contact-link:has(.signal-live) {
+    border-top-color: transparent;
+}
+
 .signal-core img {
     width: 100%;
     height: auto;
