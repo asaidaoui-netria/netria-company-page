@@ -1,6 +1,7 @@
 // Scene fx: one WebGPU layer per scene (shaders.com), each tuned to a piece of green-phosphor
 // screen culture. Progressive: the static page stays unless WebGPU, a fine pointer and motion
 // all line up, and any layer that fails just removes its canvas.
+// Pinned by an import-map integrity hash in index.html: bump both together.
 const SHADERS_URL = "https://cdn.jsdelivr.net/npm/shaders@4.0.0/dist/js/bundle.js";
 const GREEN = "#63ff72";
 const MOTH = new URL("assets/netria-logo-navbar-transparent.png", location.href).href;

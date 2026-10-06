@@ -30,6 +30,13 @@ test("shaders bundle is version-pinned, lazy, shared and telemetry-free", () => 
   assert.match(signal, /disableTelemetry:\s*true/);
 });
 
+test("the bundle URL carries an import-map integrity hash", () => {
+  const url = signal.match(/const SHADERS_URL = "([^"]+)"/)[1];
+  const map = JSON.parse(html.match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]);
+  assert.match(map.integrity[url] ?? "", /^sha384-[A-Za-z0-9+/]{64}$/);
+  assert.ok(html.indexOf('type="importmap"') < html.indexOf('src="signal.js"'));
+});
+
 test("fx are gated on webgpu, a fine pointer and motion, and fail back to static", () => {
   assert.match(signal, /"gpu" in navigator/);
   assert.match(signal, /\(pointer: fine\)/);
