@@ -23,20 +23,10 @@ const scope = (amplitude, speed) => [
 
 const LAYERS = [
     {
-        // 01 · The Matrix: glyph rain behind an LED-matrix moth the cursor scatters.
+        // 01 · An LED-matrix moth the cursor scatters.
         host: ".hero-signal",
         live: "signal-live",
         components: [
-            {
-                type: "Ascii",
-                props: { characters: "@#$%&*NETRIA0123456789", cellSize: 22, fontFamily: "Silkscreen", gamma: 0.8 },
-                children: [
-                    {
-                        type: "FallingLines",
-                        props: { colorA: "#2f9a3c", colorB: "#2f9a3c00", angle: 90, speed: 0.35, speedVariance: 0.6, density: 22, trailLength: 0.8, strokeWidth: 1, rounding: 0 },
-                    },
-                ],
-            },
             {
                 type: "Pixelate",
                 props: { scale: 76, gap: 0.18 },
