@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Share image for /articles/decision-models/. Edit here, then re-export the PNG at 1200x630. -->
+  <defs>
+    <style>
+      @font-face {
+        font-family: "Fusion Pixel";
+        src: url("fonts/fusion-pixel-12px-monospaced-latin.otf.woff2") format("woff2");
+      }
+      text { font-family: "Fusion Pixel", "Silkscreen", monospace; }
+    </style>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#63ff72" stroke-opacity=".07"/>
+    </pattern>
+    <radialGradient id="haze" cx="30%" cy="82%" r="60%">
+      <stop offset="0" stop-color="#14361a"/>
+      <stop offset=".55" stop-color="#08100a"/>
+      <stop offset="1" stop-color="#050706"/>
+    </radialGradient>
+    <filter id="glow" x="-20%" y="-200%" width="140%" height="500%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="#050706"/>
+  <rect width="1200" height="630" fill="url(#haze)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Pixel-cornered frame, like the site's contact panel -->
+  <path d="M48 32H1152V40H1160V48H1168V582H1160V590H1152V598H48V590H40V582H32V48H40V40H48Z"
+      fill="none" stroke="#63ff72" stroke-opacity=".35" stroke-width="2"/>
+
+  <!-- Netria moth, traced from the logo's pixel grid -->
+  <path transform="translate(72 64) scale(2)" fill="#63ff72" d="M8 0h1v1h-1zM18 0h1v1h-1zM9 1h1v1h-1zM17 1h1v1h-1zM10 2h1v1h-1zM16 2h1v1h-1zM11 3h1v1h-1zM15 3h1v1h-1zM1 4h4v1h-4zM11 4h1v1h-1zM15 4h1v1h-1zM22 4h4v1h-4zM0 5h7v1h-7zM12 5h3v1h-3zM20 5h7v1h-7zM0 6h9v1h-9zM11 6h5v1h-5zM18 6h9v1h-9zM0 7h27v1h-27zM0 8h27v1h-27zM1 9h25v1h-25zM2 10h23v1h-23zM3 11h21v1h-21zM5 12h17v1h-17zM4 13h19v1h-19zM4 14h19v1h-19zM4 15h19v1h-19zM4 16h6v1h-6zM11 16h5v1h-5zM17 16h6v1h-6zM5 17h5v1h-5zM11 17h5v1h-5zM17 17h5v1h-5zM6 18h3v1h-3zM11 18h5v1h-5zM18 18h3v1h-3zM11 19h5v1h-5zM11 20h5v1h-5zM12 21h3v1h-3zM12 22h3v1h-3z"/>
+  <text x="140" y="104" font-size="24" fill="#f2f5f1">Netria</text>
+  <text x="1128" y="104" font-size="24" fill="#657068" text-anchor="end">netria.dev/articles</text>
+
+  <text x="72" y="230" font-size="72" fill="#f2f5f1">Decision models:</text>
+  <text x="72" y="314" font-size="72" fill="#f2f5f1">a System 1 for software</text>
+  <text x="72" y="380" font-size="24" fill="#95a097">Typed answers with a confidence score, not text.</text>
+
+  <!-- One decision, scored in a single pass -->
+  <g font-size="24">
+    <rect x="72" y="428" width="660" height="156" fill="#050706" fill-opacity=".7" stroke="#63ff72" stroke-opacity=".25"/>
+    <text x="104" y="470" fill="#657068">&gt;<tspan fill="#f2f5f1"> Urgency: low, medium or high?</tspan></text>
+    <text x="104" y="502" fill="#95a097">low</text>
+    <rect x="264" y="486" width="330" height="14" fill="#63ff72" fill-opacity=".08"/>
+    <rect x="264" y="486" width="6" height="14" fill="#63ff72" fill-opacity=".45"/>
+    <text x="618" y="502" fill="#95a097">0.01</text>
+    <text x="104" y="532" fill="#95a097">medium</text>
+    <rect x="264" y="516" width="330" height="14" fill="#63ff72" fill-opacity=".08"/>
+    <rect x="264" y="516" width="16" height="14" fill="#63ff72" fill-opacity=".45"/>
+    <text x="618" y="532" fill="#95a097">0.05</text>
+    <text x="104" y="562" fill="#63ff72">high</text>
+    <rect x="264" y="546" width="330" height="14" fill="#63ff72" fill-opacity=".08"/>
+    <rect x="264" y="546" width="310" height="14" fill="#63ff72" filter="url(#glow)"/>
+    <text x="618" y="562" fill="#63ff72">0.94</text>
+  </g>
+
+  <text x="1128" y="562" font-size="24" fill="#657068" text-anchor="end">By Abderrahman SaidAlaoui</text>
+</svg>

@@ -130,6 +130,16 @@ test("search and answer engines get structured, consistent signals", () => {
   assert.match(llms, /https:\/\/www\.netria\.dev\/articles\//);
   assert.doesNotMatch(llms, /Article template/, "drafts must not reach llms.txt");
 
+  // Every article's share image is a tracked 1200x630 PNG (what X and LinkedIn expect).
+  for (const file of readdirSync(join(root, "articles")).filter((f) => f.endsWith(".md"))) {
+    const image = read(join("articles", file)).match(/^image:\s*(\S+)/m)?.[1];
+    if (image) {
+      assert.ok(tracked.has(image.slice(1)), `${file}: ${image} is not a tracked file`);
+      const png = readFileSync(join(root, image));
+      assert.deepEqual([png.readUInt32BE(16), png.readUInt32BE(20)], [1200, 630], `${file}: ${image} is not 1200x630`);
+    }
+  }
+
   // Every published article ships valid structured data that names its author.
   const posts = readdirSync(join(out, "articles"), { withFileTypes: true }).filter((d) => d.isDirectory());
   for (const post of posts) {

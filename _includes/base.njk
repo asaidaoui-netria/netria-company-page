@@ -22,14 +22,17 @@
     <meta property="og:url" content="{{ site.url }}{{ page.url }}">
     <meta property="og:title" content="{{ title }}">
     <meta property="og:description" content="{{ description }}">
-    <meta property="og:image" content="{{ site.url }}/assets/og-image.png">
+    {% set shareImage = image or "/assets/og-image.png" %}
+    <meta property="og:image" content="{{ site.url }}{{ shareImage }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ imageAlt or 'Netria pixel moth on a dark signal grid' }}">
     <meta property="og:site_name" content="{{ site.name }}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ title }}">
     <meta name="twitter:description" content="{{ description }}">
-    <meta name="twitter:image" content="{{ site.url }}/assets/og-image.png">
+    <meta name="twitter:image" content="{{ site.url }}{{ shareImage }}">
+    <meta name="twitter:image:alt" content="{{ imageAlt or 'Netria pixel moth on a dark signal grid' }}">
     {% if isArticle %}
     <meta property="article:published_time" content="{{ page.date | isoDate }}">
     <meta property="article:modified_time" content="{{ (updated or page.date) | isoDate }}">
@@ -44,7 +47,7 @@
             "url": "{{ site.url }}{{ page.url }}",
             "mainEntityOfPage": "{{ site.url }}{{ page.url }}",
             "inLanguage": "en",
-            "image": "{{ site.url }}/assets/og-image.png",
+            "image": "{{ site.url }}{{ shareImage }}",
             "author": {% if author %}{ "@type": "Person", "name": {{ author.name | dump | safe }}{% if author.role %}, "jobTitle": {{ author.role | dump | safe }}{% endif %}{% if author.url %}, "url": {{ author.url | dump | safe }}{% endif %}, "worksFor": { "@id": "{{ site.url }}/#organization" } }{% else %}{ "@id": "{{ site.url }}/#organization" }{% endif %},
             "publisher": {
                 "@type": "Organization",

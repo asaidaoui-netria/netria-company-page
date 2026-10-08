@@ -1,6 +1,9 @@
 ---
 title: "Decision models: a System 1 for software"
 description: Decision models answer typed questions with a confidence score instead of text. What they are, how they work, and what is still unproven.
+# Share image: edit assets/og-decision-models.svg, then re-export the PNG at 1200x630.
+image: /assets/og-decision-models.png
+imageAlt: "Decision models: a System 1 for software. A decision model scores low, medium and high urgency at once and picks high, at 0.94."
 author:
     name: Abderrahman SaidAlaoui
     # TODO: add `url:` once Netria has an author profile page (see README, To do).
