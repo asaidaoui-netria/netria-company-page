@@ -16,7 +16,7 @@ const SITE = { url: "https://www.netria.dev", name: "Netria", email: "hello@netr
 
 export default function (eleventyConfig) {
     STATIC.forEach((path) => eleventyConfig.addPassthroughCopy(path));
-    ["README.md", "docs/**", "tests/**"].forEach((glob) => eleventyConfig.ignores.add(glob));
+    ["README.md", "docs/**", "tests/**", ".agents/**", ".claude/**", ".codex/**"].forEach((glob) => eleventyConfig.ignores.add(glob));
 
     eleventyConfig.addGlobalData("site", SITE);
     // Preview: reload the page on changes instead of patching it in place, which would undo

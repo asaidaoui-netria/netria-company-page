@@ -45,7 +45,7 @@ test("built pages reference stylesheets and scripts by content version", async (
 });
 
 test("internal files and drafts stay out of the published site", () => {
-  for (const path of ["README.md", "docs", "tests", "package.json", "eleventy.config.js", "_includes", "node_modules"]) {
+  for (const path of ["README.md", "docs", "tests", "package.json", "eleventy.config.js", "_includes", "node_modules", ".agents", ".claude", ".codex"]) {
     assert.ok(!built(path), `${path} was published`);
     assert.ok(!STATIC.includes(path));
   }
