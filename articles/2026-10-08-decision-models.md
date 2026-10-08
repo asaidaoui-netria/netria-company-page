@@ -79,13 +79,17 @@ Jev started the category in mid-September. Within three weeks, more than a dozen
 
 {% modelExplorer decisionModels %}
 
-Each vendor publishes benchmarks it wins, and the results conflict. On the same banking benchmark, Laya reports Jev doing about twice as well as Laya, while Cloudflare reports Clef well ahead of Jev. No independent tests exist yet.
+Each vendor publishes benchmarks it wins, and the results conflict. On the same banking benchmark, Laya reports Jev doing about twice as well as Laya, while Cloudflare reports Clef well ahead of Jev.
+
+The first independent comparison is the community-run [Jev Decision Index](https://huggingface.co/spaces/multimodalart/jev-decision-index) on Hugging Face. As of 7 October, it had run 115 models, many of them attempts to reproduce Jev, through 42 benchmarks on a single GPU. Most of its score comes from private tests that no one can train on. Perplexity's decider leads, with Fastino's GLiDE and Jev tied for second. The leaders are large: nearly all of the top fifteen have 26 to 31 billion parameters.
 
 ## Keeping up
 
 This list will age quickly. For the current picture, OpenRouter publishes [live decision model rankings](https://openrouter.ai/rankings/decisions#top-models-by-category) built from real traffic. It shows which models are used most, overall and by category, domain and market share.
 
 Read it as a measure of use, not quality: a model can lead because it came first or costs less. In the week to 7 October, Jev handled the vast majority of requests, while new models were arriving every few days.
+
+For quality, follow the Jev Decision Index. It adds models as they appear, and its news page tracks new attempts to reproduce Jev.
 
 ## Where they are used
 
@@ -101,9 +105,11 @@ A higher threshold means fewer answers used directly, but more of them right. La
 
 This only works if the confidence is honest. That makes calibration, not raw accuracy, the first thing to test.
 
+The Decision Index tests it, and the leaders run a little overconfident. Jev is right 74% of the time while reporting 81% confidence on average, and Perplexity's decider shows a similar gap. Of the top three, GLiDE comes closest: right 75% of the time at 79% confidence.
+
 ## What to watch
 
-The category is only weeks old, so treat every number as a vendor claim until someone independent confirms it. Calibration can also drift: confidence tuned on public benchmarks may not hold on real data, though a few hundred labeled examples are enough to find out. And some questions are harder than others. Laya, for one, says questions with many options, and graded scales such as minor, major and critical, are its weakest.
+The category is only weeks old. Treat vendor numbers as claims, and remember that the one independent index is a single project's method, still changing from one edition to the next. Calibration can also drift: confidence tuned on public benchmarks may not hold on real data, though a few hundred labeled examples are enough to find out. And some questions are harder than others. Laya, for one, says questions with many options, and graded scales such as minor, major and critical, are its weakest.
 
 People stay in the loop, too. Cloudflare says a human "does not necessarily need to be in the loop", but keeps the option to "defer to a human when needed". The threshold is what decides when.
 
