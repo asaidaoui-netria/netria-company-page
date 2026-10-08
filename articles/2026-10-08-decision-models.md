@@ -78,6 +78,12 @@ Jev started the category in mid-September. Within three weeks, more than a dozen
 
 Each vendor publishes benchmarks it wins, and the results conflict. On the same banking benchmark, Laya reports Jev doing about twice as well as Laya, while Cloudflare reports Clef well ahead of Jev. No independent tests exist yet.
 
+## Keeping up
+
+This list will age quickly. For the current picture, OpenRouter publishes [live decision model rankings](https://openrouter.ai/rankings/decisions#top-models-by-category) built from real traffic. It shows which models are used most, overall and by category, domain and market share.
+
+Read it as a measure of use, not quality: a model can lead because it came first or costs less. In the week to 7 October, Jev handled the vast majority of requests, while new models were arriving every few days.
+
 ## Where they are used
 
 Most early uses are about sorting and checking. Decision models triage and route tickets, emails and requests. They screen prompts for moderation and jailbreak attempts, and check what a language model writes before anyone sees it. Cloudflare's threat intelligence team uses Clef to classify domains, including how likely each one is to be phishing.
