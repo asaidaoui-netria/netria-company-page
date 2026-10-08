@@ -1284,6 +1284,14 @@ html.paged .contact.scene .footer {
     border: 1px solid var(--color-border);
     background: var(--color-surface);
     line-height: 1.6;
+    scrollbar-color: var(--color-border-strong) transparent;
+}
+
+@media (max-width: 600px) {
+    .article-body pre {
+        padding: 0.875rem 1rem;
+        font-size: 0.8rem;
+    }
 }
 
 .article-body pre code {
@@ -1291,10 +1299,614 @@ html.paged .contact.scene .footer {
     background: none;
 }
 
+/* Animated decision-model figure: plain HTML in the Markdown. The base styles are the
+   finished state; the loop only runs when motion is allowed. */
+.decision-figure {
+    padding: clamp(1rem, 3vw, 1.75rem);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.df-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-dim);
+    font-family: var(--font-pixel);
+    font-size: 0.8rem;
+}
+
+.df-input p {
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: 1rem;
+}
+
+/* The read head that sweeps the input */
+.df-input p::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    background: var(--color-signal);
+    box-shadow: 0 0 12px var(--color-signal);
+    opacity: 0;
+}
+
+.df-pass {
+    margin: 1rem 0;
+    color: var(--color-dim);
+    text-align: center;
+}
+
+.df-questions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.df-opt {
+    display: grid;
+    grid-template-columns: 4.75rem minmax(0, 1fr) 2.25rem;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-muted);
+}
+
+.df-bar {
+    height: 0.5rem;
+    background: rgba(99, 255, 114, 0.08);
+}
+
+.df-bar::before {
+    content: "";
+    display: block;
+    width: calc(var(--p) * 100%);
+    height: 100%;
+    background: var(--color-border-strong);
+}
+
+.df-num {
+    text-align: right;
+}
+
+.df-win {
+    color: var(--color-signal);
+    font-weight: 600;
+}
+
+.df-win .df-bar::before {
+    background: var(--color-signal);
+}
+
+.decision-figure figcaption {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-dim);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 600px) {
+    .df-questions {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 9s loop: read the input (0-22%), fill every bar at once (28-48%), light the answers (52%),
+   hold, fade and restart. */
+@media (prefers-reduced-motion: no-preference) {
+    .df-input p::after {
+        animation: df-scan 9s steps(24) infinite;
+    }
+
+    .df-pass {
+        animation: df-pass 9s steps(2) infinite;
+    }
+
+    .df-bar::before {
+        animation: df-fill 9s steps(12) infinite;
+    }
+
+    .df-win .df-bar::before {
+        animation:
+            df-fill 9s steps(12) infinite,
+            df-win-bar 9s steps(2) infinite;
+    }
+
+    .df-num {
+        animation: df-show 9s steps(2) infinite;
+    }
+
+    .df-win {
+        animation: df-win 9s steps(2) infinite;
+    }
+}
+
+@keyframes df-scan {
+    0%, 2% { left: 0; opacity: 1; }
+    22% { left: 100%; opacity: 1; }
+    23%, 100% { left: 100%; opacity: 0; }
+}
+
+@keyframes df-pass {
+    0%, 20% { color: var(--color-dim); }
+    24%, 46% { color: var(--color-signal); }
+    50%, 100% { color: var(--color-dim); }
+}
+
+@keyframes df-fill {
+    0%, 28% { width: 0; opacity: 1; }
+    48%, 90% { width: calc(var(--p) * 100%); opacity: 1; }
+    100% { width: calc(var(--p) * 100%); opacity: 0; }
+}
+
+@keyframes df-win-bar {
+    0%, 48% { background: var(--color-border-strong); }
+    52%, 90% { background: var(--color-signal); }
+    100% { background: var(--color-border-strong); }
+}
+
+@keyframes df-show {
+    0%, 46% { opacity: 0; }
+    50%, 90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes df-win {
+    0%, 48% { color: var(--color-muted); font-weight: 400; }
+    52%, 90% { color: var(--color-signal); font-weight: 600; }
+    100% { color: var(--color-muted); font-weight: 400; }
+}
+
 /* Photos and diagrams, unlike the pixel-art logos */
 .article-body img {
     height: auto;
     image-rendering: auto;
+}
+
+/* Decision-model explorer (_includes/model-explorer.js, explorer.js). Without JavaScript the
+   picker stays hidden and every panel shows in turn. */
+.mx {
+    padding: clamp(1rem, 3vw, 1.5rem);
+    border: 2px solid var(--color-border-strong);
+    background:
+        var(--dither) 0 0 / 6px 6px,
+        var(--color-surface);
+    clip-path: var(--pixel-corner);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.mx-note {
+    margin: 0 0 1.25rem;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--color-signal);
+    background: rgba(99, 255, 114, 0.06);
+    color: var(--color-muted);
+    font-size: 0.9rem;
+}
+
+.mx-note strong {
+    color: var(--color-text);
+}
+
+/* Picker: a dock of logo icons. The hovered or focused model's name shows in a readout line
+   under the icons; names stay in the markup, so the tabs keep their accessible names. */
+.mx-picker {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem 0.4rem;
+    margin-bottom: 1.25rem;
+    padding: 0.9rem 0 2.1rem;
+}
+
+.mx:not(.is-ready) .mx-picker {
+    display: none;
+}
+
+.mx:not(.is-ready) .mx-panel + .mx-panel {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.mx-tab {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+}
+
+.mx-tab:focus-visible {
+    outline: none;
+}
+
+.mx-tab-icon {
+    position: relative;
+    display: block;
+    transform-origin: 50% 100%;
+    transition: transform 150ms steps(3, end);
+}
+
+.mx-tab .mx-logo--sm {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+/* The selected model: a green bar under its icon */
+.mx-tab[aria-selected="true"] .mx-tab-icon::after {
+    content: "";
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    width: 1rem;
+    height: 3px;
+    background: var(--color-signal);
+    box-shadow: 0 0 8px var(--color-signal);
+    transform: translateX(-50%);
+}
+
+.mx-tab:focus-visible .mx-tab-icon {
+    z-index: 2;
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+    transform: scale(1.45);
+}
+
+/* Readout line: idle hint, or the name of the model under the pointer or focus */
+.mx-hint,
+.mx-tab-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    white-space: nowrap;
+}
+
+.mx-hint {
+    color: var(--color-dim);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+}
+
+.mx-tab-label {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+}
+
+.mx-tab:focus-visible .mx-tab-label {
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+}
+
+.mx-picker:has(.mx-tab:focus-visible) .mx-hint {
+    visibility: hidden;
+}
+
+@media (hover: hover) {
+    .mx-tab:hover .mx-tab-icon {
+        z-index: 2;
+        transform: scale(1.45);
+    }
+
+    .mx-tab:hover .mx-tab-label {
+        width: auto;
+        height: auto;
+        overflow: visible;
+        clip-path: none;
+    }
+
+    .mx-picker:has(.mx-tab:hover) .mx-hint {
+        visibility: hidden;
+    }
+
+    /* While pointing at one logo, hide the keyboard-focused one's name */
+    .mx-picker:has(.mx-tab:hover) .mx-tab:not(:hover) .mx-tab-label {
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+    }
+}
+
+.mx-tab-name {
+    color: var(--color-signal);
+    font-family: var(--font-pixel);
+    font-size: 0.85rem;
+}
+
+/* Decorative prompt, with empty alt text so it is not read aloud */
+.mx-tab-name::before {
+    content: "> " / "";
+    color: var(--color-dim);
+}
+
+.mx-tab-maker {
+    margin-left: 0.4rem;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+}
+
+/* Logos sit on a light tile so dark and coloured marks stay clearly visible */
+.mx-logo {
+    display: grid;
+    place-items: center;
+    flex: none;
+    background: var(--color-text);
+    clip-path: var(--pixel-corner);
+    color: var(--color-bg);
+    font-family: var(--font-pixel);
+}
+
+.mx-logo.is-dark {
+    background: #000;
+}
+
+/* Marks that come on their own square fill the tile edge to edge */
+.mx-logo.is-fill {
+    padding: 0;
+    background: transparent;
+}
+
+.mx-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: auto;
+}
+
+.mx-logo--xs {
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0.2rem;
+    font-size: 0.6rem;
+}
+
+.mx-logo--sm {
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.3rem;
+    font-size: 0.8rem;
+}
+
+.mx-logo--lg {
+    width: 4.5rem;
+    height: 4.5rem;
+    padding: 0.55rem;
+    font-size: 1.4rem;
+}
+
+.mx-logo--compare {
+    background: var(--color-signal);
+}
+
+.mx-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mx-title h3,
+.mx-compare-title {
+    margin: 0;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.1;
+}
+
+.mx-compare-title {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.mx-title p {
+    margin: 0.3rem 0 0;
+    color: var(--color-dim);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+}
+
+.mx-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.35rem;
+    margin: 0;
+}
+
+.mx-badge {
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    white-space: nowrap;
+}
+
+.mx-badge--open {
+    border-color: var(--color-signal);
+    color: var(--color-signal);
+}
+
+.mx-notable {
+    margin: 0 0 1rem;
+    font-size: 1.05rem;
+}
+
+.mx-chips,
+.mx-meter {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+}
+
+.mx-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.5rem;
+}
+
+.mx-chips > span:first-child,
+.mx-meter > span:first-child {
+    width: 4.5rem;
+    color: var(--color-dim);
+}
+
+.mx-chip {
+    padding: 0.1rem 0.45rem;
+    background: rgba(99, 255, 114, 0.1);
+    color: var(--color-signal);
+}
+
+.mx-meter {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr) 7.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+}
+
+.mx-meter-track {
+    height: 0.6rem;
+    background: rgba(99, 255, 114, 0.08);
+}
+
+.mx-meter-fill {
+    display: block;
+    width: calc(var(--v) * 100%);
+    height: 100%;
+    background: var(--color-signal);
+}
+
+.mx-meter-value {
+    text-align: right;
+}
+
+.mx-meter-value.is-unknown {
+    color: var(--color-dim);
+}
+
+.mx-specs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem 1.25rem;
+    margin: 1.25rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.mx-specs dt {
+    color: var(--color-dim);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+}
+
+.mx-specs dd {
+    margin: 0.1rem 0 0;
+    font-size: 0.92rem;
+}
+
+.mx-sources {
+    margin: 1rem 0 0;
+    color: var(--color-dim);
+    font-size: 0.8rem;
+}
+
+.mx-table-wrap {
+    overflow-x: auto;
+    scrollbar-color: var(--color-border-strong) transparent;
+}
+
+.mx-table {
+    width: 100%;
+    min-width: 36rem;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+}
+
+.mx-table th,
+.mx-table td {
+    padding: 0.55rem 0.6rem;
+    border-bottom: 1px solid var(--color-border);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.mx-table th {
+    font-weight: 400;
+}
+
+.mx-table thead th {
+    color: var(--color-dim);
+}
+
+.mx-row-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.mx-row-name small {
+    display: block;
+    color: var(--color-dim);
+    font-size: 0.68rem;
+}
+
+@media (max-width: 600px) {
+    .mx-picker {
+        grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+    }
+
+    .mx-head {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .mx-badges {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+
+    .mx-meter {
+        grid-template-columns: 4rem minmax(0, 1fr) 6.25rem;
+    }
+
+    .mx-specs {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .mx.is-ready .mx-panel:not([hidden]) .mx-meter-fill {
+        animation: mx-grow 500ms steps(10) both;
+    }
+}
+
+@keyframes mx-grow {
+    from {
+        width: 0;
+    }
 }
 
 .article-cta {

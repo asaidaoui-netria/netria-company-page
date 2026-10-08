@@ -1,0 +1,743 @@
+{
+    "decisionModels": {
+        "asOf": "2026-10-08",
+        "models": [
+            {
+                "id": "jev",
+                "name": "Jev",
+                "maker": "TypeSafe AI",
+                "logo": "/assets/logos/typesafe.png",
+                "released": "2026-09-15",
+                "status": "Early access",
+                "access": "Hosted API",
+                "weights": false,
+                "license": "Proprietary",
+                "size": null,
+                "sizeB": null,
+                "base": "Not published",
+                "context": 65536,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": "70–500 ms end to end (vendor-stated)",
+                "price": "$0.042 per million input tokens; output free",
+                "priceIn": "$0.042",
+                "notable": "The model that started the category and named it after Kahneman’s System 1.",
+                "sources": [
+                    {
+                        "label": "Launch post",
+                        "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev"
+                    },
+                    {
+                        "label": "Models",
+                        "url": "https://docs.typesafe.ai/models"
+                    }
+                ]
+            },
+            {
+                "id": "decider-mapika",
+                "name": "decider",
+                "maker": "Mark Marosi (open source)",
+                "logo": null,
+                "mono": "dc",
+                "released": "2026-09-16",
+                "status": "Research release",
+                "access": "Open weights",
+                "weights": true,
+                "license": "Apache 2.0",
+                "size": "0.8B to 35B (3B active)",
+                "sizeB": 35,
+                "base": "Qwen3.5 and Gemma 4 models",
+                "context": 32768,
+                "inputs": [
+                    "Text",
+                    "Image"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": "Median 39 ms for the 31B model on an NVIDIA B300 (author’s tests)",
+                "price": "Free to self-host",
+                "priceIn": "Self-hosted",
+                "notable": "A broad open family with a vision version and builds that run on a CPU. Its 2B version has about 325,000 downloads.",
+                "sources": [
+                    {
+                        "label": "GitHub",
+                        "url": "https://github.com/Mapika/decider"
+                    },
+                    {
+                        "label": "Hugging Face",
+                        "url": "https://huggingface.co/Mapika/decider-2b"
+                    }
+                ]
+            },
+            {
+                "id": "semif",
+                "name": "SemIf",
+                "maker": "Theo Lee (open source)",
+                "logo": null,
+                "mono": "Si",
+                "released": "2026-09-16",
+                "status": "Research release",
+                "access": "Open source",
+                "weights": true,
+                "license": "MIT",
+                "size": "Uses open models, 0.6B to 27B",
+                "sizeB": 4,
+                "base": "Unmodified open models, Qwen3.5-4B by default",
+                "context": null,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Yes/no"
+                ],
+                "latency": "About 1 s for 21 yes/no questions on one RTX 3090 GPU (author’s tests)",
+                "price": "Free; also hosted free on LangChain’s LangSmith gateway",
+                "priceIn": "Free",
+                "notable": "Trains nothing: it reads answer probabilities straight from an open model’s output, and can run in a browser. Formerly called OpenJev.",
+                "sources": [
+                    {
+                        "label": "GitHub",
+                        "url": "https://github.com/TheoLeeCJ/SemIf-OpenJev"
+                    },
+                    {
+                        "label": "LangChain: decision models",
+                        "url": "https://docs.langchain.com/langsmith/llm-gateway-decision-models"
+                    }
+                ]
+            },
+            {
+                "id": "kev",
+                "name": "Kev",
+                "maker": "Jared Palmer (open source)",
+                "logo": null,
+                "mono": "Kv",
+                "released": "2026-09-17",
+                "status": "Research release",
+                "access": "Open weights + hosted API",
+                "weights": true,
+                "license": "Apache 2.0",
+                "size": "0.8B to 27B",
+                "sizeB": 27,
+                "base": "Qwen3.5 and Qwen3.8 base models",
+                "context": 65536,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": "41–145 ms for Kev-4B on an L40S GPU (author’s tests)",
+                "price": "Free to self-host; $0.042 per million input tokens for Kev 4B on OpenRouter",
+                "priceIn": "$0.042 (4B)",
+                "notable": "An open copy of Jev’s approach, with training code and test suites, using the same request format. An independent test put Kev-4B close to Jev.",
+                "sources": [
+                    {
+                        "label": "GitHub",
+                        "url": "https://github.com/jaredpalmer/kev"
+                    },
+                    {
+                        "label": "Kev 1.0 release notes",
+                        "url": "https://github.com/jaredpalmer/kev/releases/tag/kev-1.0"
+                    },
+                    {
+                        "label": "Opper: Jev vs. Kev",
+                        "url": "https://opper.ai/blog/jev-vs-kev-open-decision-model"
+                    }
+                ]
+            },
+            {
+                "id": "nimble",
+                "name": "Bespoke Nimble",
+                "maker": "Bespoke Labs",
+                "logo": "/assets/logos/bespoke.png",
+                "logoBg": "fill",
+                "released": "2026-09-18",
+                "status": "Research release",
+                "access": "Open weights",
+                "weights": true,
+                "license": "Apache 2.0",
+                "size": "9B",
+                "sizeB": 9,
+                "base": "Qwen3.5-9B, fine-tuned",
+                "context": 8192,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": null,
+                "price": "Free to self-host",
+                "priceIn": "Self-hosted",
+                "notable": "Trained on pairs of examples where changing one fact flips the answer. The training data and recipe are published.",
+                "sources": [
+                    {
+                        "label": "GitHub",
+                        "url": "https://github.com/bespokelabsai/nimble"
+                    },
+                    {
+                        "label": "Hugging Face",
+                        "url": "https://huggingface.co/bespokelabs/Bespoke-Nimble-9B"
+                    }
+                ]
+            },
+            {
+                "id": "laya",
+                "name": "Laya",
+                "maker": "Convai Innovations",
+                "logo": "/assets/logos/convai.png",
+                "released": "2026-09-18",
+                "status": "Available",
+                "access": "Open weights",
+                "weights": true,
+                "license": "Apache 2.0",
+                "size": "421M (English), 322M (multilingual)",
+                "sizeB": 0.421,
+                "base": "ModernBERT-large; mmBERT-base for 100+ languages",
+                "context": 512,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": "33–40 ms per question on a Tesla T4 GPU (vendor-stated)",
+                "price": "Free to self-host; no hosted API",
+                "priceIn": "Self-hosted",
+                "notable": "Small encoder models that run on a modest GPU. The English model reads 512 tokens; the multilingual one up to 8,192.",
+                "sources": [
+                    {
+                        "label": "Hugging Face",
+                        "url": "https://huggingface.co/convaiinnovations/laya"
+                    },
+                    {
+                        "label": "GitHub",
+                        "url": "https://github.com/NandhaKishorM/laya"
+                    }
+                ]
+            },
+            {
+                "id": "decider",
+                "name": "Decider 1",
+                "maker": "meraGPT",
+                "logo": "/assets/logos/meragpt.svg",
+                "logoBg": "fill",
+                "released": "2026-09-22",
+                "status": "Available",
+                "access": "Hosted API",
+                "weights": false,
+                "license": "Proprietary",
+                "size": null,
+                "sizeB": null,
+                "base": "Not published (built in house)",
+                "context": 4096,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": "About 0.5 s median, including network (vendor-stated)",
+                "price": "$0.04 per million input tokens; output free",
+                "priceIn": "$0.04",
+                "notable": "Uses the same request format as Jev. Requests are capped at 4,096 tokens and ten choices.",
+                "sources": [
+                    {
+                        "label": "Launch post",
+                        "url": "https://meragpt.com/blog/introducing-decider-1"
+                    },
+                    {
+                        "label": "Model page",
+                        "url": "https://meragpt.com/models/state-decider-1"
+                    }
+                ]
+            },
+            {
+                "id": "solar-decide",
+                "name": "Solar Decide",
+                "maker": "Upstage",
+                "logo": "/assets/logos/upstage.svg",
+                "released": "2026-09-22",
+                "status": "Beta",
+                "access": "Hosted API",
+                "weights": false,
+                "license": null,
+                "size": "35B total, 3B active",
+                "sizeB": 35,
+                "base": "Solar Mini 4 (mixture of experts)",
+                "context": 524288,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": null,
+                "price": "$0.10 per million input tokens; output free",
+                "priceIn": "$0.10",
+                "notable": "Reads up to 512K tokens, enough to use a whole document as the input. Choices can have 2 to 26 options.",
+                "sources": [
+                    {
+                        "label": "Model page",
+                        "url": "https://console.upstage.ai/docs/models/solar-decide"
+                    },
+                    {
+                        "label": "API reference",
+                        "url": "https://console.upstage.ai/api/systemone"
+                    }
+                ]
+            },
+            {
+                "id": "clm",
+                "name": "CLM-8B",
+                "maker": "Contrastive-LM",
+                "logo": "/assets/logos/contrastive-lm.png",
+                "released": "2026-09-23",
+                "status": "Research release",
+                "access": "Open weights",
+                "weights": true,
+                "license": "Apache 2.0",
+                "size": "8B",
+                "sizeB": 8,
+                "base": "Qwen3-8B, unchanged, with small trained heads",
+                "context": 2048,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": "Up to 9 times faster than Jev on the authors’ agent tasks (authors’ tests)",
+                "price": "Free to self-host",
+                "priceIn": "Self-hosted",
+                "notable": "Picks answers by comparing the input with each option as embeddings, not by reading word probabilities. From Stanford and NVIDIA researchers.",
+                "sources": [
+                    {
+                        "label": "GitHub",
+                        "url": "https://github.com/Contrastive-LM/CLM"
+                    },
+                    {
+                        "label": "Hugging Face",
+                        "url": "https://huggingface.co/Contrastive-LM/CLM-v0.1-8B"
+                    }
+                ]
+            },
+            {
+                "id": "tev1",
+                "name": "Tev1",
+                "maker": "Together AI",
+                "logo": "/assets/logos/together.png",
+                "released": "2026-09-23",
+                "status": "Experimental",
+                "access": "Open weights + hosted API",
+                "weights": true,
+                "license": "Not final (base model Apache 2.0)",
+                "size": "4.7B",
+                "sizeB": 4.7,
+                "base": "Qwen3.5-4B, fine-tuned",
+                "context": 32768,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice"
+                ],
+                "latency": null,
+                "price": "$0.04 per million input tokens; output free",
+                "priceIn": "$0.04",
+                "notable": "An experiment, not a true System One model: it writes one option letter and returns no probabilities. The weights and a $17 training recipe are public.",
+                "sources": [
+                    {
+                        "label": "Blog: train your own Jev for $17",
+                        "url": "https://www.together.ai/blog/how-to-train-your-own-jev"
+                    },
+                    {
+                        "label": "Hugging Face",
+                        "url": "https://huggingface.co/togethercomputer/Tev1-4B-experimental"
+                    }
+                ]
+            },
+            {
+                "id": "gliner-decide",
+                "name": "GLiNER2.5-Decide",
+                "maker": "Fastino Labs",
+                "logo": "/assets/logos/fastino.png",
+                "logoBg": "fill",
+                "released": "2026-09-24",
+                "status": "Available",
+                "access": "Open weights + hosted API",
+                "weights": true,
+                "license": "Apache 2.0",
+                "size": "340M",
+                "sizeB": 0.34,
+                "base": "GLiNER2 (DeBERTa-v3-large encoder)",
+                "context": 8192,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Yes/no"
+                ],
+                "latency": "38–47 ms on GPUs, 167 ms on a CPU, one request at a time (vendor-stated)",
+                "price": "$0.03 per million input tokens hosted; free to self-host",
+                "priceIn": "$0.03",
+                "notable": "Runs on a CPU, and can pull out names, relations and text spans in the same request as its decisions.",
+                "sources": [
+                    {
+                        "label": "Launch post",
+                        "url": "https://fastino.ai/blog/gliner-2-5-decide-open-weight-decision-model"
+                    },
+                    {
+                        "label": "Hugging Face",
+                        "url": "https://huggingface.co/fastino/GLiNER2.5-Decide"
+                    }
+                ]
+            },
+            {
+                "id": "span-01",
+                "name": "Span-01",
+                "maker": "Respan",
+                "logo": "/assets/logos/respan.svg",
+                "logoBg": "fill",
+                "released": "2026-09-24",
+                "status": "Available",
+                "access": "Hosted API",
+                "weights": false,
+                "license": null,
+                "size": null,
+                "sizeB": null,
+                "base": "Not published",
+                "context": null,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Yes/no"
+                ],
+                "latency": null,
+                "price": "Free daily tier; $0.02 per million input tokens for Pro; output free",
+                "priceIn": "$0.02",
+                "notable": "Built for AI agent logs. It scores whether each behavior you describe is present, absent or not observable.",
+                "sources": [
+                    {
+                        "label": "Launch post",
+                        "url": "https://www.respan.ai/blog/introducing-span-1"
+                    },
+                    {
+                        "label": "Documentation",
+                        "url": "https://respan.ai/docs/documentation/span-01/concept"
+                    }
+                ]
+            },
+            {
+                "id": "d1",
+                "name": "d1",
+                "maker": "Liquid AI",
+                "logo": "/assets/logos/liquid.png",
+                "released": "2026-09-29",
+                "status": "Available",
+                "access": "Hosted API",
+                "weights": false,
+                "license": "Proprietary (open siblings use the LFM Open License)",
+                "size": null,
+                "sizeB": null,
+                "base": "Not published",
+                "context": null,
+                "inputs": [
+                    "Text",
+                    "Image"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": "200–300 ms per text decision (vendor-stated)",
+                "price": "$0.04 per million input tokens; output free; a free text-only tier",
+                "priceIn": "$0.04",
+                "notable": "Reads images as well as text. Smaller open-weight versions, d1-3B and d1-omni-600M, followed on 7 October.",
+                "sources": [
+                    {
+                        "label": "Blog: introducing d1",
+                        "url": "https://www.liquid.ai/blog/d1-decision-model"
+                    },
+                    {
+                        "label": "Blog: open d1",
+                        "url": "https://www.liquid.ai/blog/d1-open"
+                    },
+                    {
+                        "label": "Documentation",
+                        "url": "https://docs.liquid.ai/lfm/models/d1"
+                    }
+                ]
+            },
+            {
+                "id": "openai-decisions",
+                "name": "Decisions API",
+                "maker": "OpenAI",
+                "logo": "/assets/logos/openai.svg",
+                "released": "2026-09-29",
+                "status": "Public beta",
+                "access": "Hosted API",
+                "weights": false,
+                "license": "Proprietary",
+                "size": null,
+                "sizeB": null,
+                "base": "GPT-6 Luna",
+                "context": null,
+                "inputs": [
+                    "Text",
+                    "Image"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": "About 10 times faster than a standard GPT-6 Luna call (vendor-stated)",
+                "price": "$0.10 per million input tokens; output free",
+                "priceIn": "$0.10",
+                "notable": "A dedicated decisions endpoint on GPT-6 Luna. Previewed at DevDay on 29 September, public beta since 6 October. It can also refuse to answer.",
+                "sources": [
+                    {
+                        "label": "Decisions guide",
+                        "url": "https://developers.openai.com/api/docs/guides/decisions"
+                    },
+                    {
+                        "label": "API changelog",
+                        "url": "https://developers.openai.com/api/docs/changelog"
+                    },
+                    {
+                        "label": "DevDay 2026 recap",
+                        "url": "https://openai.com/index/devday-2026-recap/"
+                    }
+                ]
+            },
+            {
+                "id": "glide",
+                "name": "GLiDE",
+                "maker": "Fastino Labs",
+                "logo": "/assets/logos/fastino.png",
+                "logoBg": "fill",
+                "released": "2026-09-30",
+                "status": "Available",
+                "access": "Hosted API",
+                "weights": false,
+                "license": "Proprietary",
+                "size": null,
+                "sizeB": null,
+                "base": "Not published",
+                "context": 40000,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": null,
+                "price": "$0.15 per million input tokens; output free; extra internal passes count as input",
+                "priceIn": "$0.15",
+                "notable": "Billed as a “thinking” decision model: it answers at once when confident and takes extra passes when unsure.",
+                "sources": [
+                    {
+                        "label": "Launch post",
+                        "url": "https://fastino.ai/blog/introducing-glide-the-first-thinking-decision-model"
+                    },
+                    {
+                        "label": "Documentation",
+                        "url": "https://docs.fastino.ai/inference/systemone"
+                    }
+                ]
+            },
+            {
+                "id": "mercury-decide",
+                "name": "Mercury Decide",
+                "maker": "Inception",
+                "logo": "/assets/logos/inception.png",
+                "logoBg": "fill",
+                "released": "2026-09-30",
+                "status": "Available",
+                "access": "Hosted API",
+                "weights": false,
+                "license": null,
+                "size": null,
+                "sizeB": null,
+                "base": "Not published",
+                "context": 32768,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": null,
+                "price": "$0.04 per million input tokens; output free; a free version on OpenRouter",
+                "priceIn": "$0.04",
+                "notable": "From the makers of the Mercury diffusion language models. Release date and context size come from its OpenRouter listing.",
+                "sources": [
+                    {
+                        "label": "Documentation",
+                        "url": "https://docs.inceptionlabs.ai/capabilities/decisions"
+                    },
+                    {
+                        "label": "Models and pricing",
+                        "url": "https://docs.inceptionlabs.ai/get-started/models"
+                    },
+                    {
+                        "label": "OpenRouter listing",
+                        "url": "https://openrouter.ai/inception/mercury-decide:free"
+                    }
+                ]
+            },
+            {
+                "id": "clef",
+                "name": "Clef",
+                "maker": "Cloudflare",
+                "logo": "/assets/logos/cloudflare.svg",
+                "released": "2026-10-01",
+                "status": "Available",
+                "access": "Open weights + hosted API",
+                "weights": true,
+                "license": "Apache 2.0",
+                "size": "27B; Clef-flash 9B",
+                "sizeB": 27,
+                "base": "Qwen3.8-27B and Qwen3.5-9B",
+                "context": 65536,
+                "inputs": [
+                    "Text",
+                    "Image"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": "Median 209 ms (Clef) and 39 ms (Clef-flash) in Cloudflare’s tests",
+                "price": "$0.24 per million input tokens (Clef), $0.09 (Clef-flash) on Workers AI",
+                "priceIn": "$0.24 / $0.09",
+                "notable": "Open weights that read images, with the same request format as Jev, served on Cloudflare’s network.",
+                "sources": [
+                    {
+                        "label": "Launch post",
+                        "url": "https://blog.cloudflare.com/clef-decision-models/"
+                    },
+                    {
+                        "label": "Workers AI model page",
+                        "url": "https://developers.cloudflare.com/workers-ai/models/clef/"
+                    },
+                    {
+                        "label": "Pricing",
+                        "url": "https://developers.cloudflare.com/workers-ai/platform/pricing/"
+                    }
+                ]
+            },
+            {
+                "id": "pplx-decider",
+                "name": "pplx-decider",
+                "maker": "Perplexity",
+                "logo": "/assets/logos/perplexity.svg",
+                "logoBg": "fill",
+                "released": "2026-10-01",
+                "status": "Available",
+                "access": "Open weights + hosted API",
+                "weights": true,
+                "license": "Apache 2.0",
+                "size": "27B",
+                "sizeB": 27,
+                "base": "Qwen3.8-27B",
+                "context": 262144,
+                "inputs": [
+                    "Text",
+                    "Image"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": "Under 2 s for a few hundred tokens; about 5 s at 90K tokens (vendor-stated)",
+                "price": "$0.02 per million input tokens; output free",
+                "priceIn": "$0.02",
+                "notable": "Open weights that read images and very long inputs. Version 1.1 followed on 5 October at half the launch price.",
+                "sources": [
+                    {
+                        "label": "Hugging Face",
+                        "url": "https://huggingface.co/perplexity-ai/pplx-decider-v1-27b"
+                    },
+                    {
+                        "label": "Decisions API quickstart",
+                        "url": "https://docs.perplexity.ai/docs/decisions/quickstart"
+                    },
+                    {
+                        "label": "API changelog",
+                        "url": "https://docs.perplexity.ai/docs/resources/changelog"
+                    }
+                ]
+            },
+            {
+                "id": "strands-decider",
+                "name": "Strands Decider",
+                "maker": "AWS (Strands Labs)",
+                "logo": "/assets/logos/aws.png",
+                "released": "2026-10-01",
+                "status": "Research release",
+                "access": "Open weights",
+                "weights": true,
+                "license": "Apache 2.0",
+                "size": "1.9B",
+                "sizeB": 1.9,
+                "base": "Qwen3.5-2B with a small answer head",
+                "context": 4096,
+                "inputs": [
+                    "Text"
+                ],
+                "outputs": [
+                    "Choice",
+                    "Score",
+                    "Yes/no"
+                ],
+                "latency": "Median 115 ms per question on an RTX 3090 GPU (vendor-stated)",
+                "price": "Free to self-host",
+                "priceIn": "Self-hosted",
+                "notable": "From AWS’s Strands Labs. The weights, training data and training scripts are all published.",
+                "sources": [
+                    {
+                        "label": "Launch post",
+                        "url": "https://strandsagents.com/blog/introducing-strands-decider/"
+                    },
+                    {
+                        "label": "GitHub",
+                        "url": "https://github.com/strands-labs/strands-decider"
+                    }
+                ]
+            }
+        ]
+    }
+}

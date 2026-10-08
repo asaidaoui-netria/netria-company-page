@@ -37,7 +37,7 @@ Articles are Markdown files in `articles/`, published at `/articles/<slug>/`:
 2. Set `title` and `description` (the description is the summary shown in the listing, search results and link previews).
 3. Write, preview with `npm start`, then remove `draft: true` and push to `main`.
 
-Posts marked `draft: true` show in `npm start` but are never published. The listing, feed (`/articles/feed.xml`), sitemap and search and share metadata update automatically.
+Posts marked `draft: true` show in `npm start` but are never published. Optional front matter: `author:` with `name`, `role` and `url` adds a byline and names that person in the structured data (without it, articles are credited to Netria); `updated: YYYY-MM-DD` shows an Updated date and sets the modified date for search engines and the sitemap. Markdown can include plain HTML (keep it free of blank lines). The decision-models article's interactive model explorer is built from `articles/2026-10-08-decision-models.11tydata.json`, with logos in `assets/logos/`: edit that file, including its `asOf` date, as models change. The listing, feed (`/articles/feed.xml`), sitemap and search and share metadata update automatically.
 
 ## Project Structure
 
@@ -53,6 +53,7 @@ Posts marked `draft: true` show in `npm start` but are never published. The list
 ├── eleventy.config.js       # What gets built and published
 ├── index.html               # Semantic page content and metadata
 ├── robots.txt               # Points crawlers at the sitemap
+├── llms.njk                 # Generates llms.txt, a site summary for AI answer engines
 ├── sitemap.njk              # Generates sitemap.xml
 ├── script.js                # Mobile navigation and progressive reveals
 ├── scenes.js                # Scene pager, glyph wave, entrances
@@ -90,6 +91,10 @@ git diff --check
 
 The pages should also be checked at 320px, 768px, 1024px, and 1440px widths, with keyboard navigation and reduced motion enabled.
 
+## To do
+
+- Add an author profile page for Abderrahman SaidAlaoui and link article bylines to it (`author.url` in an article's front matter).
+
 ## Deployment
 
-Every push to `main` runs `.github/workflows/deploy.yml`: it installs dependencies, runs the tests, builds with Eleventy, and publishes `_site/` to GitHub Pages. Only the homepage files listed in `eleventy.config.js` and the rendered articles are published; a failing test stops the deploy. The repository's Pages source must be set to **GitHub Actions**, and the custom domain `www.netria.dev` is configured in the Pages settings.
+Every push to `main` runs `.github/workflows/deploy.yml`: it installs dependencies, runs the tests, builds with Eleventy, and publishes `_site/` to GitHub Pages. Only the homepage files listed in `eleventy.config.js` and the rendered articles are published; a failing test stops the deploy. Built pages load `styles.css` and the scripts with a content hash (`?v=…`), so a deploy never pairs new HTML with a stylesheet a browser cached from the previous one. The repository's Pages source must be set to **GitHub Actions**, and the custom domain `www.netria.dev` is configured in the Pages settings.
