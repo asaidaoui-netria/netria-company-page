@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, mkdtempSync, readFileSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import Eleventy from "@11ty/eleventy";
@@ -9,6 +10,8 @@ import { modelExplorer } from "../_includes/model-explorer.js";
 
 const root = new URL("..", import.meta.url).pathname;
 const read = (path) => readFileSync(join(root, path), "utf8");
+// GitHub Pages is case-sensitive but macOS is not: check paths against git's exact names.
+const tracked = new Set(execFileSync("git", ["ls-files"], { cwd: root, encoding: "utf8" }).split("\n"));
 
 // One real production build, shared by the publishing tests below.
 const out = mkdtempSync(join(tmpdir(), "netria-site-"));
@@ -20,6 +23,7 @@ test("every local file the homepage references is published", () => {
   const refs = [...read("index.html").matchAll(/(?:src|href|srcset)="([^"#:]+)"/g)].map((m) => m[1]);
   for (const ref of refs) {
     const path = ref.replace(/^\//, "");
+    assert.ok(tracked.has(path) || path.startsWith("articles/"), `${ref} does not match a tracked file's exact name`);
     assert.ok(built(path) || built(join(path, "index.html")), `${ref} is missing from the build`);
   }
   for (const path of ["signal.js", "assets/fonts/fusion-pixel-12px-monospaced-latin.otf.woff2", "CNAME"]) {
@@ -99,7 +103,7 @@ test("the model explorer renders accessible tabs from its data", () => {
   for (const m of data.models) {
     assert.ok(m.sources.length && m.sources.every((s) => s.url.startsWith("https://")), m.id);
     if (m.logo) {
-      assert.ok(existsSync(join(root, m.logo)), `${m.id} logo ${m.logo} is missing`);
+      assert.ok(tracked.has(m.logo.slice(1)), `${m.id} logo ${m.logo} is not a tracked file (check its case)`);
     }
   }
   assert.ok(STATIC.includes("explorer.js") && VERSIONED.includes("explorer.js"));
@@ -110,7 +114,7 @@ test("search and answer engines get structured, consistent signals", () => {
   const ld = JSON.parse(home.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
   const org = ld["@graph"].find((n) => n["@type"] === "Organization");
   assert.equal(org.url, "https://www.netria.dev/");
-  assert.ok(existsSync(join(root, new URL(org.logo).pathname)), "organization logo is missing");
+  assert.ok(tracked.has(new URL(org.logo).pathname.slice(1)), "organization logo is not a tracked file (check its case)");
   assert.ok(ld["@graph"].some((n) => n["@type"] === "WebSite"));
 
   const base = read("_includes/base.njk");
