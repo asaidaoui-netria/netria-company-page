@@ -2,6 +2,8 @@
 <html lang="en" class="no-js">
 <head>
     <meta charset="UTF-8">
+    <!-- Before first paint: JS-dependent layout (fixed header, scenes) must not flash its no-JS form -->
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} — {{ site.name }}</title>
     <meta name="description" content="{{ description }}">
@@ -30,6 +32,7 @@
     <meta name="twitter:image" content="{{ site.url }}/assets/og-image.png">
     {% if isArticle %}
     <meta property="article:published_time" content="{{ page.date | isoDate }}">
+    <meta property="article:modified_time" content="{{ (updated or page.date) | isoDate }}">
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -37,10 +40,19 @@
             "headline": {{ title | dump | safe }},
             "description": {{ description | dump | safe }},
             "datePublished": "{{ page.date | isoDate }}",
+            "dateModified": "{{ (updated or page.date) | isoDate }}",
             "url": "{{ site.url }}{{ page.url }}",
+            "mainEntityOfPage": "{{ site.url }}{{ page.url }}",
+            "inLanguage": "en",
             "image": "{{ site.url }}/assets/og-image.png",
-            "author": { "@type": "Organization", "name": "{{ site.name }}", "url": "{{ site.url }}/" },
-            "publisher": { "@type": "Organization", "name": "{{ site.name }}", "url": "{{ site.url }}/" }
+            "author": {% if author %}{ "@type": "Person", "name": {{ author.name | dump | safe }}{% if author.role %}, "jobTitle": {{ author.role | dump | safe }}{% endif %}{% if author.url %}, "url": {{ author.url | dump | safe }}{% endif %}, "worksFor": { "@id": "{{ site.url }}/#organization" } }{% else %}{ "@id": "{{ site.url }}/#organization" }{% endif %},
+            "publisher": {
+                "@type": "Organization",
+                "@id": "{{ site.url }}/#organization",
+                "name": "{{ site.name }}",
+                "url": "{{ site.url }}/",
+                "logo": { "@type": "ImageObject", "url": "{{ site.url }}/assets/netria_logo.png", "width": 1024, "height": 1024 }
+            }
         }
     </script>
     {% endif %}
@@ -50,6 +62,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Silkscreen:wght@400;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap"
         rel="stylesheet">
+    <!-- Fetch the pixel font with the page, so headings don't jump when it swaps in -->
+    <link rel="preload" href="/assets/fonts/fusion-pixel-12px-monospaced-latin.otf.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="/styles.css">
     <script src="/script.js" defer></script>
     <script type="importmap">

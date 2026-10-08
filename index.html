@@ -2,6 +2,8 @@
 <html lang="en" class="no-js">
 <head>
     <meta charset="UTF-8">
+    <!-- Before first paint: JS-dependent layout (fixed header, scenes) must not flash its no-JS form -->
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
         content="Netria designs and builds custom digital products and automated systems that turn complex work into forward motion.">
@@ -11,7 +13,7 @@
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#050706">
 
-    <link rel="canonical" href="https://netria.dev/">
+    <link rel="canonical" href="https://www.netria.dev/">
     <link rel="alternate" type="application/atom+xml" title="Netria articles" href="/articles/feed.xml">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
@@ -19,11 +21,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
 
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://netria.dev/">
+    <meta property="og:url" content="https://www.netria.dev/">
     <meta property="og:title" content="Netria — Custom Software &amp; Workflow Automation">
     <meta property="og:description"
         content="Netria designs and builds custom digital products and automated systems that turn complex work into forward motion.">
-    <meta property="og:image" content="https://netria.dev/assets/og-image.png">
+    <meta property="og:image" content="https://www.netria.dev/assets/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Netria pixel moth on a dark signal grid">
@@ -33,9 +35,36 @@
     <meta name="twitter:title" content="Netria — Custom Software &amp; Workflow Automation">
     <meta name="twitter:description"
         content="Netria designs and builds custom digital products and automated systems that turn complex work into forward motion.">
-    <meta name="twitter:image" content="https://netria.dev/assets/og-image.png">
+    <meta name="twitter:image" content="https://www.netria.dev/assets/og-image.png">
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "Organization",
+                    "@id": "https://www.netria.dev/#organization",
+                    "name": "Netria",
+                    "url": "https://www.netria.dev/",
+                    "logo": "https://www.netria.dev/assets/netria_logo.png",
+                    "email": "hello@netria.dev",
+                    "description": "Netria designs and builds custom digital products and automated systems that turn complex work into forward motion."
+                },
+                {
+                    "@type": "WebSite",
+                    "@id": "https://www.netria.dev/#website",
+                    "name": "Netria",
+                    "url": "https://www.netria.dev/",
+                    "inLanguage": "en",
+                    "publisher": { "@id": "https://www.netria.dev/#organization" }
+                }
+            ]
+        }
+    </script>
 
     <title>Netria — Custom Software &amp; Workflow Automation</title>
+    <!-- Fetch the pixel font with the page, so headings don't jump when it swaps in -->
+    <link rel="preload" href="assets/fonts/fusion-pixel-12px-monospaced-latin.otf.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link

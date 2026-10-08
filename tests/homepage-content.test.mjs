@@ -15,7 +15,9 @@ test("uses internationally neutral English metadata", () => {
     html,
     /Netria designs and builds custom digital products and automated systems that turn complex work into forward motion\./
   );
-  assert.match(html, /<link rel="canonical" href="https:\/\/netria\.dev\/">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.netria\.dev\/">/);
+  // The bare domain redirects to www: every absolute URL should already point at www.
+  assert.doesNotMatch(html, /https:\/\/netria\.dev/);
   assert.doesNotMatch(
     html,
     /Morocco|Moroccan|Maroc|المغرب|Kenitra|Kénitra/i

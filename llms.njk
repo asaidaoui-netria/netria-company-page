@@ -1,0 +1,23 @@
+---
+permalink: /llms.txt
+eleventyExcludeFromCollections: true
+---
+# {{ site.name }}
+
+> Netria designs and builds custom digital products and automated systems that turn complex work into forward motion.
+
+Netria helps teams in two ways: building new software products (web applications, mobile experiences, digital platforms and internal tools), and improving existing operations through workflow automation, system integrations, operational tooling, and data flows and dashboards.
+
+Contact: {{ site.email }}
+
+## Pages
+
+- [Home]({{ site.url }}/): what Netria does and how to get in touch
+- [Articles]({{ site.url }}/articles/): notes on building custom software and automating the work around it
+{%- if collections.articles.length %}
+
+## Articles
+{% for post in collections.articles %}
+- [{{ post.data.title | safe }}]({{ site.url }}{{ post.url }}): {{ post.data.description | safe }}
+{%- endfor %}
+{%- endif %}
