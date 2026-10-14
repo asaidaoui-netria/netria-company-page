@@ -1,7 +1,7 @@
 # Scene Pager + Directional Glyph Wave — Design
 
 Date: 2026-07-24
-Status: Approved (pending final user review)
+Status: Retired 2026-10-14. The homepage scrolls normally again (docs/superpowers/plans/2026-10-14-customer-facing-fixes.md).
 Supersedes: `2026-07-23-signal-resolve-scroll-effects-design.md` (the scroll-entry effects are absorbed into this system; decode/dissolve internals survive as scene-entry effects)
 
 ## Context

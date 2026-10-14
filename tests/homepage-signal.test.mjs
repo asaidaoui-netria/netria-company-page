@@ -54,8 +54,6 @@ test("fx are gated on webgpu, a fine pointer and motion, and fail back to static
   assert.match(signal, /canvas\.remove\(\)/);
 });
 
-test("only the scene on screen draws", () => {
-  assert.match(signal, /scene--active, \.scene--entering/);
-  assert.match(signal, /shader\.pause\(\)/);
-  assert.match(signal, /shader\.resume\(\)/);
+test("layers leave off-screen pausing to the renderer", () => {
+  assert.doesNotMatch(signal, /scene--active|scene--entering|MutationObserver|closest\("\.scene"\)/);
 });

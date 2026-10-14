@@ -54,11 +54,10 @@ const LAYERS = [
             { type: "Glow", props: { intensity: 2, threshold: 0.2, size: 12 } },
         ],
         // Grid has no speed prop: scroll it one cell per loop (wrap makes the seam invisible).
-        wire(shader, host) {
+        // ponytail: updates every frame even while scrolled away; gate on an IntersectionObserver if it shows in a profile.
+        wire(shader) {
             const roll = (t) => {
-                if (host.matches(".scene--active, .scene--entering")) {
-                    shader.update("floor", { transform: { offsetY: (t / 4000) % (1 / 12), edges: "wrap" } });
-                }
+                shader.update("floor", { transform: { offsetY: (t / 4000) % (1 / 12), edges: "wrap" } });
                 requestAnimationFrame(roll);
             };
             requestAnimationFrame(roll);
@@ -118,7 +117,6 @@ const present = (layer) => document.querySelector(layer.host)?.offsetWidth > 0;
 
 async function mountLayer({ host: selector, live, components, wire }, createShader, gpu) {
     const host = document.querySelector(selector);
-    const scene = host.closest(".scene");
     const canvas = document.createElement("canvas");
     canvas.className = "scene-fx";
     canvas.style.width = canvas.style.height = "100%";
@@ -140,15 +138,8 @@ async function mountLayer({ host: selector, live, components, wire }, createShad
         fail();
         return;
     }
+    // The renderer pauses layers scrolled out of view.
     wire?.(shader, host, canvas);
-
-    // Stacked scenes all look visible to the renderer: only draw while the owning one is on
-    // screen. Outside the pager the renderer already pauses layers scrolled out of view.
-    if (scene) {
-        const sync = () => (scene.matches(".scene--active, .scene--entering") ? shader.resume() : shader.pause());
-        new MutationObserver(sync).observe(scene, { attributes: true, attributeFilter: ["class"] });
-        sync();
-    }
 }
 
 async function mount() {

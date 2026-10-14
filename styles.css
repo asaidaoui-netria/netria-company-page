@@ -418,15 +418,27 @@ h1 em {
     visibility: hidden;
 }
 
-/* Behind the scene's content, above its backdrop (active scenes are stacking contexts) */
-.scene > .scene-fx {
-    z-index: -1;
-    transition: opacity 300ms;
+/* Behind the section's content, above the page background: each scene is its own stacking context */
+.scene {
+    position: relative;
+    isolation: isolate;
 }
 
-/* Full-bleed layers outlast a wipe into a column-wide scene at the sides: fade them as it starts */
-main:has(.scene--entering) .scene--active > .scene-fx {
-    opacity: 0;
+.scene > .scene-fx {
+    z-index: -1;
+}
+
+/* Full bleed: these layers break out of the content column to the viewport edges.
+   !important beats the inline width: 100% that signal.js puts on every layer canvas. */
+.capabilities > .scene-fx,
+.principles > .scene-fx {
+    left: calc(50% - 50vw);
+    width: 100vw !important;
+}
+
+/* 100vw counts a desktop scrollbar: clip that sliver instead of scrolling sideways */
+main {
+    overflow-x: clip;
 }
 
 .capabilities > .scene-fx {
@@ -678,17 +690,6 @@ main:has(.scene--entering) .scene--active > .scene-fx {
     }
 }
 
-@keyframes pixel-blink {
-    0%,
-    49% {
-        opacity: 1;
-    }
-    50%,
-    100% {
-        opacity: 0.25;
-    }
-}
-
 @media (max-width: 900px) {
     :root {
         --header-height: 68px;
@@ -859,303 +860,7 @@ main:has(.scene--entering) .scene--active > .scene-fx {
     }
 }
 
-/* Scene shell (gated behind html.paged, set by scenes.js: no-js and article pages keep normal scrolling) */
-html.paged,
-html.paged body {
-    height: 100%;
-    overflow: hidden;
-    overscroll-behavior: none;
-    touch-action: none;
-}
-
-html.paged main {
-    position: relative;
-    height: 100svh;
-    overflow: hidden;
-}
-
-html.paged .scene {
-    position: absolute;
-    inset: 0;
-    visibility: hidden;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-}
-
-/* Opaque backdrop so the entering scene's clip truly wipes the outgoing one */
-html.paged .scene:not(.contact) {
-    background: var(--color-bg);
-}
-
-html.paged .scene--active {
-    visibility: visible;
-    z-index: 1;
-}
-
-html.paged .scene--entering {
-    visibility: visible;
-    z-index: 2;
-}
-
-html.paged .site-header {
-    z-index: 70;
-}
-
-#fx-wave {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100svh;
-    display: none;
-    pointer-events: none;
-    image-rendering: pixelated;
-    z-index: 60;
-}
-
-html.paged #fx-wave.is-on {
-    display: block;
-}
-
-.scroll-cue {
-    position: absolute;
-    left: 50%;
-    bottom: 18px;
-    transform: translateX(-50%);
-    margin: 0;
-}
-
-.scroll-cue-chevrons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-}
-
-/* Pixel-art chevron pointing up: five 3px blocks drawn with box-shadow */
-.scroll-cue-chevrons i {
-    position: relative;
-    display: block;
-    width: 15px;
-    height: 9px;
-    animation: pixel-blink 1.4s steps(1) infinite;
-}
-
-.scroll-cue-chevrons i:nth-child(1) {
-    animation-delay: 0.4s;
-}
-
-.scroll-cue-chevrons i:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.scroll-cue-chevrons i::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 3px;
-    height: 3px;
-    box-shadow:
-        6px 0 0 var(--color-signal),
-        3px 3px 0 var(--color-signal),
-        9px 3px 0 var(--color-signal),
-        0 6px 0 var(--color-signal),
-        12px 6px 0 var(--color-signal);
-}
-
-/* Scene fit */
-html.paged .section.scene {
-    padding-top: 80px;
-    padding-bottom: 16px;
-}
-
-/* Full-bleed boxes so their fx layers reach the viewport edges; padding keeps the content column */
-html.paged .capabilities.scene,
-html.paged .principles.scene {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 12px;
-    width: auto;
-    padding-inline: max(1rem, calc(50% - var(--content-width) / 2));
-}
-
-html.paged .contact.scene {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-top: 80px;
-    padding-bottom: 24px;
-    gap: 0;
-}
-
-html.paged .contact.scene .footer {
-    margin-top: 16px;
-}
-
-@media (max-width: 600px) {
-    html.paged .principle-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
-    }
-
-    html.paged .principle-grid article {
-        min-height: 0;
-        padding: 4px;
-    }
-
-    html.paged .principle-grid h3 {
-        margin-bottom: 4px;
-    }
-}
-
-@media (max-width: 600px) {
-    html.paged .hero-signal {
-        display: none;
-    }
-
-    html.paged .hero.scene {
-        padding-top: 68px;
-        padding-bottom: 16px;
-        gap: 12px;
-    }
-
-    html.paged .section.scene {
-        padding-top: 68px;
-        padding-bottom: 4px;
-        padding-inline: 0.625rem;
-    }
-
-    html.paged .section-heading {
-        gap: 6px;
-        margin-bottom: 8px;
-    }
-
-    html.paged .section-heading h2 {
-        font-size: clamp(1.5rem, 8vw, 3rem);
-    }
-
-    html.paged .section-heading > p:last-child {
-        font-size: 0.95rem;
-    }
-
-    html.paged .eyebrow {
-        margin-bottom: 0.4rem;
-        font-size: 0.62rem;
-    }
-
-    html.paged .capabilities.scene {
-        gap: 8px;
-    }
-
-    html.paged .capability-card {
-        padding: 8px;
-    }
-
-    html.paged .card-index {
-        margin-bottom: 6px;
-    }
-
-    html.paged .capability-card h3 {
-        margin-bottom: 6px;
-        font-size: 1.25rem;
-        line-height: 1.2;
-    }
-
-    html.paged .capability-card p {
-        font-size: 0.85rem;
-        line-height: 1.35;
-    }
-
-    html.paged .capability-card ul {
-        columns: 2;
-        margin-top: 6px;
-        padding-top: 6px;
-    }
-
-    html.paged .capability-card li {
-        padding: 0.18rem 0;
-        font-size: 0.8rem;
-    }
-
-    html.paged .contact.scene {
-        padding-top: 68px;
-        padding-bottom: 16px;
-    }
-
-    html.paged .contact-link {
-        margin-top: 1rem;
-    }
-
-    html.paged .footer {
-        padding: 8px 0;
-        gap: 12px;
-    }
-
-    html.paged .footer .brand img {
-        width: 40px;
-        height: 40px;
-    }
-}
-
-@media (max-width: 400px) {
-    html.paged .capabilities .section-heading h2 {
-        font-size: 1.3rem;
-    }
-
-    html.paged .capability-card p {
-        display: none;
-    }
-
-    /* Make room for the scroll cue on the smallest phones */
-    html.paged .section.scene {
-        gap: 6px;
-    }
-
-    html.paged .capability-card {
-        padding: 6px;
-    }
-
-    html.paged .capability-card li {
-        padding: 0.12rem 0;
-        font-size: 0.75rem;
-    }
-
-    html.paged .principle-grid {
-        gap: 6px;
-    }
-
-    html.paged .principle-grid p {
-        font-size: 0.85rem;
-        line-height: 1.35;
-    }
-
-    .scroll-cue {
-        bottom: 8px;
-    }
-
-    .scroll-cue-chevrons {
-        gap: 3px;
-    }
-
-    .scroll-cue-chevrons i {
-        width: 10px;
-        height: 6px;
-    }
-
-    .scroll-cue-chevrons i::before {
-        width: 2px;
-        height: 2px;
-        box-shadow:
-            4px 0 0 var(--color-signal),
-            2px 2px 0 var(--color-signal),
-            6px 2px 0 var(--color-signal),
-            0 4px 0 var(--color-signal),
-            8px 4px 0 var(--color-signal);
-    }
-}
-
-/* Articles: ordinary scrolling pages built by Eleventy (no scene pager) */
+/* Articles: pages built by Eleventy */
 .articles,
 .article {
     width: min(calc(100% - 2rem), 46rem);

@@ -5,11 +5,11 @@ import { readFile, readdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { modelExplorer } from "./_includes/model-explorer.js";
 
-export const STATIC = ["index.html", "styles.css", "script.js", "scenes.js", "signal.js", "explorer.js", "assets", "CNAME", "robots.txt"];
+export const STATIC = ["index.html", "styles.css", "script.js", "signal.js", "explorer.js", "assets", "CNAME", "robots.txt"];
 
 // GitHub Pages lets browsers reuse these for 10 minutes; content-versioned URLs keep a deploy
 // from pairing new HTML with an old cached stylesheet or script.
-export const VERSIONED = ["styles.css", "script.js", "scenes.js", "signal.js", "explorer.js"];
+export const VERSIONED = ["styles.css", "script.js", "signal.js", "explorer.js"];
 export const version = async (file) => createHash("sha256").update(await readFile(file)).digest("hex").slice(0, 10);
 
 const SITE = { url: "https://www.netria.dev", name: "Netria", email: "hello@netria.dev" };

@@ -66,3 +66,9 @@ test("provides one navigation landmark and accessible menu hooks", () => {
   assert.match(html, /aria-expanded="false"/);
   assert.match(html, /id="navMenu"/);
 });
+
+test("the page is one scrolling document with a page footer", () => {
+  assert.doesNotMatch(html, /scenes\.js|scroll-cue|scene--active/);
+  assert.match(html, /<\/main>\s*<footer class="footer">/);
+  assert.match(html, /© 2026 Netria\. All rights reserved\./);
+});

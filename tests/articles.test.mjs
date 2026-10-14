@@ -169,9 +169,10 @@ test("search and answer engines get structured, consistent signals", () => {
   }
 });
 
-test("only the homepage pager locks native scroll", () => {
-  assert.match(read("scenes.js"), /classList\.add\("paged"\)/);
-  assert.doesNotMatch(read("styles.css"), /html\.js\b/);
+test("no page locks native scroll", () => {
+  assert.equal(existsSync(join(root, "scenes.js")), false);
+  assert.ok(!STATIC.includes("scenes.js") && !VERSIONED.includes("scenes.js"));
+  assert.doesNotMatch(read("styles.css"), /html\.js\b|html\.paged/);
   const live = (html) => html.replace(/<!--[\s\S]*?-->/g, "").replace(/\{#[\s\S]*?#\}/g, "");
   assert.match(live(read("index.html")), /<a href="\/articles\/">Articles<\/a>/);
   assert.match(live(read("_includes/base.njk")), /<a href="\/articles\/"/);

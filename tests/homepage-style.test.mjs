@@ -35,9 +35,20 @@ test("disables decorative motion when reduced motion is requested", () => {
   assert.match(css, /scroll-behavior:\s*auto/);
 });
 
-test("keeps scenes in normal document flow without JavaScript", () => {
+test("the homepage scrolls like a normal document", () => {
+  assert.doesNotMatch(css, /html\.paged|#fx-wave|scroll-cue|pixel-blink|scene--active|scene--entering/);
   assert.doesNotMatch(css, /\[data-reveal\]/);
-  assert.match(css, /html\.paged \.scene\s*\{/);
+  // Layers sit behind their section's content and above the page background.
+  assert.match(css, /\.scene\s*\{[^}]*position:\s*relative;[^}]*isolation:\s*isolate;/s);
+  // Capabilities and principles layers break out of the content column to the viewport edges.
+  // !important: signal.js sizes every layer canvas with an inline width of 100%.
+  assert.match(
+    css,
+    /\.capabilities > \.scene-fx,\s*\.principles > \.scene-fx\s*\{[^}]*left:\s*calc\(50% - 50vw\);[^}]*width:\s*100vw !important;/s
+  );
+  assert.match(css, /main\s*\{[^}]*overflow-x:\s*clip;/s);
+  // Deep links land below the fixed header.
+  assert.match(css, /\.section\s*\{[^}]*scroll-margin-top:\s*var\(--header-height\)/s);
 });
 
 test("constrains the mobile hero to the viewport", () => {
