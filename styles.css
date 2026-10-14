@@ -18,7 +18,7 @@
     --color-surface-raised: #0e1510;
     --color-text: #f2f5f1;
     --color-muted: #95a097;
-    --color-dim: #657068;
+    --color-dim: #737e76;
     --color-signal: #63ff72;
     --color-signal-dark: #193c1e;
     --color-border: rgba(99, 255, 114, 0.18);
@@ -199,7 +199,7 @@ a {
     align-items: center;
     gap: clamp(1rem, 2.5vw, 2rem);
     font-family: var(--font-pixel);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
@@ -292,7 +292,7 @@ a {
     margin: 0 0 1.25rem;
     color: var(--color-signal);
     font-family: var(--font-pixel);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 400;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -345,7 +345,7 @@ h1 em {
     padding: 0.8rem 1rem;
     border: 2px solid var(--color-border-strong);
     font-family: var(--font-pixel);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 400;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -484,7 +484,7 @@ main {
 
 .section-heading {
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.55fr);
+    grid-template-columns: minmax(0, 1fr);
     align-items: end;
     gap: 2rem;
     margin-bottom: clamp(2.5rem, 6vw, 5rem);
@@ -496,7 +496,7 @@ main {
 }
 
 .section-heading h2 {
-    max-width: 20ch;
+    max-width: 36ch;
     margin-bottom: 0;
     font-size: clamp(1.9rem, 3.9vw, 3.6rem);
     font-weight: 400;
@@ -565,7 +565,7 @@ main {
     margin-bottom: 1rem;
     color: var(--color-signal);
     font-family: var(--font-pixel);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
@@ -593,7 +593,7 @@ main {
     padding: 0.35rem 0;
     color: var(--color-muted);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.8125rem;
 }
 
 .capability-card li::before {
@@ -611,7 +611,8 @@ main {
 
 .approach-list li {
     display: grid;
-    grid-template-columns: minmax(70px, 0.25fr) minmax(0, 1fr);
+    grid-template-columns: 3rem minmax(0, 1fr);
+    align-items: baseline;
     gap: 1rem;
     padding: 2rem 0;
     border-bottom: 1px solid var(--color-border);
@@ -626,6 +627,7 @@ main {
 .approach-list div {
     display: grid;
     grid-template-columns: minmax(220px, 0.7fr) minmax(240px, 1fr);
+    align-items: baseline;
     gap: 2rem;
 }
 
@@ -653,7 +655,7 @@ main {
 }
 
 .contact h2 {
-    max-width: 16ch;
+    max-width: 24ch;
     font-size: clamp(1.9rem, 4.2vw, 3.8rem);
     font-weight: 400;
     line-height: 1.05;
@@ -681,7 +683,7 @@ main {
     margin-top: 0.25rem;
     color: var(--color-dim);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -712,7 +714,7 @@ main {
     background: transparent;
     color: var(--color-signal);
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     cursor: pointer;
 }
 
@@ -733,7 +735,7 @@ main {
     padding: 3rem 0;
     color: var(--color-dim);
     font-family: var(--font-pixel);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
 }
 
 .footer p {
@@ -882,10 +884,6 @@ main {
 
     .capability-card ul {
         columns: 1;
-    }
-
-    .approach-list li {
-        grid-template-columns: 42px 1fr;
     }
 
     .contact {

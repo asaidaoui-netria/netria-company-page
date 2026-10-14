@@ -62,11 +62,15 @@ test("constrains the mobile hero to the viewport", () => {
 test("contains no retired light-theme component selectors", () => {
   assert.doesNotMatch(css, /\.contact-form|\.form-group|\.submit-button|\.lang-drawer/);
 });
-test("the process list stacks on tablets and keeps a narrow index column on phones", () => {
+test("the process list stacks on tablets", () => {
   assert.match(css, /\.hero-summary\s*\{/);
-  assert.match(css, /\.approach-list li\s*\{[^}]*grid-template-columns:\s*minmax\(70px, 0\.25fr\) minmax\(0, 1fr\)/s);
   assert.match(css, /@media\s*\(max-width:\s*900px\)[\s\S]*\.capability-grid,\s*\.approach-list div\s*\{\s*grid-template-columns:\s*1fr;/);
-  assert.match(css, /@media\s*\(max-width:\s*600px\)[\s\S]*\.approach-list li\s*\{\s*grid-template-columns:\s*42px 1fr;/);
+});
+
+test("process steps line up: a narrow number column and a shared baseline", () => {
+  assert.match(css, /\.approach-list li\s*\{[^}]*grid-template-columns:\s*3rem minmax\(0, 1fr\);[^}]*align-items:\s*baseline;/s);
+  assert.match(css, /\.approach-list div\s*\{[^}]*align-items:\s*baseline;/s);
+  assert.doesNotMatch(css, /42px 1fr/);
 });
 
 test("the copy button hides without JavaScript and confirms a copy", () => {
@@ -77,4 +81,38 @@ test("the copy button hides without JavaScript and confirms a copy", () => {
 test("old card anchors land below the fixed header", () => {
   assert.match(css, /\.capability-grid,\s*\.capability-card,\s*\.approach-list\s*\{\s*scroll-margin-top:\s*calc\(var\(--header-height\) \+ 1\.5rem\);/);
   assert.doesNotMatch(css, /principle-grid|\.principles\b/);
+});
+
+const token = (name) => css.match(new RegExp(`--${name}:\\s*(#[0-9a-f]{6})`, "i"))[1];
+const contrast = (a, b) => {
+  const lum = (hex) => {
+    const [r, g, bl] = [1, 3, 5]
+      .map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+      .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * bl;
+  };
+  const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+
+test("text colours meet WCAG AA contrast on the page background", () => {
+  for (const name of ["color-text", "color-muted", "color-dim"]) {
+    assert.ok(contrast(token(name), token("color-bg")) >= 4.5, `${name} is ${contrast(token(name), token("color-bg")).toFixed(2)}:1`);
+  }
+});
+
+test("small labels use the pixel font's native 12px, small mono text 13px", () => {
+  // Fusion Pixel is drawn on a 12px grid: other small sizes blur.
+  for (const sel of ["\\.nav-menu", "\\.eyebrow", "\\.button", "\\.card-index", "\\.approach-list > li > span", "\\.footer"]) {
+    assert.match(css, new RegExp(`\\n${sel}\\s*\\{[^}]*font-size:\\s*0\\.75rem;`), sel);
+  }
+  for (const sel of ["\\.capability-card li", "\\.founder-name span", "\\.copy-email"]) {
+    assert.match(css, new RegExp(`\\n${sel}\\s*\\{[^}]*font-size:\\s*0\\.8125rem;`), sel);
+  }
+});
+
+test("section headings use the full content width", () => {
+  assert.match(css, /\.section-heading\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\);/s);
+  assert.match(css, /\.section-heading h2\s*\{[^}]*max-width:\s*36ch;/s);
+  assert.match(css, /\.contact h2\s*\{[^}]*max-width:\s*24ch;/s);
 });
