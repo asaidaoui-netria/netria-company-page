@@ -117,6 +117,11 @@ test("section headings use the full content width", () => {
   assert.match(css, /\.contact h2\s*\{[^}]*max-width:\s*24ch;/s);
 });
 
+test("the founder photo is smooth, not pixelated like the logos, and the bio stays muted", () => {
+  assert.match(css, /\.founder-photo\s*\{[^}]*image-rendering:\s*auto;/s);
+  assert.match(css, /\.founder-bio\s*\{[^}]*color:\s*var\(--color-muted\);/s);
+});
+
 test("the About link lands on the founder below the fixed header", () => {
   assert.match(css, /\.founder\s*\{[^}]*scroll-margin-top:\s*calc\(var\(--header-height\) \+ 1\.5rem\);/s);
 });

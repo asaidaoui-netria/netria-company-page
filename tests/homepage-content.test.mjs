@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -104,7 +104,8 @@ test("every email action opens a short brief, and the address can be copied", ()
 test("names the person a visitor will work with", () => {
   const main = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
   const founder = main.slice(main.indexOf('id="founder"'));
-  assert.match(founder, /<p class="founder-name">[^<]+<span>[^<]+<\/span><\/p>\s*<p>[^<]{60,}<\/p>/);
+  assert.match(founder, /<img class="founder-photo" src="assets\/founder\.webp" alt="" width="72" height="72">\s*<p class="founder-name">[^<]+<span>[^<]+<\/span><\/p>\s*<p class="founder-bio">[^<]{60,}<\/p>/);
+  assert.ok(statSync(join(root, "assets/founder.webp")).size < 20_000, "photo stays small");
   assert.ok(main.indexOf('id="founder"') > main.indexOf('id="contact"'), "founder sits in the contact section");
   assert.doesNotMatch(main, /forward motion|«/);
 
@@ -117,6 +118,7 @@ test("names the person a visitor will work with", () => {
   const linkedin = "https://www.linkedin.com/in/asaidalaoui/";
   assert.ok(founder.includes(`<a class="founder-link" href="${linkedin}">LinkedIn <span aria-hidden="true">↗</span></a>`));
   assert.deepEqual(org.founder.sameAs, [linkedin]);
+  assert.equal(org.founder.image, "https://www.netria.dev/assets/founder.webp");
 });
 
 
