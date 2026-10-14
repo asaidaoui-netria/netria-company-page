@@ -44,7 +44,7 @@ test("the homepage scrolls like a normal document", () => {
   // !important: signal.js sizes every layer canvas with an inline width of 100%.
   assert.match(
     css,
-    /\.capabilities > \.scene-fx,\s*\.principles > \.scene-fx\s*\{[^}]*left:\s*calc\(50% - 50vw\);[^}]*width:\s*100vw !important;/s
+    /\.capabilities > \.scene-fx\s*\{[^}]*left:\s*calc\(50% - 50vw\);[^}]*width:\s*100vw !important;/s
   );
   assert.match(css, /main\s*\{[^}]*overflow-x:\s*clip;/s);
   // Deep links land below the fixed header.
@@ -62,12 +62,6 @@ test("constrains the mobile hero to the viewport", () => {
 test("contains no retired light-theme component selectors", () => {
   assert.doesNotMatch(css, /\.contact-form|\.form-group|\.submit-button|\.lang-drawer/);
 });
-
-test("the principles number field stays behind readable text", () => {
-  assert.match(css, /\.principles > \.scene-fx\s*\{[^}]*mask-image:[^}]*rgb\(0 0 0 \/ 0\.1\)\)/s);
-  assert.match(css, /\.principles:has\(> \.scene-fx\) \.section-heading\s*\{[^}]*text-shadow:/s);
-});
-
 test("the process list stacks on tablets and keeps a narrow index column on phones", () => {
   assert.match(css, /\.hero-summary\s*\{/);
   assert.match(css, /\.approach-list li\s*\{[^}]*grid-template-columns:\s*minmax\(70px, 0\.25fr\) minmax\(0, 1fr\)/s);
@@ -81,5 +75,6 @@ test("the copy button hides without JavaScript and confirms a copy", () => {
 });
 
 test("old card anchors land below the fixed header", () => {
-  assert.match(css, /\.capability-grid,\s*\.capability-card\s*\{\s*scroll-margin-top:\s*calc\(var\(--header-height\) \+ 1\.5rem\);/);
+  assert.match(css, /\.capability-grid,\s*\.capability-card,\s*\.approach-list\s*\{\s*scroll-margin-top:\s*calc\(var\(--header-height\) \+ 1\.5rem\);/);
+  assert.doesNotMatch(css, /principle-grid|\.principles\b/);
 });

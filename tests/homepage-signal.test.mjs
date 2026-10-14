@@ -18,7 +18,7 @@ test("scene fx load as a module on top of the static page", () => {
 
 test("every scene gets exactly one layer, and articles get the divider trace", () => {
   const hosts = [...signal.matchAll(/^\s{8}host: "([^"]+)"/gm)].map((m) => m[1]);
-  assert.deepEqual(hosts, [".hero-signal", "#capabilities", "#principles", ".contact-scope", ".article-scope"]);
+  assert.deepEqual(hosts, [".hero-signal", "#capabilities", ".contact-scope", ".article-scope"]);
   for (const host of hosts) {
     const id = host.startsWith("#") ? host.slice(1) : null;
     const pages = html + article;
@@ -56,4 +56,8 @@ test("fx are gated on webgpu, a fine pointer and motion, and fail back to static
 
 test("layers leave off-screen pausing to the renderer", () => {
   assert.doesNotMatch(signal, /scene--active|scene--entering|MutationObserver|closest\("\.scene"\)/);
+});
+
+test("the principles number field is retired with its section", () => {
+  assert.doesNotMatch(signal, /#principles|VT323|Severance/);
 });

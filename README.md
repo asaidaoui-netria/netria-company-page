@@ -21,7 +21,7 @@ The **Quiet Signal** identity combines:
 - self-hosted Fusion Pixel bitmap typography with technical monospace labels;
 - CRT scanlines, dithered textures, pixel-cut corners, and hard offset shadows;
 - restrained grids, particles, and squared orbital geometry;
-- live WebGPU layers via [shaders](https://github.com/shader-effects-inc/shaders), four green-phosphor references: an LED-matrix moth the cursor scatters (hero), a Tron grid floor the cursor ripples (capabilities), Severance-style refinement numbers under a cursor lens (principles), and an oscilloscope trace that spikes when you reach for the email link (contact). They load lazily and only with WebGPU, a fine pointer and motion allowed; otherwise the static page stays;
+- live WebGPU layers via [shaders](https://github.com/shader-effects-inc/shaders), three green-phosphor references: an LED-matrix moth the cursor scatters (hero), a Tron grid floor the cursor ripples (capabilities), and an oscilloscope trace that spikes when you reach for the email link (contact). They load lazily and only with WebGPU, a fine pointer and motion allowed; otherwise the static page stays;
 - an ordinary scrolling page, so section links, the keyboard and reduced motion behave as browsers expect.
 
 ## Contact

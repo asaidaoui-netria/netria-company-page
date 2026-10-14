@@ -26,16 +26,16 @@ test("uses internationally neutral English metadata", () => {
 
 test("says what Netria builds and how a project runs", () => {
   const ids = [...html.matchAll(/<section[^>]+id="([^"]+)"/g)].map((m) => m[1]);
-  assert.deepEqual(ids, ["top", "capabilities", "approach", "principles", "contact"]);
+  assert.deepEqual(ids, ["top", "capabilities", "approach", "contact"]);
   const eyebrows = [...html.matchAll(/<p class="eyebrow"><span>(\d\d)<\/span>/g)].map((m) => m[1]);
-  assert.deepEqual(eyebrows, ["01", "02", "03", "04", "05"]);
+  assert.deepEqual(eyebrows, ["01", "02", "03", "04"]);
 
   assert.match(authoredText, /Software for ideas and operations in motion\./);
   assert.match(html, /<\/h1>\s*<p class="hero-summary">[^<]{40,}<\/p>/);
   assert.match(html, /Build a product/);
   assert.match(html, /Improve a system/);
 
-  const approach = html.slice(html.indexOf('id="approach"'), html.indexOf('id="principles"'));
+  const approach = html.slice(html.indexOf('id="approach"'), html.indexOf('id="contact"'));
   const steps = [...approach.matchAll(/<li>\s*<span>0\d<\/span>\s*<div>\s*<h3>([^<]+)<\/h3>\s*<p>[^<]{30,}<\/p>/g)];
   assert.deepEqual(steps.map((m) => m[1]), ["Frame the problem", "Prototype the path", "Build and validate", "Release and hand over"]);
   assert.doesNotMatch(html, /«/, "an owner input was left unfilled");
@@ -118,4 +118,9 @@ test("links from the July pager to #situations and #systems still land on the ca
   const caps = html.slice(html.indexOf('id="capabilities"'), html.indexOf('id="approach"'));
   assert.match(caps, /<div class="capability-grid" id="situations">/);
   assert.match(caps, /<article class="capability-card" id="systems">/);
+});
+
+test("the principles section is gone, and its old links land on the process", () => {
+  assert.doesNotMatch(html, /principle-grid|Working principles/);
+  assert.match(html, /<ol class="approach-list" id="principles">/);
 });

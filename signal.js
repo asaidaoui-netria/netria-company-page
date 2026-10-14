@@ -1,4 +1,4 @@
-// Scene fx: one WebGPU layer per homepage scene (shaders.com), each tuned to a piece of
+// Scene fx: WebGPU layers for the homepage (shaders.com), each tuned to a piece of
 // green-phosphor screen culture, plus the article divider trace. Progressive: the static page
 // stays unless WebGPU, a fine pointer and motion all line up, and any layer that fails just
 // removes its canvas. Pages with no layer host never download the bundle.
@@ -64,36 +64,7 @@ const LAYERS = [
         },
     },
     {
-        // 03 · Severance: Macrodata Refinement. Drifting clusters of numbers; the cursor is the
-        // magnifying lens, and only the digits under it light up.
-        host: "#principles",
-        components: [
-            {
-                type: "Bulge",
-                props: { center: { type: "mouse-position", smoothing: 0.2 }, strength: 0.7, radius: 0.6, falloff: 1 },
-                children: [
-                    {
-                        type: "Ascii",
-                        props: { characters: "9876543210", cellSize: 26, fontFamily: "VT323" },
-                        children: [
-                            { type: "SimplexNoise", props: { colorA: GREEN, colorB: "#0d2410", scale: 0.6, speed: 0.35, contrast: 0.5 } },
-                            { type: "BlueNoise", props: { grain: 2, blendMode: "overlay", opacity: 0.8 } },
-                        ],
-                    },
-                ],
-            },
-        ],
-        // The spotlight is a CSS mask (styles.css) centred on the cursor.
-        wire(shader, host, canvas) {
-            host.addEventListener("pointermove", (e) => {
-                const r = canvas.getBoundingClientRect();
-                canvas.style.setProperty("--mx", `${e.clientX - r.left}px`);
-                canvas.style.setProperty("--my", `${e.clientY - r.top}px`);
-            });
-        },
-    },
-    {
-        // 04 · Contact: an oscilloscope trace that locks on when you reach for the email link.
+        // 03 · Contact: an oscilloscope trace that locks on when you reach for the email link.
         host: ".contact-scope",
         live: "signal-live",
         components: scope(0.35, 0.8),
