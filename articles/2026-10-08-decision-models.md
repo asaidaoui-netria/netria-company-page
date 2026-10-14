@@ -5,7 +5,7 @@ description: Decision models answer typed questions with a confidence score inst
 image: /assets/og-decision-models.png
 imageAlt: "Decision models: a System 1 for software. A decision model scores low, medium and high urgency at once and picks high, at 0.94."
 author:
-    name: Abderrahman SaidAlaoui
+    name: Abderrahman Said-Alaoui
     url: https://www.netria.dev/#founder
 # Nunjucks first, for the model explorer shortcode below; then Markdown.
 templateEngineOverride: njk,md

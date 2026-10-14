@@ -23,7 +23,8 @@ test("every local file the homepage references is published", () => {
   const refs = [...read("index.html").matchAll(/(?:src|href|srcset)="([^"#:]+)"/g)].map((m) => m[1]);
   for (const ref of refs) {
     const path = ref.replace(/^\//, "");
-    assert.ok(tracked.has(path) || path.startsWith("articles/"), `${ref} does not match a tracked file's exact name`);
+    // Files must match a tracked file exactly; Eleventy builds articles/ and pages (paths ending in /).
+    assert.ok(tracked.has(path) || path.startsWith("articles/") || path.endsWith("/"), `${ref} does not match a tracked file's exact name`);
     assert.ok(built(path) || built(join(path, "index.html")), `${ref} is missing from the build`);
   }
   for (const path of ["signal.js", "assets/fonts/fusion-pixel-12px-monospaced-latin.otf.woff2", "CNAME"]) {
@@ -141,6 +142,8 @@ test("search and answer engines get structured, consistent signals", () => {
     // Body text in its real font from the first paint: no fallback that rewraps when it swaps.
     assert.match(page, /rel="preload" href="\/?assets\/fonts\/space-grotesk-latin\.woff2" as="font" type="font\/woff2" crossorigin/);
     assert.doesNotMatch(page, /family=Space\+Grotesk/);
+    // Every font is served from netria.dev: no request to Google from any page.
+    assert.doesNotMatch(page, /fonts\.googleapis|fonts\.gstatic/);
   }
   assert.match(base, /"dateModified"/);
   assert.match(base, /"publisher": \{[\s\S]*"logo"/);
@@ -200,4 +203,30 @@ test("article pages share the homepage's header links and summary", () => {
   assert.match(base, /<a href="\/#approach">How we work<\/a>\s*<a href="\/#founder">About<\/a>/);
   assert.doesNotMatch(read("llms.njk"), /forward motion/);
   assert.match(read("llms.njk"), /Netria builds web apps, internal tools and automations/);
+});
+
+test("the legal page names the company, its host, and what happens to visitors' data", () => {
+  const legal = readFileSync(join(out, "legal/index.html"), "utf8");
+  for (const fact of [
+    "Netria SARLAU",
+    "société à responsabilité limitée à associé unique",
+    "100,000 MAD",
+    "77 Angle Imam Ali et Amr Ibn Al Ass, Apt 24, Kénitra, Morocco",
+    "RC Kénitra 78945",
+    "ICE 003776887000054",
+    "Abderrahman Said-Alaoui",
+    "GitHub, Inc.",
+    "cookies",
+    "jsDelivr",
+    "Proton AG",
+    "09-08",
+  ]) {
+    assert.ok(legal.includes(fact), fact);
+  }
+  assert.match(legal, /<link rel="canonical" href="https:\/\/www\.netria\.dev\/legal\/">/);
+  assert.ok(readFileSync(join(out, "sitemap.xml"), "utf8").includes("https://www.netria.dev/legal/"));
+  // Article pages carry the same legal footer.
+  const base = read("_includes/base.njk");
+  assert.match(base, /<p class="footer-legal">© 2026 Netria SARLAU · RC Kénitra 78945 · ICE 003776887000054<\/p>/);
+  assert.match(base, /href="\/legal\/"/);
 });

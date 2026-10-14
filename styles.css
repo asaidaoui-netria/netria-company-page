@@ -7,6 +7,14 @@
 }
 
 @font-face {
+    font-family: "JetBrains Mono";
+    src: url("assets/fonts/jetbrains-mono-latin.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 100 800;
+    font-display: swap;
+}
+
+@font-face {
     font-family: "Space Grotesk";
     src: url("assets/fonts/space-grotesk-latin.woff2") format("woff2");
     font-style: normal;
@@ -33,7 +41,7 @@
     --color-border-strong: rgba(99, 255, 114, 0.45);
     --font-display: "Space Grotesk", system-ui, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
-    --font-pixel: "Fusion Pixel", "Silkscreen", "JetBrains Mono", ui-monospace, monospace;
+    --font-pixel: "Fusion Pixel", "JetBrains Mono", ui-monospace, monospace;
     --pixel-corner: polygon(
         8px 0,
         calc(100% - 8px) 0,
@@ -774,11 +782,12 @@ h1 em {
     display: none;
 }
 
+/* Brand and links on one row, the registered company on its own line below */
 .footer {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 1fr;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem 2rem;
     padding: 3rem 0;
     color: var(--color-dim);
     font-family: var(--font-pixel);
@@ -787,6 +796,31 @@ h1 em {
 
 .footer p {
     margin: 0;
+}
+
+.footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.25rem 1.5rem;
+}
+
+.footer-nav a {
+    padding-block: 0.4rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.footer-nav a:hover,
+.footer-nav a:focus-visible,
+.footer-nav a[aria-current="page"] {
+    color: var(--color-signal);
+}
+
+.footer-legal {
+    grid-column: 1 / -1;
 }
 
 @keyframes grid-drift {
@@ -901,6 +935,10 @@ h1 em {
     .footer .brand {
         justify-self: center;
     }
+
+    .footer-nav {
+        justify-content: center;
+    }
 }
 
 @media (max-width: 600px) {
@@ -1011,6 +1049,11 @@ h1 em {
 /* signal.js draws a live trace over the divider; the plain border stays as the fallback */
 .article-body {
     position: relative;
+}
+
+/* A page that opens on a heading (the legal page) doesn't need section spacing under the rule */
+.article-body > h2:first-child {
+    margin-top: 0;
 }
 
 .article-scope {

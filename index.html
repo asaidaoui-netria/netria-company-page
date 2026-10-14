@@ -55,7 +55,7 @@
                     "founder": {
                         "@type": "Person",
                         "@id": "https://www.netria.dev/#founder",
-                        "name": "Abderrahman SaidAlaoui",
+                        "name": "Abderrahman Said-Alaoui",
                         "jobTitle": "Founder, Netria",
                         "sameAs": ["https://www.linkedin.com/in/asaidalaoui/"],
                         "image": "https://www.netria.dev/assets/founder.webp"
@@ -78,11 +78,6 @@
     <!-- Fetch the pixel font with the page, so headings don't jump when it swaps in -->
     <link rel="preload" href="assets/fonts/fusion-pixel-12px-monospaced-latin.otf.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Silkscreen:wght@400;700&amp;display=swap"
-        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
     <script type="importmap">
@@ -236,7 +231,7 @@
 
             <div class="founder" id="founder">
                 <img class="founder-photo" src="assets/founder.webp" alt="" width="72" height="72">
-                <p class="founder-name">Abderrahman SaidAlaoui<span>Founder, Netria</span></p>
+                <p class="founder-name">Abderrahman Said-Alaoui<span>Founder, Netria</span></p>
                 <p class="founder-bio">I’ve spent my career on backend systems and cloud infrastructure, mostly on AWS: at Capital One, at Amazon in retail and AWS, and at Block, where I worked on Bitcoin Lightning payments. Netria brings that same engineering to smaller teams: software that’s secure, monitored and straightforward to run, with code and infrastructure you fully own.</p>
                 <a class="founder-link" href="https://www.linkedin.com/in/asaidalaoui/">LinkedIn <span aria-hidden="true">↗</span></a>
             </div>
@@ -258,7 +253,15 @@
             </picture>
             <span>Netria</span>
         </a>
-        <p>© 2026 Netria. All rights reserved.</p>
+        <nav class="footer-nav" aria-label="Footer">
+            <a href="#approach">How we work</a>
+            <a href="#founder">About</a>
+            <a href="/articles/">Articles</a>
+            <a href="https://www.linkedin.com/in/asaidalaoui/">LinkedIn</a>
+            <a href="mailto:hello@netria.dev?subject=Project%20conversation&amp;body=What%20do%20you%20want%20to%20build%20or%20fix%3F%0D%0A%0D%0A%0D%0AWhen%20do%20you%20need%20it%3F%0D%0A%0D%0A%0D%0ARough%20budget%2C%20if%20you%20have%20one%3A%0D%0A">Email</a>
+            <a href="/legal/">Legal &amp; privacy</a>
+        </nav>
+        <p class="footer-legal">© 2026 Netria SARLAU · RC Kénitra 78945 · ICE 003776887000054</p>
     </footer>
 </body>
 </html>

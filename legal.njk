@@ -1,0 +1,38 @@
+---
+layout: base.njk
+permalink: /legal/
+title: Legal notice and privacy
+description: Who runs netria.dev, where Netria is registered, and what the site does with your data.
+---
+<article class="article legal">
+    <header class="article-header">
+        <h1>{{ title }}</h1>
+        <p class="article-lede">{{ description }}</p>
+    </header>
+
+    <div class="article-body">
+        <h2>Company</h2>
+        <p>Netria SARLAU is a single-member limited liability company under Moroccan law (société à responsabilité limitée à associé unique) with share capital of 100,000 MAD.</p>
+        <ul>
+            <li>Registered office: 77 Angle Imam Ali et Amr Ibn Al Ass, Apt 24, Kénitra, Morocco</li>
+            <li>Commercial register: RC Kénitra 78945 (Tribunal de première instance de Kénitra)</li>
+            <li>Company identifier: ICE 003776887000054</li>
+            <li>Manager: Abderrahman Said-Alaoui</li>
+            <li>Contact: <a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+        </ul>
+
+        <h2>Hosting</h2>
+        <p>The site is hosted on GitHub Pages by GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, United States.</p>
+
+        <h2>Privacy</h2>
+        <p>This site sets no cookies and has no analytics, tracking or forms. Its pages, fonts and images are served from netria.dev itself.</p>
+        <ul>
+            <li><strong>Server logs.</strong> GitHub records technical details of each request, including your IP address, to run and secure the service. See the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub privacy statement</a>.</li>
+            <li><strong>Animation library.</strong> On desktop browsers that support WebGPU, the contact section loads an animation library from jsDelivr (cdn.jsdelivr.net), which receives your IP address. See the <a href="https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net">jsDelivr privacy policy</a>.</li>
+            <li><strong>Email.</strong> If you write to {{ site.email }}, we use your address and message to reply and to work with you. Our email is hosted by Proton AG in Switzerland; see the <a href="https://proton.me/legal/privacy">Proton privacy policy</a>.</li>
+        </ul>
+        <p>Under Moroccan law 09-08 on personal data, and the GDPR if you are in the European Union, you can ask what personal data we hold about you and have it corrected or deleted. Write to <a href="mailto:{{ site.email }}">{{ site.email }}</a>.</p>
+
+        <p>Last updated 14 October 2026.</p>
+    </div>
+</article>

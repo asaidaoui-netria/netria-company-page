@@ -20,8 +20,9 @@ test("uses internationally neutral English metadata", () => {
   assert.match(html, /<link rel="canonical" href="https:\/\/www\.netria\.dev\/">/);
   // The bare domain redirects to www: every absolute URL should already point at www.
   assert.doesNotMatch(html, /https:\/\/netria\.dev/);
+  // Location stays out of the pitch; only the footer's legal line names the registry.
   assert.doesNotMatch(
-    html,
+    html.replace(/<footer[\s\S]*<\/footer>/, ""),
     /Morocco|Moroccan|Maroc|المغرب|Kenitra|Kénitra/i
   );
 });
@@ -68,8 +69,10 @@ test("avoids unsupported proof claims", () => {
   );
 });
 
-test("provides one navigation landmark and accessible menu hooks", () => {
-  assert.equal((html.match(/<nav\b/g) ?? []).length, 1);
+test("labels each navigation landmark and provides accessible menu hooks", () => {
+  const labels = [...html.matchAll(/<nav\b[^>]*aria-label="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(labels, ["Primary navigation", "Footer"]);
+  assert.equal((html.match(/<nav\b/g) ?? []).length, labels.length);
   assert.match(html, /id="navToggle"/);
   assert.match(html, /aria-controls="navMenu"/);
   assert.match(html, /aria-expanded="false"/);
@@ -79,12 +82,12 @@ test("provides one navigation landmark and accessible menu hooks", () => {
 test("the page is one scrolling document with a page footer", () => {
   assert.doesNotMatch(html, /scenes\.js|scroll-cue|scene--active/);
   assert.match(html, /<\/main>\s*<footer class="footer">/);
-  assert.match(html, /© 2026 Netria\. All rights reserved\./);
+  assert.match(html, /© 2026 Netria SARLAU/);
 });
 
 test("every email action opens a short brief, and the address can be copied", () => {
   const mailtos = [...html.matchAll(/href="(mailto:[^"]+)"/g)].map((m) => m[1]);
-  assert.equal(mailtos.length, 3);
+  assert.equal(mailtos.length, 4);
   for (const href of mailtos) {
     // %20 and %0D%0A, never "+": some mail apps show a literal plus.
     assert.doesNotMatch(href, /\+/);
@@ -113,7 +116,8 @@ test("names the person a visitor will work with", () => {
   const org = ld["@graph"].find((node) => node["@type"] === "Organization");
   assert.equal(org.founder["@type"], "Person");
   assert.equal(org.founder["@id"], "https://www.netria.dev/#founder");
-  assert.equal(org.founder.name, "Abderrahman SaidAlaoui");
+  assert.equal(org.founder.name, "Abderrahman Said-Alaoui");
+  assert.match(founder, /<p class="founder-name">Abderrahman Said-Alaoui<span>/);
 
   const linkedin = "https://www.linkedin.com/in/asaidalaoui/";
   assert.ok(founder.includes(`<a class="founder-link" href="${linkedin}">LinkedIn <span aria-hidden="true">↗</span></a>`));
@@ -136,4 +140,13 @@ test("the principles section is gone, and its old links land on the process", ()
 test("the header links straight to the process and the founder", () => {
   const nav = html.slice(html.indexOf('id="navMenu"'), html.indexOf("</nav>"));
   assert.match(nav, /<a href="#approach">How we work<\/a>\s*<a href="#founder">About<\/a>\s*<a href="\/articles\/">Articles<\/a>/);
+});
+
+test("the footer names the registered company and links to the legal page", () => {
+  const footer = html.match(/<footer class="footer">([\s\S]*?)<\/footer>/)[1];
+  assert.match(footer, /<p class="footer-legal">© 2026 Netria SARLAU · RC Kénitra 78945 · ICE 003776887000054<\/p>/);
+  assert.match(footer, /<nav class="footer-nav" aria-label="Footer">/);
+  for (const href of ["#approach", "#founder", "/articles/", "https://www.linkedin.com/in/asaidalaoui/", "/legal/"]) {
+    assert.ok(footer.includes(`href="${href}"`), href);
+  }
 });

@@ -122,3 +122,7 @@ test("the About link lands on the founder below the fixed header", () => {
 test("Space Grotesk is self-hosted, like the pixel font", () => {
   assert.match(css, /@font-face\s*\{[^}]*font-family:\s*"Space Grotesk";[^}]*src:\s*url\("assets\/fonts\/space-grotesk-latin\.woff2"\) format\("woff2"\);[^}]*font-weight:\s*300 700;/s);
 });
+
+test("JetBrains Mono is self-hosted too", () => {
+  assert.match(css, /@font-face\s*\{[^}]*font-family:\s*"JetBrains Mono";[^}]*src:\s*url\("assets\/fonts\/jetbrains-mono-latin\.woff2"\) format\("woff2"\);/s);
+});

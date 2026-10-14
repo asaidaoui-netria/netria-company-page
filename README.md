@@ -18,7 +18,7 @@ The **Quiet Signal** identity combines:
 - a near-black canvas;
 - signal-green highlights;
 - the Netria pixel moth;
-- self-hosted Fusion Pixel bitmap typography with technical monospace labels;
+- self-hosted type (Fusion Pixel bitmap headings, Space Grotesk text, JetBrains Mono labels), so no page calls Google;
 - CRT scanlines, dithered textures, pixel-cut corners, and hard offset shadows;
 - restrained grids, particles, and squared orbital geometry;
 - moth pixels that follow the visitor down the page (plain WebGL2): the hero moth's LED pixels scatter as you scroll, draw an app window and a node diagram behind the two frosted capability cards, pour into the four process dividers and rebuild the moth at the contact. The cursor pushes them aside. They run only with WebGL2 and motion allowed; otherwise the static page stays;
@@ -53,6 +53,7 @@ Posts marked `draft: true` show in `npm start` but are never published. Optional
 ├── eleventy.config.js       # What gets built and published
 ├── index.html               # Semantic page content and metadata
 ├── robots.txt               # Points crawlers at the sitemap
+├── legal.njk                # Legal notice and privacy page (/legal/)
 ├── llms.njk                 # Generates llms.txt, a site summary for AI answer engines
 ├── sitemap.njk              # Generates sitemap.xml
 ├── script.js                # Mobile navigation and copy buttons
