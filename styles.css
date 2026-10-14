@@ -702,6 +702,29 @@ main {
     color: var(--color-muted);
 }
 
+.founder {
+    max-width: 52ch;
+    margin-top: 2.5rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--color-border-strong);
+}
+
+.founder-name {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-pixel);
+    font-size: 1.1rem;
+}
+
+.founder-name span {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--color-dim);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
 .contact-link {
     display: flex;
     align-items: center;

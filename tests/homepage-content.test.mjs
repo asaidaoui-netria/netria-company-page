@@ -96,3 +96,17 @@ test("every email action opens a short brief, and the address can be copied", ()
   }
   assert.match(html, /<button type="button" class="copy-email" data-copy="hello@netria\.dev">Copy address<\/button>/);
 });
+
+test("names the person a visitor will work with", () => {
+  const main = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
+  const founder = main.slice(main.indexOf('id="founder"'));
+  assert.match(founder, /<p class="founder-name">[^<]+<span>[^<]+<\/span><\/p>\s*<p>[^<]{60,}<\/p>/);
+  assert.ok(main.indexOf('id="founder"') > main.indexOf('id="contact"'), "founder sits in the contact section");
+  assert.doesNotMatch(main, /forward motion|«/);
+
+  const ld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  const org = ld["@graph"].find((node) => node["@type"] === "Organization");
+  assert.equal(org.founder["@type"], "Person");
+  assert.equal(org.founder["@id"], "https://www.netria.dev/#founder");
+  assert.equal(org.founder.name, "Abderrahman SaidAlaoui");
+});

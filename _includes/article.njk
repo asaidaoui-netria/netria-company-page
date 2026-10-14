@@ -6,7 +6,7 @@ isArticle: true
     <header class="article-header">
         <p class="article-meta">
             <a href="/articles/">Articles</a>
-            {% if author %}<span>By {{ author.name }}{% if author.role %}, {{ author.role }}{% endif %}</span>{% endif %}
+            {% if author %}<span>By {% if author.url %}<a href="{{ author.url }}">{{ author.name }}</a>{% else %}{{ author.name }}{% endif %}{% if author.role %}, {{ author.role }}{% endif %}</span>{% endif %}
             <time datetime="{{ page.date | isoDate }}">{{ page.date | readableDate }}</time>
             {% if updated %}<span>Updated <time datetime="{{ updated | isoDate }}">{{ updated | readableDate }}</time></span>{% endif %}
             <span>{{ content | readingTime }} min read</span>

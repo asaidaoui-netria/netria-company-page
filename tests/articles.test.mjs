@@ -184,3 +184,10 @@ test("deploys run the tests before building", () => {
   assert.match(workflow, /path: _site/);
   assert.match(workflow, /actions\/deploy-pages@/);
 });
+
+test("article bylines link to the founder on the homepage", () => {
+  const page = readFileSync(join(out, "articles/decision-models/index.html"), "utf8");
+  assert.match(page, /By <a href="https:\/\/www\.netria\.dev\/#founder">[^<]+<\/a>/);
+  assert.match(page, /"url": "https:\/\/www\.netria\.dev\/#founder"/);
+  assert.doesNotMatch(read("README.md"), /## To do/);
+});

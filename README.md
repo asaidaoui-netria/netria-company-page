@@ -36,7 +36,7 @@ Articles are Markdown files in `articles/`, published at `/articles/<slug>/`:
 2. Set `title` and `description` (the description is the summary shown in the listing, search results and link previews).
 3. Write, preview with `npm start`, then remove `draft: true` and push to `main`.
 
-Posts marked `draft: true` show in `npm start` but are never published. Optional front matter: `author:` with `name`, `role` and `url` adds a byline and names that person in the structured data (without it, articles are credited to Netria); `updated: YYYY-MM-DD` shows an Updated date and sets the modified date for search engines and the sitemap; `image:` and `imageAlt:` set a dedicated 1200x630 PNG share image (otherwise the site-wide one is used). Markdown can include plain HTML (keep it free of blank lines). Each `##` section gets an id from its title and a "#" link beside it that copies the section's address, so keep section titles unique within an article. The decision-models article's interactive model explorer is built from `articles/2026-10-08-decision-models.11tydata.json`, with logos in `assets/logos/`: edit that file, including its `asOf` date, as models change. The listing, feed (`/articles/feed.xml`), sitemap and search and share metadata update automatically.
+Posts marked `draft: true` show in `npm start` but are never published. Optional front matter: `author:` with `name`, `role` and `url` adds a byline and names that person in the structured data (set `url: https://www.netria.dev/#founder` to link the byline to the founder block on the homepage) (without it, articles are credited to Netria); `updated: YYYY-MM-DD` shows an Updated date and sets the modified date for search engines and the sitemap; `image:` and `imageAlt:` set a dedicated 1200x630 PNG share image (otherwise the site-wide one is used). Markdown can include plain HTML (keep it free of blank lines). Each `##` section gets an id from its title and a "#" link beside it that copies the section's address, so keep section titles unique within an article. The decision-models article's interactive model explorer is built from `articles/2026-10-08-decision-models.11tydata.json`, with logos in `assets/logos/`: edit that file, including its `asOf` date, as models change. The listing, feed (`/articles/feed.xml`), sitemap and search and share metadata update automatically.
 
 ## Project Structure
 
@@ -87,10 +87,6 @@ git diff --check
 ```
 
 The pages should also be checked at 320px, 768px, 1024px, and 1440px widths, with keyboard navigation and reduced motion enabled.
-
-## To do
-
-- Add an author profile page for Abderrahman SaidAlaoui and link article bylines to it (`author.url` in an article's front matter).
 
 ## Deployment
 
