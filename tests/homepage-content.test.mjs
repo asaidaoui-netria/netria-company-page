@@ -113,6 +113,10 @@ test("names the person a visitor will work with", () => {
   assert.equal(org.founder["@type"], "Person");
   assert.equal(org.founder["@id"], "https://www.netria.dev/#founder");
   assert.equal(org.founder.name, "Abderrahman SaidAlaoui");
+
+  const linkedin = "https://www.linkedin.com/in/asaidalaoui/";
+  assert.ok(founder.includes(`<a class="founder-link" href="${linkedin}">LinkedIn <span aria-hidden="true">↗</span></a>`));
+  assert.deepEqual(org.founder.sameAs, [linkedin]);
 });
 
 

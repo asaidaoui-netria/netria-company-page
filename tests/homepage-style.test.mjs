@@ -106,7 +106,7 @@ test("small labels use the pixel font's native 12px, small mono text 13px", () =
   for (const sel of ["\\.nav-menu", "\\.eyebrow", "\\.button", "\\.card-index", "\\.approach-list > li > span", "\\.footer"]) {
     assert.match(css, new RegExp(`\\n${sel}\\s*\\{[^}]*font-size:\\s*0\\.75rem;`), sel);
   }
-  for (const sel of ["\\.capability-card li", "\\.founder-name span", "\\.copy-email"]) {
+  for (const sel of ["\\.capability-card li", "\\.founder-name span", "\\.founder-link", "\\.copy-email"]) {
     assert.match(css, new RegExp(`\\n${sel}\\s*\\{[^}]*font-size:\\s*0\\.8125rem;`), sel);
   }
 });
