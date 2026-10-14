@@ -54,3 +54,36 @@ if (navToggle && navMenu) {
     });
 }
 
+
+// Articles: a section's "#" link copies the section's address instead of jumping to it.
+const copyLinks = document.querySelectorAll(".heading-link");
+
+if (copyLinks.length) {
+    const status = document.createElement("p");
+    status.className = "copy-status";
+    status.setAttribute("role", "status");
+    document.body.append(status);
+
+    copyLinks.forEach((link) => {
+        link.addEventListener("click", async (event) => {
+            if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+                return;
+            }
+            event.preventDefault();
+            try {
+                await navigator.clipboard.writeText(location.origin + location.pathname + link.hash);
+            } catch {
+                // No clipboard access: put the link in the address bar instead.
+                history.replaceState(null, "", link.hash);
+                return;
+            }
+            link.dataset.copied = "";
+            status.textContent = "Link copied";
+            clearTimeout(link.copiedTimer);
+            link.copiedTimer = setTimeout(() => {
+                delete link.dataset.copied;
+                status.textContent = "";
+            }, 2000);
+        });
+    });
+}

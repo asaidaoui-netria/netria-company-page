@@ -23,7 +23,25 @@ export default function (eleventyConfig) {
     // what scripts like explorer.js set up after load.
     eleventyConfig.setServerOptions({ domDiff: false });
     // Curly quotes and apostrophes: Space Grotesk draws a straight " like a closing quote.
-    eleventyConfig.amendLibrary("md", (md) => md.set({ typographer: true }));
+    eleventyConfig.amendLibrary("md", (md) => {
+        md.set({ typographer: true });
+        // Sections: each `##` gets an id and a link beside it, which script.js turns into
+        // "copy link". Built here, not by script, so nothing shifts and it works without JS.
+        // ponytail: two identical section titles in one article would share an id.
+        const slugify = eleventyConfig.getFilter("slugify");
+        const { heading_open: open = md.renderer.renderToken, heading_close: close = md.renderer.renderToken } = md.renderer.rules;
+        md.renderer.rules.heading_open = (tokens, idx, options, env, self) => {
+            if (tokens[idx].tag !== "h2") return open.call(self, tokens, idx, options, env, self);
+            tokens[idx].attrSet("id", slugify(tokens[idx + 1].content));
+            return `<div class="heading-anchor">${self.renderToken(tokens, idx, options)}`;
+        };
+        md.renderer.rules.heading_close = (tokens, idx, options, env, self) => {
+            if (tokens[idx].tag !== "h2") return close.call(self, tokens, idx, options, env, self);
+            const id = tokens[idx - 2].attrGet("id");
+            const label = md.utils.escapeHtml(`Copy link to “${tokens[idx - 1].content}”`);
+            return `</h2><a class="heading-link" href="#${id}" aria-label="${label}">#</a></div>\n`;
+        };
+    });
     // {% modelExplorer data %} in an article with `templateEngineOverride: njk,md`.
     eleventyConfig.addShortcode("modelExplorer", modelExplorer);
 

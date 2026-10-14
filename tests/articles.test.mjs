@@ -78,6 +78,24 @@ test("article pages scroll normally and carry search and share metadata", () => 
   assert.match(article, /mailto:\{\{ site\.email \}\}\?subject=\{\{ \('Re: ' \+ title\) \| urlencode \}\}/);
 });
 
+test("article sections carry ids and a link that copies their address", () => {
+  const page = readFileSync(join(out, "articles/decision-models/index.html"), "utf8");
+  const sections = [...read("articles/2026-10-08-decision-models.md").matchAll(/^## /gm)].length;
+  const links = [...page.matchAll(/<h2 id="([a-z0-9-]+)">[^<]+<\/h2><a class="heading-link" href="#([a-z0-9-]+)" aria-label="Copy link to [^"]+">/g)];
+  assert.equal(links.length, sections);
+  for (const [, id, href] of links) {
+    assert.equal(href, id);
+  }
+  assert.match(page, /id="fast-and-slow-thinking"/);
+  assert.match(read("script.js"), /navigator\.clipboard\.writeText\(location\.origin \+ location\.pathname \+ link\.hash\)/);
+  // Shared links land on their heading: articles jump instantly (a smooth scroll aims before
+  // fonts and images settle) and the explorer paints collapsed, not all panels then shrinking.
+  const css = read("styles.css");
+  assert.match(css, /html:has\(\.article-body\)\s*\{\s*scroll-behavior:\s*auto;/);
+  assert.match(css, /\.js \.mx:not\(\.is-ready\) \.mx-panel \+ \.mx-panel\s*\{\s*display:\s*none;/);
+  assert.doesNotMatch(css, /\.mx:not\(\.is-ready\) \.mx-picker/);
+});
+
 test("the decision figure animates only when motion is allowed", () => {
   const css = read("styles.css");
   const start = css.indexOf("@media (prefers-reduced-motion: no-preference)");
