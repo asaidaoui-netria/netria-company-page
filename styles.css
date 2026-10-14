@@ -446,8 +446,13 @@ main {
     mask-image: linear-gradient(to bottom, transparent 30%, black 75%);
 }
 
+/* Full strength only under the cursor lens: elsewhere the digits stay faint behind the text */
 .principles > .scene-fx {
-    mask-image: radial-gradient(circle 15rem at var(--mx, 70%) var(--my, 40%), black, rgb(0 0 0 / 0.28));
+    mask-image: radial-gradient(circle 15rem at var(--mx, 70%) var(--my, 40%), black, rgb(0 0 0 / 0.1));
+}
+
+.principles:has(> .scene-fx) .section-heading {
+    text-shadow: 0 0 0.3em var(--color-bg), 0 0 0.8em var(--color-bg);
 }
 
 .principles:has(> .scene-fx) .principle-grid article {

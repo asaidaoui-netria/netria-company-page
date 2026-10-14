@@ -62,3 +62,8 @@ test("constrains the mobile hero to the viewport", () => {
 test("contains no retired light-theme component selectors", () => {
   assert.doesNotMatch(css, /\.contact-form|\.form-group|\.submit-button|\.lang-drawer/);
 });
+
+test("the principles number field stays behind readable text", () => {
+  assert.match(css, /\.principles > \.scene-fx\s*\{[^}]*mask-image:[^}]*rgb\(0 0 0 \/ 0\.1\)\)/s);
+  assert.match(css, /\.principles:has\(> \.scene-fx\) \.section-heading\s*\{[^}]*text-shadow:/s);
+});
