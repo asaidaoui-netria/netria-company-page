@@ -6,6 +6,14 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: "Space Grotesk";
+    src: url("assets/fonts/space-grotesk-latin.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 300 700;
+    font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -415,8 +423,8 @@ h1 em {
     pointer-events: none;
 }
 
-.signal-live .signal-core,
-.signal-live .signal-grid {
+.pixels-live .signal-core,
+.pixels-live .signal-grid {
     visibility: hidden;
 }
 

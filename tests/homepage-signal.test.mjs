@@ -12,7 +12,6 @@ test("scene fx load as a module on top of the static page", () => {
   assert.match(html, /<script src="signal\.js" type="module"><\/script>/);
   assert.match(html, /class="signal-core"/);
   assert.match(html, /<span class="contact-scope" aria-hidden="true"><\/span>/);
-  assert.match(css, /\.signal-live \.signal-core[^{]*\{[^}]*visibility:\s*hidden/s);
   assert.match(css, /\.scene > \.scene-fx\s*\{[^}]*z-index:\s*-1/s);
 });
 

@@ -138,6 +138,9 @@ test("search and answer engines get structured, consistent signals", () => {
   const base = read("_includes/base.njk");
   for (const page of [home, base]) {
     assert.match(page, /rel="preload" href="\/?assets\/fonts\/fusion-pixel[^"]+\.woff2" as="font" type="font\/woff2" crossorigin/);
+    // Body text in its real font from the first paint: no fallback that rewraps when it swaps.
+    assert.match(page, /rel="preload" href="\/?assets\/fonts\/space-grotesk-latin\.woff2" as="font" type="font\/woff2" crossorigin/);
+    assert.doesNotMatch(page, /family=Space\+Grotesk/);
   }
   assert.match(base, /"dateModified"/);
   assert.match(base, /"publisher": \{[\s\S]*"logo"/);

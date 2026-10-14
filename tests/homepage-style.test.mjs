@@ -118,3 +118,7 @@ test("the founder photo is smooth, not pixelated like the logos, and the bio sta
 test("the About link lands on the founder below the fixed header", () => {
   assert.match(css, /\.founder\s*\{[^}]*scroll-margin-top:\s*calc\(var\(--header-height\) \+ 1\.5rem\);/s);
 });
+
+test("Space Grotesk is self-hosted, like the pixel font", () => {
+  assert.match(css, /@font-face\s*\{[^}]*font-family:\s*"Space Grotesk";[^}]*src:\s*url\("assets\/fonts\/space-grotesk-latin\.woff2"\) format\("woff2"\);[^}]*font-weight:\s*300 700;/s);
+});

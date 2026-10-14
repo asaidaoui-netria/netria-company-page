@@ -1,11 +1,13 @@
 // Moth pixels: the hero moth's LED pixels follow the visitor down the homepage. They scatter as
 // the hero leaves, draw an app window and a node diagram behind the two capability cards, pour
 // into the four process dividers, and rebuild the moth at the contact. One fixed WebGL2 canvas
-// behind the page, driven by scroll. Without WebGL2, or with reduced motion, the static page stays.
+// behind the page, driven by scroll. Without WebGL2, or with reduced motion, the static page stays:
+// index.html sets pixels-live before the first paint, and stop() takes it away again.
 const MOTH = "/assets/netria-logo-navbar-transparent.png";
 const GRID = 40; // the moth is sampled as a 40×40 LED matrix
 const SPACING = 9; // px between pixels in the card shapes
 const EASE = 0.08; // share of the way to the scroll target covered each frame
+const INTRO = 1400; // ms for the pixels to fly in and assemble the moth on load
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => [...document.querySelectorAll(sel)];
@@ -80,12 +82,14 @@ const VS = `#version 300 es
 in vec2 aHome; in vec4 aRand; in vec3 aCol;
 in vec3 aCap;   // px from its card's top-left, card 0 or 1; card -1 keeps drifting
 in vec2 aDiv;   // position along its divider 0-1, divider 0-3
-uniform vec2 uRes; uniform float uTime, uScatter, uGather, uDpr, uCap;
+uniform vec2 uRes; uniform float uTime, uIntro, uScatter, uGather, uDpr, uCap;
 uniform vec3 uHero, uDock; uniform vec2 uPointer;
 uniform vec4 uCardL, uCardR, uRows, uFill; uniform vec2 uRowX;
 out vec3 vCol;
 void main() {
-    vec2 hero = uHero.xy + aHome * uHero.z;
+    // On load, each pixel flies in from a random spot and settles into the moth.
+    float arrive = smoothstep(aRand.y * .5, aRand.y * .5 + .5, uIntro);
+    vec2 hero = mix(vec2(aRand.w, aRand.x) * uRes, uHero.xy + aHome * uHero.z, arrive);
     vec2 dock = uDock.xy + aHome * uDock.z;
     vec2 drift = aRand.xy * uRes + vec2(sin(uTime * .3 + aRand.z * 6.28), cos(uTime * .23 + aRand.w * 6.28)) * 50. * uDpr;
     float s = smoothstep(aRand.z * .5, aRand.z * .5 + .5, uScatter);
@@ -148,7 +152,6 @@ function stop() {
     stopped = true;
     $(".pixel-field")?.remove();
     document.documentElement.classList.remove("pixels-live");
-    $(".hero-signal")?.classList.remove("signal-live");
 }
 
 async function start() {
@@ -157,7 +160,7 @@ async function start() {
     canvas.setAttribute("aria-hidden", "true");
     canvas.addEventListener("webglcontextlost", stop);
     const gl = canvas.getContext("webgl2", { antialias: false });
-    if (!gl) return;
+    if (!gl) throw new Error("No WebGL2");
     const moth = await mothPixels();
     const prog = compile(gl);
     const N = moth.length;
@@ -195,14 +198,14 @@ async function start() {
     }
 
     document.body.prepend(canvas);
-    document.documentElement.classList.add("pixels-live");
-    $(".hero-signal").classList.add("signal-live");
 
     // Each weight eases toward where the scroll says it should be, so the pixels glide.
     const ease = { scatter: 0, gather: 0, cap: 0, fill: [0, 0, 0, 0] };
     const toward = (now, target) => now + (target - now) * EASE;
+    let born = null;
     const frame = (t) => {
         if (stopped) return;
+        born ??= t;
         try {
             const dpr = Math.min(devicePixelRatio, matchMedia("(pointer: fine)").matches ? 2 : 1.5);
             const w = Math.round(innerWidth * dpr), h = Math.round(innerHeight * dpr);
@@ -223,6 +226,7 @@ async function start() {
             const uniforms = {
                 uRes: [w, h],
                 uTime: [t / 1000],
+                uIntro: [clamp((t - born) / INTRO)],
                 uDpr: [dpr],
                 uScatter: [ease.scatter],
                 uGather: [ease.gather],

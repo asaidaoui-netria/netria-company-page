@@ -9,7 +9,7 @@ const pixels = readFileSync(new URL("../pixels.js", import.meta.url), "utf8");
 const signal = readFileSync(new URL("../signal.js", import.meta.url), "utf8");
 
 test("the moth pixels load as a module on the homepage, published and cache-versioned", () => {
-  assert.match(html, /<script src="pixels\.js" type="module"><\/script>/);
+  assert.match(html, /<script src="pixels\.js" type="module"[^>]*><\/script>/);
   assert.ok(STATIC.includes("pixels.js") && VERSIONED.includes("pixels.js"));
 });
 
@@ -21,10 +21,22 @@ test("the pixels run only with WebGL2 and motion allowed, and leave the static p
   assert.match(pixels, /catch\(/);
 });
 
-test("the pixel moth replaces the hero's static moth only once it runs", () => {
-  assert.match(pixels, /\.hero-signal"\)\.classList\.add\("signal-live"\)/);
-  assert.match(pixels, /classList\.add\("pixels-live"\)/);
+test("the static moth never shows when the pixels will run, and comes back when they can't", () => {
+  // Decided before the first paint, so the static moth never swaps for the pixel one.
+  const head = html.match(/<script>([^<]*)<\/script>/)[1];
+  assert.match(head, /WebGL2RenderingContext/);
+  assert.match(head, /prefers-reduced-motion: reduce/);
+  assert.match(head, /classList\.add\("pixels-live"\)/);
+  assert.match(css, /\.pixels-live \.signal-core,\s*\.pixels-live \.signal-grid\s*\{[^}]*visibility:\s*hidden/s);
+  // A script that never loads, or stops later, hands the static moth back.
+  assert.match(html, /<script src="pixels\.js" type="module" onerror="document\.documentElement\.classList\.remove\('pixels-live'\)"><\/script>/);
+  assert.match(pixels, /function stop\(\) \{[^}]*classList\.remove\("pixels-live"\)/);
+  assert.doesNotMatch(pixels, /signal-live/);
   assert.doesNotMatch(signal, /\.hero-signal|PixelThrow/);
+});
+
+test("on load the pixels fly in and assemble the moth", () => {
+  assert.match(pixels, /uIntro/);
 });
 
 test("the pixel field sits behind the page and never takes a click", () => {
