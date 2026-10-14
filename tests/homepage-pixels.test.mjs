@@ -37,8 +37,15 @@ test("cards turn to frosted glass, and the contact clears, only while the pixels
   assert.doesNotMatch(css, /\n\.capability-card\s*\{[^}]*backdrop-filter/s);
 });
 
-test("the shapes follow the cards' real size, including after fonts load", () => {
+test("the shapes follow each card's real size, including after fonts load", () => {
   assert.match(pixels, /new ResizeObserver\(/);
+  assert.match(pixels, /cards\.forEach\(\(card\) => \w+\.observe\(card\)\)/);
+});
+
+test("the static page comes back if the GPU context is lost or a frame fails", () => {
+  assert.match(pixels, /addEventListener\("webglcontextlost", stop\)/);
+  assert.match(pixels, /try \{[\s\S]*gl\.drawArrays[\s\S]*\} catch \{\s*stop\(\);/);
+  assert.match(pixels, /start\(\)\.catch\(stop\)/);
 });
 
 test("the cursor pushes pixels only on devices with a fine pointer", () => {

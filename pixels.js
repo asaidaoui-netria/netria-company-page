@@ -142,10 +142,20 @@ function dock(contact) {
     return [contact.right - size, button.top + button.height / 2, size];
 }
 
+// Hand the page back to its static art: after a failed start, a lost GPU context or a failed frame.
+let stopped = false;
+function stop() {
+    stopped = true;
+    $(".pixel-field")?.remove();
+    document.documentElement.classList.remove("pixels-live");
+    $(".hero-signal")?.classList.remove("signal-live");
+}
+
 async function start() {
     const canvas = document.createElement("canvas");
     canvas.className = "pixel-field";
     canvas.setAttribute("aria-hidden", "true");
+    canvas.addEventListener("webglcontextlost", stop);
     const gl = canvas.getContext("webgl2", { antialias: false });
     if (!gl) return;
     const moth = await mothPixels();
@@ -176,7 +186,8 @@ async function start() {
         gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
     };
     build();
-    new ResizeObserver(build).observe(cards[0]);
+    const resize = new ResizeObserver(build);
+    cards.forEach((card) => resize.observe(card));
 
     const pointer = { x: -1e4, y: -1e4 };
     if (matchMedia("(pointer: fine)").matches) {
@@ -191,52 +202,54 @@ async function start() {
     const ease = { scatter: 0, gather: 0, cap: 0, fill: [0, 0, 0, 0] };
     const toward = (now, target) => now + (target - now) * EASE;
     const frame = (t) => {
-        const dpr = Math.min(devicePixelRatio, matchMedia("(pointer: fine)").matches ? 2 : 1.5);
-        const w = Math.round(innerWidth * dpr), h = Math.round(innerHeight * dpr);
-        if (canvas.width !== w || canvas.height !== h) {
-            canvas.width = w;
-            canvas.height = h;
-            gl.viewport(0, 0, w, h);
+        if (stopped) return;
+        try {
+            const dpr = Math.min(devicePixelRatio, matchMedia("(pointer: fine)").matches ? 2 : 1.5);
+            const w = Math.round(innerWidth * dpr), h = Math.round(innerHeight * dpr);
+            if (canvas.width !== w || canvas.height !== h) {
+                canvas.width = w;
+                canvas.height = h;
+                gl.viewport(0, 0, w, h);
+            }
+            const H = innerHeight;
+            const hero = box($(".hero-signal")), contact = box($("#contact")), grid = box($(".capability-grid")), list = box($(".approach-list"));
+            const [a, b] = cards.map(box);
+            const tops = steps.map((li) => box(li).top);
+            ease.scatter = toward(ease.scatter, clamp(-hero.top / (hero.height * 0.7)));
+            ease.gather = toward(ease.gather, clamp((H * 0.95 - contact.top) / (H * 0.7)));
+            ease.cap = toward(ease.cap, clamp((H * 0.95 - grid.top) / (H * 0.45)) * clamp((grid.bottom - H * 0.05) / (H * 0.35)));
+            ease.fill = ease.fill.map((f, k) => toward(f, clamp((H * 0.85 - tops[k]) / (H * 0.3))));
+            const [dx, dy, dsize] = dock(contact);
+            const uniforms = {
+                uRes: [w, h],
+                uTime: [t / 1000],
+                uDpr: [dpr],
+                uScatter: [ease.scatter],
+                uGather: [ease.gather],
+                uCap: [ease.cap],
+                uFill: ease.fill,
+                uHero: [(hero.left + hero.width / 2) * dpr, (hero.top + hero.height / 2) * dpr, Math.min(hero.width, hero.height) * 0.54 * dpr],
+                uDock: [dx * dpr, dy * dpr, dsize * dpr],
+                uCardL: [a.left * dpr, a.top * dpr, a.width * dpr, a.height * dpr],
+                uCardR: [b.left * dpr, b.top * dpr, b.width * dpr, b.height * dpr],
+                uRows: tops.map((y) => y * dpr),
+                uRowX: [list.left * dpr, list.width * dpr],
+                uPointer: [pointer.x * dpr, pointer.y * dpr],
+            };
+            gl.clearColor(0, 0, 0, 0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.useProgram(prog);
+            for (const [name, v] of Object.entries(uniforms)) gl[`uniform${v.length}f`](gl.getUniformLocation(prog, name), ...v);
+            gl.drawArrays(gl.POINTS, 0, N);
+        } catch {
+            stop();
+            return;
         }
-        const H = innerHeight;
-        const hero = box($(".hero-signal")), contact = box($("#contact")), grid = box($(".capability-grid")), list = box($(".approach-list"));
-        const [a, b] = cards.map(box);
-        const tops = steps.map((li) => box(li).top);
-        ease.scatter = toward(ease.scatter, clamp(-hero.top / (hero.height * 0.7)));
-        ease.gather = toward(ease.gather, clamp((H * 0.95 - contact.top) / (H * 0.7)));
-        ease.cap = toward(ease.cap, clamp((H * 0.95 - grid.top) / (H * 0.45)) * clamp((grid.bottom - H * 0.05) / (H * 0.35)));
-        ease.fill = ease.fill.map((f, k) => toward(f, clamp((H * 0.85 - tops[k]) / (H * 0.3))));
-        const [dx, dy, dsize] = dock(contact);
-        const uniforms = {
-            uRes: [w, h],
-            uTime: [t / 1000],
-            uDpr: [dpr],
-            uScatter: [ease.scatter],
-            uGather: [ease.gather],
-            uCap: [ease.cap],
-            uFill: ease.fill,
-            uHero: [(hero.left + hero.width / 2) * dpr, (hero.top + hero.height / 2) * dpr, Math.min(hero.width, hero.height) * 0.54 * dpr],
-            uDock: [dx * dpr, dy * dpr, dsize * dpr],
-            uCardL: [a.left * dpr, a.top * dpr, a.width * dpr, a.height * dpr],
-            uCardR: [b.left * dpr, b.top * dpr, b.width * dpr, b.height * dpr],
-            uRows: tops.map((y) => y * dpr),
-            uRowX: [list.left * dpr, list.width * dpr],
-            uPointer: [pointer.x * dpr, pointer.y * dpr],
-        };
-        gl.clearColor(0, 0, 0, 0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.useProgram(prog);
-        for (const [name, v] of Object.entries(uniforms)) gl[`uniform${v.length}f`](gl.getUniformLocation(prog, name), ...v);
-        gl.drawArrays(gl.POINTS, 0, N);
         requestAnimationFrame(frame);
     };
     requestAnimationFrame(frame);
 }
 
 if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    start().catch(() => {
-        $(".pixel-field")?.remove();
-        document.documentElement.classList.remove("pixels-live");
-        $(".hero-signal")?.classList.remove("signal-live");
-    });
+    start().catch(stop);
 }
