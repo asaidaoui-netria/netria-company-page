@@ -435,23 +435,6 @@ h1 em {
     z-index: -1;
 }
 
-/* Full bleed: the grid floor breaks out of the content column to the viewport edges.
-   !important beats the inline width: 100% that signal.js puts on every layer canvas. */
-.capabilities > .scene-fx {
-    left: calc(50% - 50vw);
-    width: 100vw !important;
-}
-
-/* 100vw counts a desktop scrollbar: clip that sliver instead of scrolling sideways */
-main {
-    overflow-x: clip;
-}
-
-.capabilities > .scene-fx {
-    opacity: 0.6;
-    mask-image: linear-gradient(to bottom, transparent 30%, black 75%);
-}
-
 .contact-link {
     position: relative;
 }

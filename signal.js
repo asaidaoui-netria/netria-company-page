@@ -42,29 +42,7 @@ const LAYERS = [
         ],
     },
     {
-        // 02 · Tron: the Grid, rolling toward a horizon; the cursor cuts a light-cycle wake.
-        host: "#capabilities",
-        components: [
-            {
-                type: "Perspective",
-                props: { tilt: 66, fov: 100, zoom: 1.6, center: { x: 0.5, y: 0.3 } },
-                children: [{ type: "Grid", id: "floor", props: { color: GREEN, cells: 12, thickness: 1.2 } }],
-            },
-            { type: "CursorRipples", props: { intensity: 8, decay: 6, radius: 0.4, chromaticSplit: 1.5, edges: "transparent" } },
-            { type: "Glow", props: { intensity: 2, threshold: 0.2, size: 12 } },
-        ],
-        // Grid has no speed prop: scroll it one cell per loop (wrap makes the seam invisible).
-        // ponytail: updates every frame even while scrolled away; gate on an IntersectionObserver if it shows in a profile.
-        wire(shader) {
-            const roll = (t) => {
-                shader.update("floor", { transform: { offsetY: (t / 4000) % (1 / 12), edges: "wrap" } });
-                requestAnimationFrame(roll);
-            };
-            requestAnimationFrame(roll);
-        },
-    },
-    {
-        // 03 · Contact: an oscilloscope trace that locks on when you reach for the email link.
+        // 02 · Contact: an oscilloscope trace that locks on when you reach for the email link.
         host: ".contact-scope",
         live: "signal-live",
         components: scope(0.35, 0.8),

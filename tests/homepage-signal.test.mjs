@@ -18,7 +18,7 @@ test("scene fx load as a module on top of the static page", () => {
 
 test("every scene gets exactly one layer, and articles get the divider trace", () => {
   const hosts = [...signal.matchAll(/^\s{8}host: "([^"]+)"/gm)].map((m) => m[1]);
-  assert.deepEqual(hosts, [".hero-signal", "#capabilities", ".contact-scope", ".article-scope"]);
+  assert.deepEqual(hosts, [".hero-signal", ".contact-scope", ".article-scope"]);
   for (const host of hosts) {
     const id = host.startsWith("#") ? host.slice(1) : null;
     const pages = html + article;
@@ -60,4 +60,10 @@ test("layers leave off-screen pausing to the renderer", () => {
 
 test("the principles number field is retired with its section", () => {
   assert.doesNotMatch(signal, /#principles|VT323|Severance/);
+});
+
+test("the capabilities section has no background layer", () => {
+  assert.doesNotMatch(signal, /#capabilities|Perspective|"floor"/);
+  assert.match(html, /<section class="section capabilities" id="capabilities">/);
+  assert.doesNotMatch(css, /\.capabilities > \.scene-fx|50vw/);
 });
