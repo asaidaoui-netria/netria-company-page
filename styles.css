@@ -278,6 +278,13 @@ a {
     z-index: 2;
 }
 
+.hero-summary {
+    max-width: 56ch;
+    margin-bottom: 2rem;
+    color: var(--color-muted);
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+}
+
 .eyebrow {
     display: flex;
     align-items: center;
@@ -634,6 +641,45 @@ main {
     font-size: 0.9rem;
 }
 
+.approach-list {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border);
+    list-style: none;
+}
+
+.approach-list li {
+    display: grid;
+    grid-template-columns: minmax(70px, 0.25fr) minmax(0, 1fr);
+    gap: 1rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.approach-list > li > span {
+    color: var(--color-signal);
+    font-family: var(--font-pixel);
+    font-size: 0.75rem;
+}
+
+.approach-list div {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.7fr) minmax(240px, 1fr);
+    gap: 2rem;
+}
+
+.approach-list h3 {
+    margin-bottom: 0;
+    font-size: clamp(1.2rem, 2vw, 1.7rem);
+    font-weight: 400;
+}
+
+.approach-list p {
+    max-width: 52ch;
+    margin-bottom: 0;
+    color: var(--color-muted);
+}
+
 .contact {
     padding: var(--section-space) clamp(1.5rem, 5vw, 4rem);
     border: 2px solid var(--color-border-strong);
@@ -784,7 +830,8 @@ main {
     }
 
     .section-heading,
-    .capability-grid {
+    .capability-grid,
+    .approach-list div {
         grid-template-columns: 1fr;
     }
 
@@ -838,6 +885,10 @@ main {
 
     .principle-grid {
         grid-template-columns: 1fr;
+    }
+
+    .approach-list li {
+        grid-template-columns: 42px 1fr;
     }
 
     .contact {

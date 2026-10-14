@@ -24,14 +24,21 @@ test("uses internationally neutral English metadata", () => {
   );
 });
 
-test("contains the approved dual-track content structure", () => {
-  for (const id of ["capabilities", "principles", "contact"]) {
-    assert.match(html, new RegExp(`<section[^>]+id="${id}"`));
-  }
+test("says what Netria builds and how a project runs", () => {
+  const ids = [...html.matchAll(/<section[^>]+id="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(ids, ["top", "capabilities", "approach", "principles", "contact"]);
+  const eyebrows = [...html.matchAll(/<p class="eyebrow"><span>(\d\d)<\/span>/g)].map((m) => m[1]);
+  assert.deepEqual(eyebrows, ["01", "02", "03", "04", "05"]);
 
   assert.match(authoredText, /Software for ideas and operations in motion\./);
+  assert.match(html, /<\/h1>\s*<p class="hero-summary">[^<]{40,}<\/p>/);
   assert.match(html, /Build a product/);
   assert.match(html, /Improve a system/);
+
+  const approach = html.slice(html.indexOf('id="approach"'), html.indexOf('id="principles"'));
+  const steps = [...approach.matchAll(/<li>\s*<span>0\d<\/span>\s*<div>\s*<h3>([^<]+)<\/h3>\s*<p>[^<]{30,}<\/p>/g)];
+  assert.deepEqual(steps.map((m) => m[1]), ["Frame the problem", "Prototype the path", "Build and validate", "Release and hand over"]);
+  assert.doesNotMatch(html, /«/, "an owner input was left unfilled");
 });
 
 test("uses direct email contact with no contact form", () => {

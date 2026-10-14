@@ -67,3 +67,10 @@ test("the principles number field stays behind readable text", () => {
   assert.match(css, /\.principles > \.scene-fx\s*\{[^}]*mask-image:[^}]*rgb\(0 0 0 \/ 0\.1\)\)/s);
   assert.match(css, /\.principles:has\(> \.scene-fx\) \.section-heading\s*\{[^}]*text-shadow:/s);
 });
+
+test("the process list stacks on tablets and keeps a narrow index column on phones", () => {
+  assert.match(css, /\.hero-summary\s*\{/);
+  assert.match(css, /\.approach-list li\s*\{[^}]*grid-template-columns:\s*minmax\(70px, 0\.25fr\) minmax\(0, 1fr\)/s);
+  assert.match(css, /@media\s*\(max-width:\s*900px\)[\s\S]*\.capability-grid,\s*\.approach-list div\s*\{\s*grid-template-columns:\s*1fr;/);
+  assert.match(css, /@media\s*\(max-width:\s*600px\)[\s\S]*\.approach-list li\s*\{\s*grid-template-columns:\s*42px 1fr;/);
+});
