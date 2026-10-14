@@ -13,8 +13,10 @@ test("uses internationally neutral English metadata", () => {
   assert.match(html, /<title>Netria — Custom Software &amp; Workflow Automation<\/title>/);
   assert.match(
     html,
-    /Netria designs and builds custom digital products and automated systems that turn complex work into forward motion\./
+    /Netria builds web apps, internal tools and automations for teams whose work has outgrown spreadsheets and off-the-shelf software\./
   );
+  // Search snippets, share cards and structured data all use the new line.
+  assert.doesNotMatch(html, /forward motion/);
   assert.match(html, /<link rel="canonical" href="https:\/\/www\.netria\.dev\/">/);
   // The bare domain redirects to www: every absolute URL should already point at www.
   assert.doesNotMatch(html, /https:\/\/netria\.dev/);
@@ -123,4 +125,9 @@ test("links from the July pager to #situations and #systems still land on the ca
 test("the principles section is gone, and its old links land on the process", () => {
   assert.doesNotMatch(html, /principle-grid|Working principles/);
   assert.match(html, /<ol class="approach-list" id="principles">/);
+});
+
+test("the header links straight to the process and the founder", () => {
+  const nav = html.slice(html.indexOf('id="navMenu"'), html.indexOf("</nav>"));
+  assert.match(nav, /<a href="#approach">How we work<\/a>\s*<a href="#founder">About<\/a>\s*<a href="\/articles\/">Articles<\/a>/);
 });

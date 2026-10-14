@@ -116,3 +116,7 @@ test("section headings use the full content width", () => {
   assert.match(css, /\.section-heading h2\s*\{[^}]*max-width:\s*36ch;/s);
   assert.match(css, /\.contact h2\s*\{[^}]*max-width:\s*24ch;/s);
 });
+
+test("the About link lands on the founder below the fixed header", () => {
+  assert.match(css, /\.founder\s*\{[^}]*scroll-margin-top:\s*calc\(var\(--header-height\) \+ 1\.5rem\);/s);
+});

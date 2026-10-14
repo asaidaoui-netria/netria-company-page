@@ -191,3 +191,10 @@ test("article bylines link to the founder on the homepage", () => {
   assert.match(page, /"url": "https:\/\/www\.netria\.dev\/#founder"/);
   assert.doesNotMatch(read("README.md"), /## To do/);
 });
+
+test("article pages share the homepage's header links and summary", () => {
+  const base = read("_includes/base.njk");
+  assert.match(base, /<a href="\/#approach">How we work<\/a>\s*<a href="\/#founder">About<\/a>/);
+  assert.doesNotMatch(read("llms.njk"), /forward motion/);
+  assert.match(read("llms.njk"), /Netria builds web apps, internal tools and automations/);
+});
