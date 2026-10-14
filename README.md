@@ -26,7 +26,7 @@ The **Quiet Signal** identity combines:
 
 ## Contact
 
-Visitors contact Netria directly at [hello@netria.dev](mailto:hello@netria.dev). Every article ends with the same enquiry box, whose email subject names the article, so enquiries show which post brought them in.
+Visitors contact Netria directly at [hello@netria.dev](mailto:hello@netria.dev). Every homepage email link opens with three short prompts (what, when, budget), and a Copy address button helps visitors whose browser opens no mail app. Every article ends with the same enquiry box, whose email subject names the article, so enquiries show which post brought them in.
 
 ## Writing Articles
 

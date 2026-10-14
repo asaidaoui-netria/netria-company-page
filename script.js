@@ -55,33 +55,38 @@ if (navToggle && navMenu) {
 }
 
 
-// Articles: a section's "#" link copies the section's address instead of jumping to it.
-const copyLinks = document.querySelectorAll(".heading-link");
+// Copy without leaving the page: an article section's "#" link copies its address, and a
+// [data-copy] button copies its value (the contact email).
+const copyTargets = document.querySelectorAll(".heading-link, [data-copy]");
 
-if (copyLinks.length) {
+if (copyTargets.length) {
     const status = document.createElement("p");
     status.className = "copy-status";
     status.setAttribute("role", "status");
     document.body.append(status);
 
-    copyLinks.forEach((link) => {
-        link.addEventListener("click", async (event) => {
+    copyTargets.forEach((el) => {
+        el.addEventListener("click", async (event) => {
             if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
                 return;
             }
             event.preventDefault();
+            const text = el.dataset.copy ?? location.origin + location.pathname + el.hash;
             try {
-                await navigator.clipboard.writeText(location.origin + location.pathname + link.hash);
+                await navigator.clipboard.writeText(text);
             } catch {
-                // No clipboard access: put the link in the address bar instead.
-                history.replaceState(null, "", link.hash);
+                // No clipboard access: a section link goes to the address bar instead; the
+                // email stays visible and selectable beside its button.
+                if (el.hash) {
+                    history.replaceState(null, "", el.hash);
+                }
                 return;
             }
-            link.dataset.copied = "";
-            status.textContent = "Link copied";
-            clearTimeout(link.copiedTimer);
-            link.copiedTimer = setTimeout(() => {
-                delete link.dataset.copied;
+            el.dataset.copied = "";
+            status.textContent = "Copied";
+            clearTimeout(el.copiedTimer);
+            el.copiedTimer = setTimeout(() => {
+                delete el.dataset.copied;
                 status.textContent = "";
             }, 2000);
         });

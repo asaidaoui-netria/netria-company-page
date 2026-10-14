@@ -87,7 +87,7 @@ test("article sections carry ids and a link that copies their address", () => {
     assert.equal(href, id);
   }
   assert.match(page, /id="fast-and-slow-thinking"/);
-  assert.match(read("script.js"), /navigator\.clipboard\.writeText\(location\.origin \+ location\.pathname \+ link\.hash\)/);
+  assert.match(read("script.js"), /location\.origin \+ location\.pathname \+ el\.hash/);
   // Shared links land on their heading: articles jump instantly (a smooth scroll aims before
   // fonts and images settle) and the explorer paints collapsed, not all panels then shrinking.
   const css = read("styles.css");

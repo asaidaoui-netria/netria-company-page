@@ -720,6 +720,27 @@ main {
     font-family: var(--font-mono);
 }
 
+.copy-email {
+    position: relative;
+    margin-top: 1rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--color-border-strong);
+    background: transparent;
+    color: var(--color-signal);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.copy-email:hover {
+    background: rgba(99, 255, 114, 0.06);
+}
+
+/* Without JavaScript the button would do nothing: the address beside it is selectable */
+.no-js .copy-email {
+    display: none;
+}
+
 .footer {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -1034,7 +1055,8 @@ main {
 }
 
 /* Above the "#", right-aligned to it, so it never pushes text or past the page edge */
-.article-body .heading-link[data-copied]::after {
+.article-body .heading-link[data-copied]::after,
+.copy-email[data-copied]::after {
     content: "Copied";
     position: absolute;
     right: 0;

@@ -74,3 +74,8 @@ test("the process list stacks on tablets and keeps a narrow index column on phon
   assert.match(css, /@media\s*\(max-width:\s*900px\)[\s\S]*\.capability-grid,\s*\.approach-list div\s*\{\s*grid-template-columns:\s*1fr;/);
   assert.match(css, /@media\s*\(max-width:\s*600px\)[\s\S]*\.approach-list li\s*\{\s*grid-template-columns:\s*42px 1fr;/);
 });
+
+test("the copy button hides without JavaScript and confirms a copy", () => {
+  assert.match(css, /\.no-js \.copy-email\s*\{\s*display:\s*none;/);
+  assert.match(css, /\.article-body \.heading-link\[data-copied\]::after,\s*\.copy-email\[data-copied\]::after\s*\{/);
+});

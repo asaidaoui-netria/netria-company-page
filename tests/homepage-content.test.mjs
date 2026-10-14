@@ -79,3 +79,20 @@ test("the page is one scrolling document with a page footer", () => {
   assert.match(html, /<\/main>\s*<footer class="footer">/);
   assert.match(html, /© 2026 Netria\. All rights reserved\./);
 });
+
+test("every email action opens a short brief, and the address can be copied", () => {
+  const mailtos = [...html.matchAll(/href="(mailto:[^"]+)"/g)].map((m) => m[1]);
+  assert.equal(mailtos.length, 3);
+  for (const href of mailtos) {
+    // %20 and %0D%0A, never "+": some mail apps show a literal plus.
+    assert.doesNotMatch(href, /\+/);
+    const url = new URL(href.replaceAll("&amp;", "&"));
+    assert.equal(url.pathname, "hello@netria.dev");
+    assert.equal(url.searchParams.get("subject"), "Project conversation");
+    assert.equal(
+      url.searchParams.get("body"),
+      "What do you want to build or fix?\r\n\r\n\r\nWhen do you need it?\r\n\r\n\r\nRough budget, if you have one:\r\n"
+    );
+  }
+  assert.match(html, /<button type="button" class="copy-email" data-copy="hello@netria\.dev">Copy address<\/button>/);
+});

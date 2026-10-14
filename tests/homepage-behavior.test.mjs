@@ -26,3 +26,10 @@ test("contains no retired form, analytics, or localization behavior", () => {
 test("keeps the behavior file intentionally small", () => {
   assert.ok(Buffer.byteLength(script, "utf8") < 5000);
 });
+
+test("copy buttons and section links share one clipboard handler that fails quietly", () => {
+  assert.match(script, /querySelectorAll\("\.heading-link, \[data-copy\]"\)/);
+  assert.match(script, /const text = el\.dataset\.copy \?\? location\.origin \+ location\.pathname \+ el\.hash;/);
+  assert.match(script, /navigator\.clipboard\.writeText\(text\)/);
+  assert.match(script, /\} catch \{/);
+});
