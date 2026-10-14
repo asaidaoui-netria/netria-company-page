@@ -29,7 +29,18 @@ test("keeps the behavior file intentionally small", () => {
 
 test("copy buttons and section links share one clipboard handler that fails quietly", () => {
   assert.match(script, /querySelectorAll\("\.heading-link, \[data-copy\]"\)/);
-  assert.match(script, /const text = el\.dataset\.copy \?\? location\.origin \+ location\.pathname \+ el\.hash;/);
+  // A button names the element whose text it copies; a section link copies its own address.
+  assert.match(script, /const target = el\.dataset\.copy && document\.getElementById\(el\.dataset\.copy\);/);
   assert.match(script, /navigator\.clipboard\.writeText\(text\)/);
   assert.match(script, /\} catch \{/);
+  // Refused: select the address so the keyboard can copy it.
+  assert.match(script, /getSelection\(\)\.selectAllChildren\(target\)/);
+});
+
+test("copy results are announced every time, naming what was copied", () => {
+  assert.match(script, /"Address copied"/);
+  assert.match(script, /"Link copied"/);
+  assert.match(script, /"Address selected/);
+  // Clearing first and refilling on the next frame makes a repeat copy announce again.
+  assert.match(script, /status\.textContent = "";\s*requestAnimationFrame\(/);
 });

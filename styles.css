@@ -536,6 +536,12 @@ main {
     gap: 1rem;
 }
 
+/* Old links to #situations and #systems (the July pager) land on the cards, below the header */
+.capability-grid,
+.capability-card {
+    scroll-margin-top: calc(var(--header-height) + 1.5rem);
+}
+
 .capability-card {
     position: relative;
     min-height: 300px;

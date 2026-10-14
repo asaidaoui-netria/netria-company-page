@@ -138,7 +138,7 @@ async function mountLayer({ host: selector, live, components, wire }, createShad
         fail();
         return;
     }
-    // The renderer pauses layers scrolled out of view.
+    // The renderer slows layers scrolled out of view to about one frame a second.
     wire?.(shader, host, canvas);
 }
 

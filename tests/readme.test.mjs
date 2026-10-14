@@ -20,3 +20,8 @@ test("does not document retired features or positioning", () => {
     /Morocco|Moroccan|Maroc|contact form|Formspree|Plausible|language selector|i18n\.js/i
   );
 });
+
+test("describes what the scripts and layers do today", () => {
+  assert.match(readme, /script\.js\s+# Mobile navigation and copy buttons/);
+  assert.doesNotMatch(readme, /progressive reveals|reference per section/);
+});

@@ -56,7 +56,7 @@ if (navToggle && navMenu) {
 
 
 // Copy without leaving the page: an article section's "#" link copies its address, and a
-// [data-copy] button copies its value (the contact email).
+// [data-copy] button copies the text of the element it names (the contact email).
 const copyTargets = document.querySelectorAll(".heading-link, [data-copy]");
 
 if (copyTargets.length) {
@@ -65,25 +65,37 @@ if (copyTargets.length) {
     status.setAttribute("role", "status");
     document.body.append(status);
 
+    // Empty, then refill on the next frame, so screen readers announce a repeat copy again.
+    const say = (message) => {
+        status.textContent = "";
+        requestAnimationFrame(() => {
+            status.textContent = message;
+        });
+    };
+
     copyTargets.forEach((el) => {
         el.addEventListener("click", async (event) => {
             if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
                 return;
             }
             event.preventDefault();
-            const text = el.dataset.copy ?? location.origin + location.pathname + el.hash;
+            const target = el.dataset.copy && document.getElementById(el.dataset.copy);
+            const text = target ? target.textContent : location.origin + location.pathname + el.hash;
             try {
                 await navigator.clipboard.writeText(text);
             } catch {
-                // No clipboard access: a section link goes to the address bar instead; the
-                // email stays visible and selectable beside its button.
-                if (el.hash) {
+                // No clipboard access: select the address so the keyboard can copy it, or put
+                // the section's link in the address bar.
+                if (target) {
+                    getSelection().selectAllChildren(target);
+                    say("Address selected, ready to copy");
+                } else {
                     history.replaceState(null, "", el.hash);
                 }
                 return;
             }
             el.dataset.copied = "";
-            status.textContent = "Copied";
+            say(target ? "Address copied" : "Link copied");
             clearTimeout(el.copiedTimer);
             el.copiedTimer = setTimeout(() => {
                 delete el.dataset.copied;

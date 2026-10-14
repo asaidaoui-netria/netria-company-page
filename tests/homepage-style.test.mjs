@@ -79,3 +79,7 @@ test("the copy button hides without JavaScript and confirms a copy", () => {
   assert.match(css, /\.no-js \.copy-email\s*\{\s*display:\s*none;/);
   assert.match(css, /\.article-body \.heading-link\[data-copied\]::after,\s*\.copy-email\[data-copied\]::after\s*\{/);
 });
+
+test("old card anchors land below the fixed header", () => {
+  assert.match(css, /\.capability-grid,\s*\.capability-card\s*\{\s*scroll-margin-top:\s*calc\(var\(--header-height\) \+ 1\.5rem\);/);
+});

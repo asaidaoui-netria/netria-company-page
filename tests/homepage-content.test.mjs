@@ -94,7 +94,9 @@ test("every email action opens a short brief, and the address can be copied", ()
       "What do you want to build or fix?\r\n\r\n\r\nWhen do you need it?\r\n\r\n\r\nRough budget, if you have one:\r\n"
     );
   }
-  assert.match(html, /<button type="button" class="copy-email" data-copy="hello@netria\.dev">Copy address<\/button>/);
+  assert.match(html, /<span id="contact-address">hello@netria\.dev<\/span>/);
+  // aria-label keeps the name fixed while the "Copied" tag shows.
+  assert.match(html, /<button type="button" class="copy-email" data-copy="contact-address" aria-label="Copy address">Copy address<\/button>/);
 });
 
 test("names the person a visitor will work with", () => {
@@ -109,4 +111,11 @@ test("names the person a visitor will work with", () => {
   assert.equal(org.founder["@type"], "Person");
   assert.equal(org.founder["@id"], "https://www.netria.dev/#founder");
   assert.equal(org.founder.name, "Abderrahman SaidAlaoui");
+});
+
+
+test("links from the July pager to #situations and #systems still land on the capabilities", () => {
+  const caps = html.slice(html.indexOf('id="capabilities"'), html.indexOf('id="approach"'));
+  assert.match(caps, /<div class="capability-grid" id="situations">/);
+  assert.match(caps, /<article class="capability-card" id="systems">/);
 });
