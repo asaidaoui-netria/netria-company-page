@@ -1,11 +1,10 @@
-// Scene fx: WebGPU layers for the homepage (shaders.com), each tuned to a piece of
-// green-phosphor screen culture, plus the article divider trace. Progressive: the static page
+// Scene fx: WebGPU oscilloscope traces (shaders.com) on the homepage contact link and the
+// article divider. The hero moth lives in pixels.js. Progressive: the static page
 // stays unless WebGPU, a fine pointer and motion all line up, and any layer that fails just
 // removes its canvas. Pages with no layer host never download the bundle.
 // Pinned by an import-map integrity hash in index.html: bump both together.
 const SHADERS_URL = "https://cdn.jsdelivr.net/npm/shaders@4.0.0/dist/js/bundle.js";
 const GREEN = "#63ff72";
-const MOTH = new URL("/assets/netria-logo-navbar-transparent.png", location.href).href;
 
 const scope = (amplitude, speed) => [
     {
@@ -23,26 +22,7 @@ const scope = (amplitude, speed) => [
 
 const LAYERS = [
     {
-        // 01 · An LED-matrix moth the cursor scatters.
-        host: ".hero-signal",
-        live: "signal-live",
-        components: [
-            {
-                type: "Pixelate",
-                props: { scale: 76, gap: 0.18 },
-                children: [
-                    {
-                        type: "PixelThrow",
-                        props: { strength: 1, keyInfluence: 0, radius: 0.3, friction: 0.08, momentum: 0.85, edges: "transparent" },
-                        children: [{ type: "ImageTexture", props: { url: MOTH, objectFit: "contain", transform: { scale: 0.54 } } }],
-                    },
-                ],
-            },
-            { type: "Glitch", props: { intensity: 0.35, speed: 0.6, rgbShift: 3, colorBarIntensity: 0, mirrorAmount: 0 } },
-        ],
-    },
-    {
-        // 02 · Contact: an oscilloscope trace that locks on when you reach for the email link.
+        // Contact: an oscilloscope trace that locks on when you reach for the email link.
         host: ".contact-scope",
         live: "signal-live",
         components: scope(0.35, 0.8),

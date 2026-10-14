@@ -24,5 +24,5 @@ test("does not document retired features or positioning", () => {
 test("describes what the scripts and layers do today", () => {
   assert.match(readme, /script\.js\s+# Mobile navigation and copy buttons/);
   assert.doesNotMatch(readme, /progressive reveals|reference per section|Severance/);
-  assert.match(readme, /two green-phosphor references/);
+  assert.match(readme, /moth pixels/);
 });

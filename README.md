@@ -21,7 +21,8 @@ The **Quiet Signal** identity combines:
 - self-hosted Fusion Pixel bitmap typography with technical monospace labels;
 - CRT scanlines, dithered textures, pixel-cut corners, and hard offset shadows;
 - restrained grids, particles, and squared orbital geometry;
-- live WebGPU layers via [shaders](https://github.com/shader-effects-inc/shaders), two green-phosphor references: an LED-matrix moth the cursor scatters (hero) and an oscilloscope trace that spikes when you reach for the email link (contact). They load lazily and only with WebGPU, a fine pointer and motion allowed; otherwise the static page stays;
+- moth pixels that follow the visitor down the page (plain WebGL2): the hero moth's LED pixels scatter as you scroll, draw an app window and a node diagram behind the two frosted capability cards, pour into the four process dividers and rebuild the moth at the contact. The cursor pushes them aside. They run only with WebGL2 and motion allowed; otherwise the static page stays;
+- a live WebGPU oscilloscope trace via [shaders](https://github.com/shader-effects-inc/shaders) that spikes when you reach for the email link. It loads lazily and only with WebGPU, a fine pointer and motion allowed;
 - an ordinary scrolling page, so section links, the keyboard and reduced motion behave as browsers expect.
 
 ## Contact
@@ -55,7 +56,8 @@ Posts marked `draft: true` show in `npm start` but are never published. Optional
 ├── llms.njk                 # Generates llms.txt, a site summary for AI answer engines
 ├── sitemap.njk              # Generates sitemap.xml
 ├── script.js                # Mobile navigation and copy buttons
-├── signal.js                # Live WebGPU scene layers (progressive)
+├── pixels.js                # Moth pixels that follow the scroll (progressive)
+├── signal.js                # Live WebGPU oscilloscope traces (progressive)
 └── styles.css               # Quiet Signal visual system
 ```
 

@@ -18,7 +18,7 @@ test("scene fx load as a module on top of the static page", () => {
 
 test("every scene gets exactly one layer, and articles get the divider trace", () => {
   const hosts = [...signal.matchAll(/^\s{8}host: "([^"]+)"/gm)].map((m) => m[1]);
-  assert.deepEqual(hosts, [".hero-signal", ".contact-scope", ".article-scope"]);
+  assert.deepEqual(hosts, [".contact-scope", ".article-scope"]);
   for (const host of hosts) {
     const id = host.startsWith("#") ? host.slice(1) : null;
     const pages = html + article;

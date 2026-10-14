@@ -415,14 +415,42 @@ h1 em {
     pointer-events: none;
 }
 
-.hero-signal .scene-fx {
-    z-index: 1;
-    mask-image: radial-gradient(circle, black 30%, transparent 70%);
-}
-
 .signal-live .signal-core,
 .signal-live .signal-grid {
     visibility: hidden;
+}
+
+/* pixels.js: the moth's pixels on one fixed canvas behind the whole page */
+.pixel-field {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Otherwise the body's own background paints over the canvas */
+.pixels-live body {
+    background: transparent;
+}
+
+/* Frosted glass: the shapes the pixels draw glow through behind the card text */
+.pixels-live .capability-card {
+    background:
+        var(--dither) 0 0 / 6px 6px,
+        linear-gradient(145deg, rgba(99, 255, 114, 0.07), transparent 40%),
+        rgba(10, 14, 11, 0.55);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+/* Lets the rebuilt moth show through the contact panel */
+.pixels-live .contact {
+    background:
+        var(--dither) 0 0 / 6px 6px,
+        radial-gradient(circle at 90% 20%, rgba(99, 255, 114, 0.16), transparent 24rem),
+        rgba(10, 14, 11, 0.5);
 }
 
 /* Behind the section's content, above the page background: each scene is its own stacking context */
