@@ -107,7 +107,7 @@ test("every email action opens a short brief, and the address can be copied", ()
 test("names the person a visitor will work with", () => {
   const main = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
   const founder = main.slice(main.indexOf('id="founder"'));
-  assert.match(founder, /<img class="founder-photo" src="assets\/founder\.webp" alt="" width="72" height="72">\s*<p class="founder-name">[^<]+<span>[^<]+<\/span><\/p>\s*<p class="founder-bio">[^<]{60,}<\/p>/);
+  assert.match(founder, /<img class="founder-photo" src="assets\/founder\.webp" alt="" width="128" height="128">\s*<p class="founder-name">[^<]+<span>[^<]+<\/span><\/p>\s*<p class="founder-bio">[^<]{60,}<\/p>/);
   assert.ok(statSync(join(root, "assets/founder.webp")).size < 20_000, "photo stays small");
   assert.ok(main.indexOf('id="founder"') > main.indexOf('id="contact"'), "founder sits in the contact section");
   assert.doesNotMatch(main, /forward motion|«/);

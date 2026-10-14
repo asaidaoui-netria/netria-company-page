@@ -115,6 +115,10 @@ test("the founder photo is smooth, not pixelated like the logos, and the bio sta
   assert.match(css, /\.founder-bio\s*\{[^}]*color:\s*var\(--color-muted\);/s);
 });
 
+test("the founder name wraps at the space on phones, not at the hyphen in Said-Alaoui", () => {
+  assert.match(css, /\.founder-name\s*\{[^}]*text-wrap:\s*balance;/s);
+});
+
 test("the About link lands on the founder below the fixed header", () => {
   assert.match(css, /\.founder\s*\{[^}]*scroll-margin-top:\s*calc\(var\(--header-height\) \+ 1\.5rem\);/s);
 });
