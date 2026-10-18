@@ -1556,6 +1556,7 @@ h1 em {
 }
 
 .fh-body {
+    position: relative;
     display: grid;
     grid-template-columns: calc(3.2 * var(--u)) minmax(0, 1fr);
     gap: calc(0.9 * var(--u)) calc(1.2 * var(--u));
@@ -1623,10 +1624,16 @@ h1 em {
     color: var(--color-muted);
 }
 
-.fh-edge {
+/* Green marks a post worth reading: one that stays open, or one reopened with Keep */
+.fh-mark {
     position: absolute;
     inset: 0;
-    pointer-events: none;
+    background: rgba(99, 255, 114, 0.06);
+    box-shadow: inset calc(0.35 * var(--u)) 0 0 var(--color-signal);
+}
+
+.fh-noise .fh-mark {
+    opacity: 0;
 }
 
 .fh-cursor {
@@ -1687,7 +1694,7 @@ h1 em {
 }
 
 /* 17 s: 0-3.2 the feed scrolls into place; 3.4 every post blurs while it is read; from 4.1, one post every
-   0.3 s folds into a bar (a green flash) or comes back sharp; 10.1-12.8 a cursor presses Keep on the course
+   0.3 s folds into a bar or comes back sharp, marked green; 10.1-12.8 a cursor presses Keep on the course
    launch and it opens again; 13.3 the closing line; 16.3 fade out. Keyframes are percentages of 17 s. */
 @media (prefers-reduced-motion: no-preference) {
     .fh-pause {
@@ -1714,28 +1721,23 @@ h1 em {
     .fh-post-0 { animation-name: fh-fold-0; }
     .fh-post-0 .fh-body { animation-name: fh-post-0; }
     .fh-post-0 .fh-bar { animation-name: fh-bar-0; }
-    .fh-post-0 .fh-bar .fh-edge { animation-name: fh-edge-0; }
-    .fh-post-0 .fh-bar b { animation-name: fh-reason-0; }
     .fh-post-1 .fh-body { animation-name: fh-post-1; }
+    .fh-post-1 .fh-mark { animation-name: fh-mark-1; }
     .fh-post-2 { animation-name: fh-fold-2; }
     .fh-post-2 .fh-body { animation-name: fh-post-2; }
     .fh-post-2 .fh-bar { animation-name: fh-bar-2; }
-    .fh-post-2 .fh-bar .fh-edge { animation-name: fh-edge-2; }
-    .fh-post-2 .fh-bar b { animation-name: fh-reason-2; }
     .fh-post-3 { animation-name: fh-fold-3; }
     .fh-post-3 .fh-body { animation-name: fh-post-3; }
     .fh-post-3 .fh-bar { animation-name: fh-bar-3; }
-    .fh-post-3 .fh-bar .fh-edge { animation-name: fh-edge-3; }
-    .fh-post-3 .fh-bar b { animation-name: fh-reason-3; }
     .fh-post-4 { animation-name: fh-fold-4; }
     .fh-post-4 .fh-body { animation-name: fh-post-4; }
     .fh-post-4 .fh-bar { animation-name: fh-bar-4; }
-    .fh-post-4 .fh-bar .fh-edge { animation-name: fh-edge-4; }
-    .fh-post-4 .fh-bar b { animation-name: fh-reason-4; }
-    .fh-post-4 > .fh-edge { animation-name: fh-kept; }
+    .fh-post-4 .fh-mark { animation-name: fh-kept; }
     .fh-keep { animation-name: fh-keep; }
     .fh-post-5 .fh-body { animation-name: fh-post-5; }
+    .fh-post-5 .fh-mark { animation-name: fh-mark-5; }
     .fh-post-6 .fh-body { animation-name: fh-post-6; }
+    .fh-post-6 .fh-mark { animation-name: fh-mark-6; }
     .fh-cursor { animation-name: fh-cursor; }
 }
 
@@ -1795,22 +1797,15 @@ h1 em {
     26.76%, 100% { opacity: 1; }
 }
 
-@keyframes fh-edge-0 {
-    0%, 25.88% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
-    27.06%, 32.35% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 1); }
-    35.88%, 100% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
-}
-
-@keyframes fh-reason-0 {
-    0%, 25.88% { color: var(--color-text); }
-    27.06%, 32.35% { color: var(--color-signal); }
-    35.88%, 100% { color: var(--color-text); }
-}
-
 @keyframes fh-post-1 {
     0%, 20% { filter: none; }
     22.35%, 25.88% { filter: blur(calc(0.32 * var(--u))); }
     27.65%, 100% { filter: none; }
+}
+
+@keyframes fh-mark-1 {
+    0%, 27.06% { opacity: 0; }
+    28.82%, 100% { opacity: 1; }
 }
 
 @keyframes fh-fold-2 {
@@ -1829,18 +1824,6 @@ h1 em {
     30.29%, 100% { opacity: 1; }
 }
 
-@keyframes fh-edge-2 {
-    0%, 29.41% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
-    30.59%, 35.88% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 1); }
-    39.41%, 100% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
-}
-
-@keyframes fh-reason-2 {
-    0%, 29.41% { color: var(--color-text); }
-    30.59%, 35.88% { color: var(--color-signal); }
-    39.41%, 100% { color: var(--color-text); }
-}
-
 @keyframes fh-fold-3 {
     0%, 29.41% { height: calc(7.7 * var(--u)); }
     32.06%, 100% { height: calc(4.4 * var(--u)); }
@@ -1855,18 +1838,6 @@ h1 em {
 @keyframes fh-bar-3 {
     0%, 30.29% { opacity: 0; }
     32.06%, 100% { opacity: 1; }
-}
-
-@keyframes fh-edge-3 {
-    0%, 31.18% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
-    32.35%, 37.65% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 1); }
-    41.18%, 100% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
-}
-
-@keyframes fh-reason-3 {
-    0%, 31.18% { color: var(--color-text); }
-    32.35%, 37.65% { color: var(--color-signal); }
-    41.18%, 100% { color: var(--color-text); }
 }
 
 @keyframes fh-fold-4 {
@@ -1889,22 +1860,9 @@ h1 em {
     69.71%, 100% { opacity: 0; }
 }
 
-@keyframes fh-edge-4 {
-    0%, 32.94% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
-    34.12%, 39.41% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 1); }
-    42.94%, 100% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
-}
-
-@keyframes fh-reason-4 {
-    0%, 32.94% { color: var(--color-text); }
-    34.12%, 39.41% { color: var(--color-signal); }
-    42.94%, 100% { color: var(--color-text); }
-}
-
 @keyframes fh-kept {
-    0%, 69.41% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
-    71.18%, 77.06% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 1); }
-    80.59%, 100% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
+    0%, 69.41% { opacity: 0; }
+    71.18%, 100% { opacity: 1; }
 }
 
 @keyframes fh-keep {
@@ -1918,10 +1876,20 @@ h1 em {
     34.71%, 100% { filter: none; }
 }
 
+@keyframes fh-mark-5 {
+    0%, 34.12% { opacity: 0; }
+    35.88%, 100% { opacity: 1; }
+}
+
 @keyframes fh-post-6 {
     0%, 20% { filter: none; }
     22.35%, 34.71% { filter: blur(calc(0.32 * var(--u))); }
     36.47%, 100% { filter: none; }
+}
+
+@keyframes fh-mark-6 {
+    0%, 35.88% { opacity: 0; }
+    37.65%, 100% { opacity: 1; }
 }
 
 @keyframes fh-cursor {
