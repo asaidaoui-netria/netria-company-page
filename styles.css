@@ -1319,6 +1319,74 @@ h1 em {
     font-size: 0.85rem;
 }
 
+/* A mocked-up stretch of feed: placeholder posts around one collapsed into a one-line bar */
+.df-feed {
+    border: 1px solid var(--color-border);
+}
+
+.df-post {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 0.5rem 0.75rem;
+    padding: 0.9rem 1rem;
+}
+
+.df-post::before {
+    content: "";
+    grid-row: span 3;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: rgba(99, 255, 114, 0.08);
+}
+
+.df-post i {
+    width: var(--w);
+    height: 0.5rem;
+    background: rgba(99, 255, 114, 0.08);
+}
+
+.df-collapsed {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    white-space: nowrap;
+    padding: 0.6rem 1rem;
+    border-block: 1px solid var(--color-border);
+    color: var(--color-dim);
+}
+
+.df-collapsed b {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.df-who {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.df-pill {
+    padding: 0.1rem 0.7rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    color: var(--color-muted);
+}
+
+.df-pressed {
+    border-color: var(--color-signal);
+    color: var(--color-signal);
+}
+
+/* Too narrow for the handle: the bar keeps its reason and buttons on one line */
+@media (max-width: 420px) {
+    .df-who {
+        visibility: hidden;
+    }
+}
+
 @media (max-width: 600px) {
     .df-questions {
         grid-template-columns: 1fr;
@@ -1353,6 +1421,13 @@ h1 em {
     .df-win {
         animation: df-win 9s steps(2) infinite;
     }
+}
+
+/* A figure that only reports measured scores holds still in its finished state */
+.df-still .df-input p::after,
+.df-still .df-bar::before,
+.df-still :is(.df-pass, .df-num, .df-win) {
+    animation: none;
 }
 
 @keyframes df-scan {
@@ -1396,6 +1471,468 @@ h1 em {
     height: auto;
     image-rendering: auto;
 }
+
+/* Xift article hook: a 17 s loop under the lede, plain HTML in the Markdown. Sizes are in --u, a
+   hundredth of the frame's width; on phones the frame turns portrait, the feed fills the width and --u
+   grows with it. The base styles are the still frame (the noise folded, the third line of narration). */
+.feed-hook {
+    container-type: inline-size;
+}
+
+.fh-frame {
+    --u: 1cqw;
+    position: relative;
+    aspect-ratio: 16 / 9;
+    container-type: inline-size;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    background-image: linear-gradient(rgba(99, 255, 114, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 255, 114, 0.08) 1px, transparent 1px);
+    background-size: 4cqw 4cqw;
+    line-height: 1.4;
+}
+
+.fh-scene {
+    position: absolute;
+    inset: 0;
+}
+
+.fh-frame p {
+    margin: 0;
+}
+
+.fh-frame i {
+    display: block;
+}
+
+.fh-caps {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 5cqw;
+    width: 34cqw;
+    display: grid;
+    align-items: center;
+    font: 400 3.6cqw/1.25 var(--font-pixel);
+}
+
+.fh-cap {
+    grid-area: 1 / 1;
+    opacity: 0;
+    text-wrap: balance;
+}
+
+.fh-cap-2 {
+    opacity: 1;
+}
+
+.fh-cap-4 {
+    color: var(--color-signal);
+}
+
+.fh-feed {
+    position: absolute;
+    top: 3.5cqw;
+    left: 44cqw;
+    width: calc(51 * var(--u));
+    border: 1px solid var(--color-border);
+    border-bottom: 0;
+    background: var(--color-bg);
+}
+
+.fh-post {
+    position: relative;
+    height: calc(10.4 * var(--u));
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.fh-short {
+    height: calc(7.7 * var(--u));
+}
+
+.fh-noise {
+    height: calc(4.4 * var(--u));
+}
+
+.fh-body {
+    display: grid;
+    grid-template-columns: calc(3.2 * var(--u)) minmax(0, 1fr);
+    gap: calc(0.9 * var(--u)) calc(1.2 * var(--u));
+    padding: calc(1.5 * var(--u)) calc(1.8 * var(--u));
+}
+
+.fh-noise .fh-body {
+    opacity: 0;
+}
+
+.fh-body::before {
+    content: "";
+    grid-row: span 2;
+    height: calc(3.2 * var(--u));
+    border-radius: 50%;
+    background: rgba(99, 255, 114, 0.08);
+}
+
+.fh-name,
+.fh-who {
+    height: calc(0.8 * var(--u));
+    background: rgba(99, 255, 114, 0.08);
+}
+
+.fh-name {
+    width: 30%;
+}
+
+.fh-body p {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: calc(1.95 * var(--u));
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.fh-bar {
+    position: absolute;
+    inset: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: calc(1.2 * var(--u));
+    height: calc(4.4 * var(--u));
+    padding: 0 calc(1.8 * var(--u));
+    color: var(--color-dim);
+    font: calc(1.55 * var(--u)) var(--font-mono);
+    white-space: nowrap;
+}
+
+.fh-bar b {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.fh-who {
+    flex: 1;
+    max-width: calc(9 * var(--u));
+    margin-right: auto;
+}
+
+.fh-bar span {
+    padding: calc(0.2 * var(--u)) calc(1.3 * var(--u));
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    color: var(--color-muted);
+}
+
+.fh-edge {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.fh-cursor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(2.2 * var(--u));
+    opacity: 0;
+}
+
+.feed-hook figcaption {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    color: var(--color-dim);
+    font-size: 0.85rem;
+}
+
+/* Only shown when the loop runs: it stops and restarts it */
+.fh-pause {
+    display: none;
+    flex: none;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.fh-pause input {
+    margin: 0;
+    accent-color: var(--color-signal);
+}
+
+@container (max-width: 34rem) {
+    .fh-frame {
+        --u: 1.76cqw;
+        aspect-ratio: 4 / 5;
+        background-size: 8cqw 8cqw;
+    }
+
+    .fh-caps {
+        top: 6cqw;
+        right: 6cqw;
+        bottom: auto;
+        width: auto;
+        height: 15cqw;
+        align-items: start;
+        font-size: 5.4cqw;
+    }
+
+    .fh-feed {
+        top: 25cqw;
+        left: 5cqw;
+    }
+}
+
+/* 17 s: 0-3.2 the feed scrolls into place; 3.4 every post blurs while it is read; from 4.1, one post every
+   0.3 s folds into a bar (a green flash) or comes back sharp; 10.1-12.8 a cursor presses Keep on the course
+   launch and it opens again; 13.3 the closing line; 16.3 fade out. Keyframes are percentages of 17 s. */
+@media (prefers-reduced-motion: no-preference) {
+    .fh-pause {
+        display: flex;
+    }
+
+    .fh-frame * {
+        animation-duration: 17s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+    }
+
+    .feed-hook:has(.fh-pause input:checked) .fh-frame * {
+        animation-play-state: paused;
+    }
+
+    .fh-scene { animation-name: fh-scene; }
+    .fh-feed { animation-name: fh-feed; }
+    .fh-cap-0 { animation-name: fh-cap-0; }
+    .fh-cap-1 { animation-name: fh-cap-1; }
+    .fh-cap-2 { animation-name: fh-cap-2; }
+    .fh-cap-3 { animation-name: fh-cap-3; }
+    .fh-cap-4 { animation-name: fh-cap-4; }
+    .fh-post-0 { animation-name: fh-fold-0; }
+    .fh-post-0 .fh-body { animation-name: fh-post-0; }
+    .fh-post-0 .fh-bar { animation-name: fh-bar-0; }
+    .fh-post-0 .fh-bar .fh-edge { animation-name: fh-edge-0; }
+    .fh-post-0 .fh-bar b { animation-name: fh-reason-0; }
+    .fh-post-1 .fh-body { animation-name: fh-post-1; }
+    .fh-post-2 { animation-name: fh-fold-2; }
+    .fh-post-2 .fh-body { animation-name: fh-post-2; }
+    .fh-post-2 .fh-bar { animation-name: fh-bar-2; }
+    .fh-post-2 .fh-bar .fh-edge { animation-name: fh-edge-2; }
+    .fh-post-2 .fh-bar b { animation-name: fh-reason-2; }
+    .fh-post-3 { animation-name: fh-fold-3; }
+    .fh-post-3 .fh-body { animation-name: fh-post-3; }
+    .fh-post-3 .fh-bar { animation-name: fh-bar-3; }
+    .fh-post-3 .fh-bar .fh-edge { animation-name: fh-edge-3; }
+    .fh-post-3 .fh-bar b { animation-name: fh-reason-3; }
+    .fh-post-4 { animation-name: fh-fold-4; }
+    .fh-post-4 .fh-body { animation-name: fh-post-4; }
+    .fh-post-4 .fh-bar { animation-name: fh-bar-4; }
+    .fh-post-4 .fh-bar .fh-edge { animation-name: fh-edge-4; }
+    .fh-post-4 .fh-bar b { animation-name: fh-reason-4; }
+    .fh-post-4 > .fh-edge { animation-name: fh-kept; }
+    .fh-keep { animation-name: fh-keep; }
+    .fh-post-5 .fh-body { animation-name: fh-post-5; }
+    .fh-post-6 .fh-body { animation-name: fh-post-6; }
+    .fh-cursor { animation-name: fh-cursor; }
+}
+
+@keyframes fh-scene {
+    0% { opacity: 0; }
+    2.35%, 95.88% { opacity: 1; }
+    99.41%, 100% { opacity: 0; }
+}
+
+@keyframes fh-feed {
+    0% { transform: translateY(calc(12 * var(--u))); animation-timing-function: cubic-bezier(0.2, 0.6, 0.3, 1); }
+    18.82%, 100% { transform: none; }
+}
+
+@keyframes fh-cap-0 {
+    0%, 2.94% { opacity: 0; transform: translateY(calc(0.8 * var(--u))); }
+    5.59%, 17.65% { opacity: 1; transform: none; }
+    19.41%, 100% { opacity: 0; transform: none; }
+}
+
+@keyframes fh-cap-1 {
+    0%, 19.41% { opacity: 0; transform: translateY(calc(0.8 * var(--u))); }
+    22.06%, 37.65% { opacity: 1; transform: none; }
+    39.41%, 100% { opacity: 0; transform: none; }
+}
+
+@keyframes fh-cap-2 {
+    0%, 39.41% { opacity: 0; transform: translateY(calc(0.8 * var(--u))); }
+    42.06%, 56.47% { opacity: 1; transform: none; }
+    58.24%, 100% { opacity: 0; transform: none; }
+}
+
+@keyframes fh-cap-3 {
+    0%, 58.24% { opacity: 0; transform: translateY(calc(0.8 * var(--u))); }
+    60.88%, 76.47% { opacity: 1; transform: none; }
+    78.24%, 100% { opacity: 0; transform: none; }
+}
+
+@keyframes fh-cap-4 {
+    0%, 78.24% { opacity: 0; transform: translateY(calc(0.8 * var(--u))); }
+    80.88%, 100% { opacity: 1; transform: none; }
+}
+
+@keyframes fh-fold-0 {
+    0%, 24.12% { height: calc(10.4 * var(--u)); }
+    26.76%, 100% { height: calc(4.4 * var(--u)); }
+}
+
+@keyframes fh-post-0 {
+    0%, 20% { opacity: 1; filter: none; }
+    22.35%, 24.12% { opacity: 1; filter: blur(calc(0.32 * var(--u))); }
+    25.59%, 100% { opacity: 0; filter: blur(calc(0.32 * var(--u))); }
+}
+
+@keyframes fh-bar-0 {
+    0%, 25% { opacity: 0; }
+    26.76%, 100% { opacity: 1; }
+}
+
+@keyframes fh-edge-0 {
+    0%, 25.88% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
+    27.06%, 32.35% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 1); }
+    35.88%, 100% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
+}
+
+@keyframes fh-reason-0 {
+    0%, 25.88% { color: var(--color-text); }
+    27.06%, 32.35% { color: var(--color-signal); }
+    35.88%, 100% { color: var(--color-text); }
+}
+
+@keyframes fh-post-1 {
+    0%, 20% { filter: none; }
+    22.35%, 25.88% { filter: blur(calc(0.32 * var(--u))); }
+    27.65%, 100% { filter: none; }
+}
+
+@keyframes fh-fold-2 {
+    0%, 27.65% { height: calc(10.4 * var(--u)); }
+    30.29%, 100% { height: calc(4.4 * var(--u)); }
+}
+
+@keyframes fh-post-2 {
+    0%, 20% { opacity: 1; filter: none; }
+    22.35%, 27.65% { opacity: 1; filter: blur(calc(0.32 * var(--u))); }
+    29.12%, 100% { opacity: 0; filter: blur(calc(0.32 * var(--u))); }
+}
+
+@keyframes fh-bar-2 {
+    0%, 28.53% { opacity: 0; }
+    30.29%, 100% { opacity: 1; }
+}
+
+@keyframes fh-edge-2 {
+    0%, 29.41% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
+    30.59%, 35.88% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 1); }
+    39.41%, 100% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
+}
+
+@keyframes fh-reason-2 {
+    0%, 29.41% { color: var(--color-text); }
+    30.59%, 35.88% { color: var(--color-signal); }
+    39.41%, 100% { color: var(--color-text); }
+}
+
+@keyframes fh-fold-3 {
+    0%, 29.41% { height: calc(7.7 * var(--u)); }
+    32.06%, 100% { height: calc(4.4 * var(--u)); }
+}
+
+@keyframes fh-post-3 {
+    0%, 20% { opacity: 1; filter: none; }
+    22.35%, 29.41% { opacity: 1; filter: blur(calc(0.32 * var(--u))); }
+    30.88%, 100% { opacity: 0; filter: blur(calc(0.32 * var(--u))); }
+}
+
+@keyframes fh-bar-3 {
+    0%, 30.29% { opacity: 0; }
+    32.06%, 100% { opacity: 1; }
+}
+
+@keyframes fh-edge-3 {
+    0%, 31.18% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
+    32.35%, 37.65% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 1); }
+    41.18%, 100% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
+}
+
+@keyframes fh-reason-3 {
+    0%, 31.18% { color: var(--color-text); }
+    32.35%, 37.65% { color: var(--color-signal); }
+    41.18%, 100% { color: var(--color-text); }
+}
+
+@keyframes fh-fold-4 {
+    0%, 31.18% { height: calc(10.4 * var(--u)); }
+    33.82%, 68.24% { height: calc(4.4 * var(--u)); }
+    71.18%, 100% { height: calc(10.4 * var(--u)); }
+}
+
+@keyframes fh-post-4 {
+    0%, 20% { opacity: 1; filter: none; }
+    22.35%, 31.18% { opacity: 1; filter: blur(calc(0.32 * var(--u))); }
+    32.65% { opacity: 0; filter: blur(calc(0.32 * var(--u))); }
+    68.24% { opacity: 0; filter: none; }
+    70.59%, 100% { opacity: 1; filter: none; }
+}
+
+@keyframes fh-bar-4 {
+    0%, 32.06% { opacity: 0; }
+    33.82%, 68.24% { opacity: 1; }
+    69.71%, 100% { opacity: 0; }
+}
+
+@keyframes fh-edge-4 {
+    0%, 32.94% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
+    34.12%, 39.41% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 1); }
+    42.94%, 100% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
+}
+
+@keyframes fh-reason-4 {
+    0%, 32.94% { color: var(--color-text); }
+    34.12%, 39.41% { color: var(--color-signal); }
+    42.94%, 100% { color: var(--color-text); }
+}
+
+@keyframes fh-kept {
+    0%, 69.41% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
+    71.18%, 77.06% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 1); }
+    80.59%, 100% { box-shadow: inset calc(0.35 * var(--u)) 0 0 rgba(99, 255, 114, 0); }
+}
+
+@keyframes fh-keep {
+    0%, 66.18% { color: var(--color-muted); border-color: var(--color-border-strong); }
+    66.76%, 100% { color: var(--color-signal); border-color: var(--color-signal); }
+}
+
+@keyframes fh-post-5 {
+    0%, 20% { filter: none; }
+    22.35%, 32.94% { filter: blur(calc(0.32 * var(--u))); }
+    34.71%, 100% { filter: none; }
+}
+
+@keyframes fh-post-6 {
+    0%, 20% { filter: none; }
+    22.35%, 34.71% { filter: blur(calc(0.32 * var(--u))); }
+    36.47%, 100% { filter: none; }
+}
+
+@keyframes fh-cursor {
+    0%, 59.41% { opacity: 0; transform: translate(calc(64 * var(--u)), calc(48 * var(--u))); }
+    60.29% { opacity: 1; transform: translate(calc(64 * var(--u)), calc(48 * var(--u))); }
+    65.59% { opacity: 1; transform: translate(calc(45.8 * var(--u)), calc(26.2 * var(--u))); }
+    66.18% { opacity: 1; transform: translate(calc(45.8 * var(--u)), calc(26.2 * var(--u))) scale(0.82); }
+    67.35%, 72.94% { opacity: 1; transform: translate(calc(45.8 * var(--u)), calc(26.2 * var(--u))); }
+    75.29%, 100% { opacity: 0; transform: translate(calc(45.8 * var(--u)), calc(26.2 * var(--u))); }
+}
+/* End of the Xift article hook */
 
 /* Decision-model explorer (_includes/model-explorer.js, explorer.js). Without JavaScript the
    picker stays hidden and every panel shows in turn. */
@@ -1788,6 +2325,11 @@ h1 em {
 
 .mx-table thead th {
     color: var(--color-dim);
+}
+
+/* In a figure, the caption's rule closes the table */
+.decision-figure .mx-table tbody tr:last-child td {
+    border-bottom: 0;
 }
 
 .mx-row-name {

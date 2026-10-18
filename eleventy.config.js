@@ -72,13 +72,14 @@ export default function (eleventyConfig) {
     eleventyConfig.addFilter("readableDate", (date) =>
         date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
     );
-    // Reference widgets such as the model explorer are browsed, not read: leave them out.
+    // Reference widgets such as the model explorer are browsed, not read, and the Xift hook's frame
+    // only acts out its caption: leave them out.
     eleventyConfig.addFilter("readingTime", (html) =>
         Math.max(
             1,
             Math.round(
                 html
-                    .replace(/<div class="mx"[\s\S]*?<!--\/mx-->/g, " ")
+                    .replace(/<div class="(?:mx|fh-frame)"[\s\S]*?<!--\/(?:mx|fh)-->/g, " ")
                     .replace(/<[^>]+>/g, " ")
                     .split(/\s+/)
                     .filter(Boolean).length / 220

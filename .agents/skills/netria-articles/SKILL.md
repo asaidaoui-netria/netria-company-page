@@ -5,7 +5,7 @@ description: Use when researching, drafting, editing, publishing or promoting an
 
 # Netria articles
 
-Lessons from shipping /articles/decision-models/. README.md ("Writing Articles") has the mechanics: file naming, front matter, drafts, author, share image fields. This covers what it doesn't.
+Lessons from shipping /articles/decision-models/ and reviewing the Xift article. README.md ("Writing Articles") has the mechanics: file naming, front matter, drafts, author, share image fields. This covers what it doesn't.
 
 ## Voice
 
@@ -13,9 +13,19 @@ Lessons from shipping /articles/decision-models/. README.md ("Writing Articles")
 - Prose, not bullet points. Turn lists into paragraphs.
 - About the technology, not a pitch. No workflow-automation or "Netria can help" angle in the body; the layout's closing aside is the only ask.
 - Explain the idea a topic borrows (decision models → Kahneman's System 1 and System 2) rather than assume readers know it.
-- Vendor numbers are claims: say who reported them, say when sources conflict, label illustrative figures as illustrative.
-- Link primary sources inline (announcements, docs). For books, link a bibliographic record such as `https://lccn.loc.gov/<lccn>`, never a shop.
+- A story piece (what I tried and what it taught me) is first person, with no section headings. Anything built along the way appears as what the story produced, never as the pitch.
+- Go straight to what worked. Cut false starts unless the lesson can't be told without them, then check that the lede and any hook still match what the body shows.
+- Leave out dates and other specifics that don't change the point ("on 17 October", "in September").
+- Every sentence must make sense on a first read. Plain wording beats a compressed image: "two posts about the same new model can be a careful benchmark or a giveaway" needed a rewrite to say that muting the model's name hides both.
 - Fast-moving topics: give an as-of date and a "Keeping up" pointer to a live source, saying what it measures (OpenRouter rankings measure use, not quality).
+
+## Numbers and claims
+
+- Keep only numbers a reader who never used the thing can use. Internal tuning figures (limits, step sizes, how many posts went into calibration) stay out; numbers that test a claim the article makes (speed, cost) stay in.
+- Vendor numbers are claims: say who reported them, say when sources conflict, label illustrative figures as illustrative.
+- Back a general claim with a primary study, linked inline, and state its finding as the paper does ("each word referring to the other side", not "attacking").
+- Don't assert behaviour you haven't checked. Test it, or soften the sentence.
+- Link primary sources inline (announcements, docs). For books, link a bibliographic record such as `https://lccn.loc.gov/<lccn>`, never a shop.
 
 ## Research and data
 
@@ -30,7 +40,22 @@ Lessons from shipping /articles/decision-models/. README.md ("Writing Articles")
 - Animate only under `@media (prefers-reduced-motion: no-preference)`.
 - Put data-may-be-stale disclaimers above the interactive box.
 - Prefer compact: an icon dock with names on hover/focus beat labelled tabs; a plain spec row beat a timeline.
-- `readingTime` strips `<div class="mx"…<!--/mx-->` before counting. Wrap any similar widget the same way or reading time inflates.
+- `readingTime` strips `<div class="mx"…<!--/mx-->` and `<div class="fh-frame"…<!--/fh-->` before counting. Add any similar widget to that regex in `eleventy.config.js`, with its end marker inside the figure, or reading time inflates.
+
+## Figures
+
+- Frame supporting media as a `.decision-figure`: a `.df-label` above, a `figcaption` below. A table goes in one too.
+- Prefer an HTML mockup to a live screenshot. Screenshots show real accounts and settings the reader doesn't need; a mockup shows only the point.
+- A figure that reports measured numbers holds still (`df-still`). The 9 s `.decision-figure` loop is for showing a process.
+
+## Hook
+
+- An article can open with a short loop under the lede (the Xift article's `.feed-hook`). Prototype two or three directions for the owner before building one.
+- CSS only, in its own classes: `.decision-figure` would pull in its 9 s loop. Base styles are the still frame; keyframes run only with motion allowed.
+- A loop longer than 5 s needs a Pause control (WCAG 2.2.2): a checkbox in the caption, shown only when motion is allowed.
+- The frame is `aria-hidden`; the caption says what it shows. Leave the frame out of reading time (see above).
+- Size it in container units so it scales like a video, and switch to a portrait layout on phones so its text stays readable.
+- Few words, almost no numbers: the reader hasn't started the article. End by pointing into the article, not at the product.
 
 ## Share image
 
