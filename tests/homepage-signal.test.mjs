@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 
 const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
@@ -26,8 +27,9 @@ test("every scene gets exactly one layer, and articles get the divider trace", (
   assert.match(signal, /LAYERS\.filter\(present\)[\s\S]*await import\(SHADERS_URL\)/);
 });
 
-test("shaders bundle is version-pinned, lazy, shared and telemetry-free", () => {
-  assert.match(signal, /cdn\.jsdelivr\.net\/npm\/shaders@\d+\.\d+\.\d+\/dist\/js\/bundle\.js/);
+test("shaders bundle is self-hosted, version-pinned, lazy, shared and telemetry-free", () => {
+  assert.match(signal, /const SHADERS_URL = "\/assets\/vendor\/shaders@\d+\.\d+\.\d+\/bundle\.js"/);
+  assert.match(readFileSync(new URL(`..${signal.match(/const SHADERS_URL = "([^"]+)"/)[1].replace("bundle.js", "LICENSE")}`, import.meta.url), "utf8"), /^MIT License/);
   assert.match(signal, /await import\(SHADERS_URL\)/);
   assert.match(signal, /createSharedDevice\(\)/);
   assert.match(signal, /disableTelemetry:\s*true/);
@@ -42,6 +44,8 @@ test("every page that loads the bundle pins it with the same integrity hash", ()
   });
   assert.match(hashes[0] ?? "", /^sha384-[A-Za-z0-9+/]{64}$/);
   assert.equal(hashes[1], hashes[0]);
+  const file = readFileSync(new URL(`..${url}`, import.meta.url));
+  assert.equal(`sha384-${createHash("sha384").update(file).digest("base64")}`, hashes[0]);
 });
 
 test("fx are gated on webgpu, a fine pointer and motion, and fail back to static", () => {

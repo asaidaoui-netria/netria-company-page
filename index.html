@@ -83,14 +83,13 @@
     <script type="importmap">
         {
             "integrity": {
-                "https://cdn.jsdelivr.net/npm/shaders@4.0.0/dist/js/bundle.js": "sha384-VDjIeOVAcnhq9MDIGMkbO6OLD5w+pfUpRpIJ8Pfv/f2uuM2o0vmPvMrkvEOnuy0b"
+                "/assets/vendor/shaders@4.0.0/bundle.js": "sha384-VDjIeOVAcnhq9MDIGMkbO6OLD5w+pfUpRpIJ8Pfv/f2uuM2o0vmPvMrkvEOnuy0b"
             }
         }
     </script>
     <script src="signal.js" type="module"></script>
     <script src="pixels.js" type="module" onerror="document.documentElement.classList.remove('pixels-live')"></script>
-    <!-- Visit counts: Cloudflare Web Analytics, cookieless. Same tag in _includes/base.njk; described on /legal/. No integrity hash: Cloudflare updates this script in place -->
-    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f60cb93de13848efaf73afdcadb076cd"}'></script>
+    <script src="count.js" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#main">Skip to content</a>

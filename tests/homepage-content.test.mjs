@@ -56,15 +56,28 @@ test("uses direct email contact with no contact form", () => {
   assert.doesNotMatch(html, /<form\b|Formspree|formspree\.io|contactForm/i);
 });
 
-test("loads no third-party script but the Cloudflare visit counter, with one site token", () => {
+test("pages load no third-party script; count.js holds the one outside URL, Cloudflare's beacon", () => {
   const base = readFileSync(join(root, "_includes/base.njk"), "utf8");
-  const beacon = /<script type="module" src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js" data-cf-beacon='\{"token": "[0-9a-f]{32}"\}'><\/script>/;
+  const count = readFileSync(join(root, "count.js"), "utf8");
   for (const page of [html, base]) {
     const external = [...page.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)].map((m) => m[1]).filter((src) => /^(https?:)?\/\//.test(src));
-    assert.deepEqual(external, ["https://static.cloudflareinsights.com/beacon.min.js"]);
-    assert.match(page, beacon);
+    assert.deepEqual(external, []);
+    assert.match(page, /<script src="\/?count\.js" defer><\/script>/);
   }
-  assert.equal(html.match(beacon)[0], base.match(beacon)[0]);
+  assert.deepEqual(count.match(/https?:\/\/[^"`\s]+/g), ["https://static.cloudflareinsights.com/beacon.min.js"]);
+  assert.match(count, /const TOKEN = "[0-9a-f]{32}";/);
+});
+
+test("count.js asks first in EU/EEA and unknown time zones, and nowhere else", () => {
+  const count = readFileSync(join(root, "count.js"), "utf8");
+  // Runs the pure top of count.js, everything before its page block.
+  const asksFirst = new Function(`${count.slice(0, count.indexOf("\n{\n"))}\nreturn asksFirst;`)();
+  for (const zone of ["Europe/Berlin", "Asia/Nicosia", "Atlantic/Canary", "Indian/Reunion", "UTC", "Etc/GMT", "CET", undefined]) {
+    assert.equal(asksFirst(zone), true, zone);
+  }
+  for (const zone of ["Africa/Casablanca", "Europe/London", "Europe/Zurich", "America/New_York", "Asia/Tokyo"]) {
+    assert.equal(asksFirst(zone), false, zone);
+  }
 });
 
 test("ships no custom localization", () => {

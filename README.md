@@ -57,6 +57,7 @@ Posts marked `draft: true` show in `npm start` but are never published. Optional
 ├── llms.njk                 # Generates llms.txt, a site summary for AI answer engines
 ├── sitemap.njk              # Generates sitemap.xml
 ├── script.js                # Mobile navigation and copy buttons
+├── count.js                 # Visit counter: Cloudflare Web Analytics, asks first in the EU/EEA
 ├── pixels.js                # Moth pixels that follow the scroll (progressive)
 ├── signal.js                # Live WebGPU oscilloscope traces (progressive)
 └── styles.css               # Quiet Signal visual system
@@ -86,6 +87,7 @@ Check JavaScript syntax and whitespace:
 ```bash
 node --check script.js
 node --check signal.js
+node --check count.js
 git diff --check
 ```
 

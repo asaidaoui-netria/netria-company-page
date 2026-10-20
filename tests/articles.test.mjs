@@ -218,7 +218,8 @@ test("the legal page names the company, its host, and what happens to visitors' 
     "GitHub, Inc.",
     "Cloudflare, Inc.",
     "cookies",
-    "jsDelivr",
+    "Global Privacy Control",
+    "data-count-setting",
     "Proton AG",
     "09-08",
   ]) {

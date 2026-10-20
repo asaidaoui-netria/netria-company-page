@@ -2422,3 +2422,48 @@ h1 em {
 main + .footer {
     border-top: 1px solid var(--color-border);
 }
+
+/* Visit counting (count.js): the ask shown to EU/EEA time zones, and the switch on /legal/ */
+.count-ask {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 1400;
+    max-width: 26rem;
+    padding: 1rem;
+    border: 2px solid var(--color-border-strong);
+    color: var(--color-muted);
+    background: var(--color-surface-raised);
+    box-shadow: 4px 4px 0 0 var(--color-signal-dark);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.count-ask p {
+    margin: 0 0 0.75rem;
+}
+
+.count-ask a {
+    color: var(--color-signal);
+}
+
+.count-ask div {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.count-ask .button,
+.count-setting .button {
+    min-height: 40px;
+    padding: 0.5rem 0.9rem;
+    color: var(--color-text);
+    background: transparent;
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .count-ask {
+        left: 1rem;
+        max-width: none;
+    }
+}

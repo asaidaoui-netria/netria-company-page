@@ -2,8 +2,9 @@
 // article divider. The hero moth lives in pixels.js. Progressive: the static page
 // stays unless WebGPU, a fine pointer and motion all line up, and any layer that fails just
 // removes its canvas. Pages with no layer host never download the bundle.
-// Pinned by an import-map integrity hash in index.html: bump both together.
-const SHADERS_URL = "https://cdn.jsdelivr.net/npm/shaders@4.0.0/dist/js/bundle.js";
+// Served from assets/vendor (MIT, license beside it) and pinned by an import-map integrity hash in
+// index.html and _includes/base.njk: bump all three together.
+const SHADERS_URL = "/assets/vendor/shaders@4.0.0/bundle.js";
 const GREEN = "#63ff72";
 
 const scope = (amplitude, speed) => [
