@@ -2,6 +2,7 @@
 
 Date: 2026-07-23
 Status: Approved for implementation planning
+Amended 2026-10-20: the site now counts visits with Cloudflare Web Analytics (cookieless, described on /legal/), so the goal "Remove page analytics and visitor-data collection" and the constraint "No analytics script or visitor-tracking service" below no longer hold.
 
 ## Summary
 

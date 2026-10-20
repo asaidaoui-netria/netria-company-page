@@ -216,6 +216,7 @@ test("the legal page names the company, its host, and what happens to visitors' 
     "ICE 003776887000054",
     "Abderrahman Said-Alaoui",
     "GitHub, Inc.",
+    "Cloudflare, Inc.",
     "cookies",
     "jsDelivr",
     "Proton AG",

@@ -56,8 +56,19 @@ test("uses direct email contact with no contact form", () => {
   assert.doesNotMatch(html, /<form\b|Formspree|formspree\.io|contactForm/i);
 });
 
-test("ships no analytics or custom localization", () => {
-  assert.doesNotMatch(html, /plausible|analytics|data-domain|langDrawer|language-selector/i);
+test("loads no third-party script but the Cloudflare visit counter, with one site token", () => {
+  const base = readFileSync(join(root, "_includes/base.njk"), "utf8");
+  const beacon = /<script type="module" src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js" data-cf-beacon='\{"token": "[0-9a-f]{32}"\}'><\/script>/;
+  for (const page of [html, base]) {
+    const external = [...page.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)].map((m) => m[1]).filter((src) => /^(https?:)?\/\//.test(src));
+    assert.deepEqual(external, ["https://static.cloudflareinsights.com/beacon.min.js"]);
+    assert.match(page, beacon);
+  }
+  assert.equal(html.match(beacon)[0], base.match(beacon)[0]);
+});
+
+test("ships no custom localization", () => {
+  assert.doesNotMatch(html, /langDrawer|language-selector/i);
   assert.doesNotMatch(html, /i18n\.js|data-i18n|hreflang/i);
   assert.equal(existsSync(join(root, "i18n.js")), false);
 });
