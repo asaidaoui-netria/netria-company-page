@@ -1310,6 +1310,15 @@ h1 em {
     background: var(--color-signal);
 }
 
+/* A still bar chart: df-opt rows with longer labels and values */
+.df-chart .df-opt {
+    grid-template-columns: 9.5rem minmax(0, 1fr) 4.5rem;
+}
+
+.df-chart .df-opt + .df-opt {
+    margin-top: 0.5rem;
+}
+
 .decision-figure figcaption {
     margin-top: 1.25rem;
     padding-top: 1rem;
