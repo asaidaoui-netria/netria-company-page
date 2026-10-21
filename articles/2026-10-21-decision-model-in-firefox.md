@@ -3,7 +3,7 @@ title: "I ran my X feed filter inside Firefox. It works, at a second a post"
 description: Could a decision model run inside Firefox itself, for people who don't run Ollama? A 0.6B model in a throwaway add-on answered Xift's four questions in the ordinary release of Firefox, with nothing leaving the browser. It took one to two seconds a post, and on two of the four questions it did no better than chance.
 # Share image: edit assets/og-firefox-model.svg, then re-export the PNG at 1200x630.
 image: /assets/og-firefox-model.png
-imageAlt: "Inside Firefox, a second a post. Median time for Xift's four questions about one post: kev-0.6b in Chrome 102 ms, Jev in the cloud 409 ms, kev-0.6b in Firefox 1,074 ms."
+imageAlt: "Inside Firefox, 1 s per post. Median time for Xift's four questions about one post: kev-0.6b in Chrome 102 ms, Jev in the cloud 409 ms, kev-0.6b in Firefox 1,074 ms."
 author:
     name: Abderrahman Said-Alaoui
     url: https://www.netria.dev/#founder

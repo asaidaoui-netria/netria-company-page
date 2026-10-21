@@ -41,7 +41,7 @@
   <text x="1128" y="92" font-size="24" fill="#657068" text-anchor="end">By Abderrahman Said-Alaoui</text>
 
   <text x="72" y="200" font-size="72" fill="#f2f5f1">Inside Firefox,</text>
-  <text x="72" y="280" font-size="72" fill="#f2f5f1">a second a post</text>
+  <text x="72" y="280" font-size="72" fill="#f2f5f1">1 s per post</text>
 
   <!-- Median time for Xift's four questions about one post (bars to scale, 1,074 ms = 260). Ends above y=480: X lays the title over the card. -->
   <g font-size="24">
